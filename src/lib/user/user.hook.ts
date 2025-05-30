@@ -9,23 +9,13 @@ export const useUser = () => {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 
-	const router = useRouter();
-
 	useEffect(() => {
-		setLoading(true);
-		getRedirectResult(auth).then((result) => {
-			if (result) {
-				void router.push(ROUTES.ROOT.path);
-			}
-		});
-
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			setUser(user);
+		const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+			setUser(firebaseUser);
 			setLoading(false);
 		});
-
 		return () => unsubscribe();
-	}, [router, setLoading, setUser]);
+	}, []);
 
 	return { user, loading };
 };
