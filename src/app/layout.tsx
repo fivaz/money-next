@@ -3,6 +3,7 @@ import type { Viewport } from 'next';
 import './globals.css';
 import { ReactNode } from 'react';
 import Navbar from '@/components/Navbar/Navbar';
+import ClientWrapper from '@/app/TokenRefresher';
 
 export const metadata: Metadata = {
 	title: 'Money',
@@ -21,7 +22,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+				<ClientWrapper>
+					<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+				</ClientWrapper>
 			</body>
 		</html>
 	);
