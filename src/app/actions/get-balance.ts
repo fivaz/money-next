@@ -8,7 +8,7 @@ export async function getBalance(): Promise<number> {
 
 	if (!token) throw new Error('User not authenticated');
 
-	const res = await fetch(`${BACKEND_URL}/balance-calc`, {
+	const res = await fetch(`${BACKEND_URL}/calculate-balance`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
