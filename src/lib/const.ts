@@ -30,3 +30,5 @@ export const navLinks: { name: string; path: string }[] = [
 	ROUTES.BUDGETS,
 	ROUTES.SOURCES,
 ];
+
+export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';

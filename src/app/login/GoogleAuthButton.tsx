@@ -3,21 +3,32 @@ import Button from '@/components/Button';
 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/const';
 export default function GoogleAuthButton() {
 	const provider = new GoogleAuthProvider();
+	const router = useRouter();
 
 	const signIn = async () => {
-		const result = await signInWithPopup(auth, provider);
-		const user = result.user;
-		const token = await user.getIdToken();
+		try {
+			const result = await signInWithPopup(auth, provider);
+			const idToken = await result.user.getIdToken();
 
-		// send this token to your Spring Boot API
-		const res = await fetch('/api/protected', {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
+			// send this token to your Spring Boot API
+			const response = await fetch('/api/session', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ idToken }),
+			});
+
+			if (response.ok) {
+				router.push(ROUTES.ROOT.path);
+			} else {
+				console.error('Authentication failed');
+			}
+		} catch (error) {
+			console.error('Error signing in:', error);
+		}
 	};
 
 	return (

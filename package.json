@@ -6,9 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tsc": "tsc --noEmit --watch"
   },
   "dependencies": {
+    "cookies-next": "^6.0.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.8.1",
     "lucide-react": "^0.511.0",
