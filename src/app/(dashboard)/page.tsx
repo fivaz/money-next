@@ -1,4 +1,4 @@
-import { getBalance } from './actions/get-balance';
+import { getBalance } from '../actions/get-balance';
 import { cookies } from 'next/headers';
 
 export default async function HomePage() {
