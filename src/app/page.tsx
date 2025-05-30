@@ -4,12 +4,12 @@ import { cookies } from 'next/headers';
 export default async function HomePage() {
 	let balance: number;
 
-	// try {
-	// 	balance = await getBalance();
-	// } catch (error) {
-	// 	console.error('Failed to fetch balance:', error);
-	// 	balance = NaN; // or you can show a fallback
-	// }
+	try {
+		balance = await getBalance();
+	} catch (error) {
+		console.error('Failed to fetch balance:', error);
+		balance = NaN; // or you can show a fallback
+	}
 
 	return (
 		<main>

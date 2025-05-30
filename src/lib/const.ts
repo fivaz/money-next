@@ -25,10 +25,8 @@ export const ROUTES = {
 	},
 };
 
-export const navLinks: { name: string; path: string }[] = [
-	ROUTES.ROOT,
-	ROUTES.BUDGETS,
-	ROUTES.SOURCES,
-];
+export const navLinks = [ROUTES.ROOT, ROUTES.BUDGETS, ROUTES.SOURCES];
+
+export const profileLinks = [ROUTES.PROFILE];
 
 export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';

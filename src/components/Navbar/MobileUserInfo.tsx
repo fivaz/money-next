@@ -1,64 +1,46 @@
-'use client';
-
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, DisclosureButton } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
 import DarkMode from './DarkMode';
+import clsx from 'clsx';
+import { profileLinks } from '@/lib/const';
+import { User } from '@/lib/user/user.model';
 
-interface NavigationItem {
-	name: string;
-	href?: string;
-	onClick?: () => void;
-}
+type MobileUserInfoProps = {
+	user: User | null;
+};
 
-interface MobileUserInfoProps {
-	user: { name: string; email: string; imageUrl: string | null };
-	userNavigation: NavigationItem[];
-}
-
-export default function MobileUserInfo({ user, userNavigation }: MobileUserInfoProps) {
-	const navigationItems = userNavigation.map((item) => ({
-		...item,
-		isLink: !!item.href,
-		isButton: !!item.onClick,
-	}));
-
-	function handleItemClick(item: NavigationItem) {
-		if (item.onClick) {
-			item.onClick();
-		}
-	}
-
+export default function MobileUserInfo({ user }: MobileUserInfoProps) {
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">
 			<div className="flex items-center px-4">
 				<div className="shrink-0">
-					{user.imageUrl ? (
-						<img className="size-10 rounded-full" src={user.imageUrl} alt="" />
+					{user?.photoURL ? (
+						<img className="size-10 rounded-full" src={user.photoURL} alt="" />
 					) : (
 						<CircleUser className="size-8 text-yellow-500" />
 					)}
 				</div>
 				<div className="ml-3">
-					<div className="text-base font-medium text-gray-800 dark:text-gray-200">{user.name}</div>
-					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{user.email}</div>
+					<div className="text-base font-medium text-gray-800 dark:text-gray-200">
+						{user?.displayName}
+					</div>
+					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{user?.email}</div>
 				</div>
 				<DarkMode className="ml-auto shrink-0" />
 			</div>
 			<div className="mt-3 space-y-1">
-				{navigationItems.map((item) => (
-					<Disclosure.Button
+				{profileLinks.map((item) => (
+					<DisclosureButton
 						key={item.name}
-						as={item.isLink ? Link : 'button'}
-						href={item.isLink ? item.href : undefined}
-						onClick={item.isButton ? () => handleItemClick(item) : undefined}
-						className={[
+						as={Link}
+						href={item.path}
+						className={clsx(
 							'block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200',
-							item.isButton ? 'w-full text-left' : '',
-						].join(' ')}
+						)}
 					>
 						{item.name}
-					</Disclosure.Button>
+					</DisclosureButton>
 				))}
 			</div>
 		</div>
