@@ -3,6 +3,7 @@ import { getCurrentMonthTransactions } from '../actions/transaction';
 import { cookies } from 'next/headers';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import MText from '@/components/MText';
+import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 
 export default async function HomePage() {
 	let balance: number;
@@ -34,7 +35,9 @@ export default async function HomePage() {
 					</li>
 				))}
 			</ul>
-			<TransactionForm />
+			<TransactionFormButton>
+				<TransactionForm />
+			</TransactionFormButton>
 		</main>
 	);
 }

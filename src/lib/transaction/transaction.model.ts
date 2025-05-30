@@ -3,6 +3,8 @@ export type Transaction = {
 	name: string;
 	description: string;
 	createdAt: string;
+	referenceDate: string;
+	date: string;
 	amount: number;
 	isPaid: boolean;
 };
