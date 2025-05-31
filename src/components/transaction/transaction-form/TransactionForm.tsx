@@ -1,4 +1,5 @@
-import { type PropsWithChildren } from 'react';
+'use client';
+import { type PropsWithChildren, useTransition } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Heading } from '@/components/base/heading';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
@@ -7,25 +8,67 @@ import { Textarea } from '@/components/base/textarea';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
 import { Switch, SwitchField } from '@/components/base/switch';
-import { DialogActions, DialogTitle } from '@/components/base/dialog';
+import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { saveTransaction } from '@/app/actions/transaction';
+import { XIcon } from 'lucide-react';
 
-type TransactionFormProps = {
+export type TransactionFormProps = {
 	transaction?: Transaction;
+	isOpen: boolean;
+	closeForm: () => void;
+	onAddOptimistic: (transaction: Transaction) => void;
+	onConfirmSave: (tempId: number, realTransaction: Transaction) => void;
 };
 
-export default function TransactionForm({ transaction }: TransactionFormProps) {
+const transactionExample: Transaction = {
+	description: 'description',
+	amount: 9999,
+	date: '2025-05-30T23:53',
+	isPaid: true,
+};
+
+export default function TransactionForm({
+	transaction = transactionExample,
+	isOpen,
+	closeForm,
+	onAddOptimistic,
+	onConfirmSave,
+}: TransactionFormProps) {
+	const [isPending, startTransition] = useTransition();
+
 	async function handleSubmit(formData: FormData) {
-		'use server';
-		await saveTransaction(formData);
+		const fakeId = Date.now();
+
+		const optimisticTransaction: Transaction = {
+			id: fakeId,
+			description: formData.get('description') as string,
+			amount: parseFloat(formData.get('amount') as string),
+			date: formData.get('date') as string,
+			isPaid: formData.get('isPaid') === 'on',
+			referenceDate: (formData.get('referenceDate') as string) || '',
+			userId: 'you',
+			createdAt: new Date().toISOString(),
+			isDeleted: false,
+		};
+
+		onAddOptimistic(optimisticTransaction);
+
+		startTransition(async () => {
+			const saved = await saveTransaction(formData);
+			onConfirmSave(fakeId, saved);
+		});
 	}
 
 	return (
-		<>
+		<Dialog open={isOpen} onClose={closeForm}>
 			<DialogTitle className="font-semibold">
-				{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}
+				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
+				<Button onClick={closeForm}>
+					<XIcon />
+				</Button>
 			</DialogTitle>
+
 			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
 				<OperationSelector value={transaction?.id ? 'income' : 'expense'} />
 				<Field>
@@ -59,9 +102,9 @@ export default function TransactionForm({ transaction }: TransactionFormProps) {
 				</Field>
 
 				<DialogActions>
-					<Button type="submit">Save</Button>
+					<Button type="submit"> {isPending ? 'Saving...' : 'Save'}</Button>
 				</DialogActions>
 			</form>
-		</>
+		</Dialog>
 	);
 }

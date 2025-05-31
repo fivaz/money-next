@@ -6,42 +6,43 @@ import MDialog from '@/components/MDialog';
 import MText from '@/components/MText';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
+import TransactionForm, {
+	type TransactionFormProps,
+} from '@/components/transaction/transaction-form/TransactionForm';
 import { Dialog } from '@/components/base/dialog';
 
-type TransactionFormProps = PropsWithChildren<{}>;
+type TransactionFormButtonProps = PropsWithChildren &
+	Pick<TransactionFormProps, 'transaction' | 'onConfirmSave' | 'onAddOptimistic'>;
 
-export default function TransactionFormButton({ children }: TransactionFormProps) {
-	const [open, setOpen] = useState(false);
+export default function TransactionFormButton({
+	children,
+	transaction,
+	onAddOptimistic,
+	onConfirmSave,
+}: TransactionFormButtonProps) {
+	const [isOpen, setIsOpen] = useState(false);
 
-	const closeDialog = () => setOpen(false);
-	const openDialog = () => setOpen(true);
+	const closeDialog = () => setIsOpen(false);
+	const openDialog = () => setIsOpen(true);
 
 	return (
 		<>
 			<Button onClick={openDialog}>
-				<PlusIcon />
-				Transaction
+				{children || (
+					<>
+						<PlusIcon />
+						Transaction
+					</>
+				)}
 			</Button>
 
-			<Dialog open={open} onClose={setOpen}>
-				<CloseButton close={closeDialog} />
-				{children}
-			</Dialog>
+			<TransactionForm
+				transaction={transaction}
+				onAddOptimistic={onAddOptimistic}
+				onConfirmSave={onConfirmSave}
+				isOpen={isOpen}
+				closeForm={closeDialog}
+			/>
 		</>
-	);
-}
-
-type CloseButtonProps = {
-	close: () => void;
-};
-
-function CloseButton({ close }: CloseButtonProps) {
-	return (
-		<div className="absolute top-0 right-0 pt-5 pr-5">
-			<Button onClick={close}>
-				<XIcon />
-			</Button>
-		</div>
 	);
 }

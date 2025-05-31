@@ -6,6 +6,7 @@ import MText from '@/components/MText';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import TransactionItem from '@/components/transaction/TransactionItem';
+import TransactionList from '@/components/transaction/TransactionList';
 
 export default async function HomePage() {
 	let balance: number;
@@ -19,13 +20,6 @@ export default async function HomePage() {
 		balance = NaN; // or you can show a fallback
 	}
 
-	const transaction: Transaction = {
-		description: 'description',
-		amount: 9999,
-		date: '2025-05-30T23:53',
-		isPaid: true,
-	};
-
 	return (
 		<main>
 			<MText size="2xl" className="font-bold">
@@ -37,14 +31,8 @@ export default async function HomePage() {
 					{isNaN(balance) ? 'Not available' : `$${balance.toFixed(2)}`}
 				</span>
 			</p>
-			<ul>
-				{transactions.map((transaction) => (
-					<TransactionItem key={transaction.id} transaction={transaction} />
-				))}
-			</ul>
-			<TransactionFormButton>
-				<TransactionForm transaction={transaction} />
-			</TransactionFormButton>
+
+			<TransactionList initialTransactions={transactions} />
 		</main>
 	);
 }
