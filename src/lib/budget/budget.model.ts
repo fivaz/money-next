@@ -5,11 +5,11 @@ export const BudgetSchema = z.object({
 	amount: z.number(),
 	icon: z.string(),
 	sortOrder: z.number(),
+	parent: z.string().nullable(),
 	// optional
 	id: z.number().int().optional(),
 	userId: z.string().optional(),
 	createdAt: z.string().optional(),
-	parent: z.string().optional(),
 	isDeleted: z.boolean().optional(),
 });
 

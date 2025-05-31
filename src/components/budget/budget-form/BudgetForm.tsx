@@ -33,32 +33,15 @@ export default function BudgetForm({
 	onDeleteAction,
 }: BudgetFormProps) {
 	const [isPending, startTransition] = useTransition();
-	const [operation, setOperation] = useState<'expense' | 'income'>(
-		budget?.amount && budget.amount > 0 ? 'income' : 'expense',
-	);
 	const [amount, setAmount] = useState<string>(budget?.amount.toString() || '');
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
 	const isEditing = !!budget?.id;
 
-	function parseAmount(amount: string, operation: 'expense' | 'income'): string {
-		const positiveValue = Math.abs(Number(amount));
-		return (operation === 'income' ? positiveValue : positiveValue * -1).toString();
-	}
-
-	const handleOperationChange = (newOperation: 'expense' | 'income') => {
-		setOperation(newOperation);
-		setAmount((amount) => parseAmount(amount, newOperation));
-	};
-
 	const resetForm = () => {
 		// Reset form and state after successful submission
 		formRef.current?.reset(); // Reset form inputs
-		setAmount(''); // Reset controlled amount input
-		setOperation('expense'); // Reset operation
 	};
-
-	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? budget.id! : Date.now();
@@ -106,7 +89,7 @@ export default function BudgetForm({
 					</Field>
 				</div>
 
-				<IconPicker value={budget?.icon} onChange={handleOperationChange} />
+				<IconPicker name="icon" defaultValue={budget?.icon} />
 
 				<DialogActions>
 					<div>
