@@ -20,6 +20,7 @@ export type TransactionFormProps = {
 	closeFormAction: () => void;
 	onAddOptimisticAction: (transaction: Transaction) => void;
 	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
+	onDeleteAction?: (transaction: Transaction) => void;
 };
 
 export default function TransactionForm({
@@ -28,6 +29,7 @@ export default function TransactionForm({
 	closeFormAction,
 	onAddOptimisticAction,
 	onConfirmSaveAction,
+	onDeleteAction,
 }: TransactionFormProps) {
 	const [isPending, startTransition] = useTransition();
 
@@ -51,6 +53,12 @@ export default function TransactionForm({
 				}
 			}
 		});
+	}
+
+	function handleDelete() {
+		if (transaction && onDeleteAction) {
+			onDeleteAction(transaction);
+		}
 	}
 
 	return (
@@ -95,6 +103,12 @@ export default function TransactionForm({
 				</Field>
 
 				<DialogActions>
+					{transaction?.id && onDeleteAction && (
+						<Button type="button" color="red" onClick={handleDelete}>
+							Delete
+						</Button>
+					)}
+
 					<Button type="submit"> {isPending ? 'Saving...' : 'Save'}</Button>
 				</DialogActions>
 			</form>

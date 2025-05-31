@@ -28,6 +28,10 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 
 	const handleAddOptimistic = (transaction: Transaction) => addOptimisticTransaction(transaction);
 
+	const handleDelete = (transaction: Transaction) => {
+		setTransactions((prev) => prev.filter((t) => t.id !== transaction.id));
+	};
+
 	return (
 		<div>
 			<ul>
@@ -37,6 +41,7 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 						transaction={transaction}
 						onAddOptimisticAction={handleAddOptimistic}
 						onConfirmSaveAction={handleConfirmSave}
+						onDeleteAction={handleDelete}
 					/>
 				))}
 			</ul>

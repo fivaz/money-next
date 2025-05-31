@@ -7,13 +7,17 @@ import TransactionForm, {
 } from '@/components/transaction/transaction-form/TransactionForm';
 
 type TransactionFormButtonProps = PropsWithChildren &
-	Pick<TransactionFormProps, 'transaction' | 'onConfirmSaveAction' | 'onAddOptimisticAction'>;
+	Pick<
+		TransactionFormProps,
+		'transaction' | 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'
+	>;
 
 export default function TransactionFormButton({
 	children,
 	transaction,
 	onAddOptimisticAction,
 	onConfirmSaveAction,
+	onDeleteAction,
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -37,6 +41,7 @@ export default function TransactionFormButton({
 				onConfirmSaveAction={onConfirmSaveAction}
 				isOpen={isOpen}
 				closeFormAction={closeDialog}
+				onDeleteAction={onDeleteAction}
 			/>
 		</>
 	);

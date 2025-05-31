@@ -44,8 +44,6 @@ export async function saveTransaction(transaction: Transaction) {
 
 	const method = transaction.id ? 'PUT' : 'POST';
 
-	console.log('transaction', transaction);
-
 	const url = transaction.id ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
 
 	console.log(url);
@@ -71,4 +69,21 @@ export async function saveTransaction(transaction: Transaction) {
 	}
 
 	return await res.json();
+}
+
+export async function deleteTransaction(id: number): Promise<void> {
+	const token = (await cookies()).get('firebase_token')?.value;
+	if (!token) throw new Error('Not authenticated');
+
+	const res = await fetch(`${TransactionRoute}/${id}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+
+	if (!res.ok) {
+		const msg = await res.text();
+		throw new Error(`Delete failed: ${msg}`);
+	}
 }
