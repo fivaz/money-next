@@ -1,5 +1,5 @@
 'use client';
-import { type PropsWithChildren, useTransition } from 'react';
+import { type PropsWithChildren, useState, useTransition } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Heading } from '@/components/base/heading';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
@@ -32,9 +32,32 @@ export default function TransactionForm({
 	onDeleteAction,
 }: TransactionFormProps) {
 	const [isPending, startTransition] = useTransition();
+	const [operation, setOperation] = useState<'expense' | 'income'>(
+		transaction?.amount && transaction.amount > 0 ? 'income' : 'expense',
+	);
+	const [amount, setAmount] = useState(transaction?.amount?.toString() || '');
+
+	const isEditing = !!transaction?.id;
+
+	const handleOperationChange = (newOperation: 'expense' | 'income') => {
+		setOperation(newOperation);
+		// Update amount based on operation
+		if (amount) {
+			const numericAmount = parseFloat(amount);
+			if (!isNaN(numericAmount)) {
+				setAmount(
+					newOperation === 'expense' && numericAmount > 0
+						? (-numericAmount).toString()
+						: newOperation === 'income' && numericAmount < 0
+							? Math.abs(numericAmount).toString()
+							: amount,
+				);
+			}
+		}
+	};
 
 	async function handleSubmit(formData: FormData) {
-		const id = transaction?.id || Date.now();
+		const id = isEditing ? transaction.id! : Date.now();
 
 		const newTransaction = buildTransaction(formData);
 
@@ -46,11 +69,7 @@ export default function TransactionForm({
 				onConfirmSaveAction(id, saved);
 				closeFormAction();
 			} catch (err) {
-				if (err instanceof Error) {
-					console.error(err.message); // log to dev console
-				} else {
-					console.error(err);
-				}
+				console.error('Failed to save transaction:', err);
 			}
 		});
 	}
@@ -64,14 +83,15 @@ export default function TransactionForm({
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
+				<span>{isEditing ? 'Edit Transaction' : 'Add Transaction'}</span>
 				<Button onClick={closeFormAction} outline size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
 
 			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
-				<OperationSelector value="" />
+				<input type="hidden" defaultValue={transaction?.id} />
+				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
 					<Label>Description</Label>
 					<Textarea name="description" defaultValue={transaction?.description} />
@@ -84,7 +104,11 @@ export default function TransactionForm({
 
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<Input name="amount" defaultValue={transaction?.amount} />
+						<Input
+							name="amount"
+							value={Math.abs(Number(amount))}
+							onChange={(event) => setAmount(event.target.value)}
+						/>
 					</Field>
 				</div>
 
@@ -103,7 +127,7 @@ export default function TransactionForm({
 				</Field>
 
 				<DialogActions>
-					{transaction?.id && onDeleteAction && (
+					{isEditing && onDeleteAction && (
 						<Button type="button" color="red" onClick={handleDelete}>
 							Delete
 						</Button>

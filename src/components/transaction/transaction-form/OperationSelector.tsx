@@ -3,27 +3,32 @@
 import { RadioGroup, Radio } from '@headlessui/react';
 import { ArrowLeftFromLine, ArrowLeftRight, ArrowRightToLine } from 'lucide-react';
 import { JSX, ReactNode } from 'react';
+import ExpenseIcon from '@/components/icons/ExpenseIcon';
+import IncomeIcon from '@/components/icons/IncomeIcon';
+import clsx from 'clsx';
 
 interface Operation {
 	icon: (props: { className: string }) => ReactNode;
 	value: string;
+	className: string;
 }
 
 const operations: Operation[] = [
-	{ icon: ArrowLeftFromLine, value: 'expense' },
-	{ icon: ArrowRightToLine, value: 'income' },
+	{ icon: ExpenseIcon, value: 'expense', className: 'text-red-500 dark:text-red-600' },
+	{ icon: IncomeIcon, value: 'income', className: 'text-green-500 dark:text-green-600' },
 ];
 
 interface RadioGroupProps {
 	value: string;
-	onChange?: (value: string) => void;
+	onChangeAction: (value: 'income' | 'expense') => void;
 }
 
-export default function OperationSelector({ value }: RadioGroupProps) {
+export default function OperationSelector({ value, onChangeAction }: RadioGroupProps) {
 	return (
 		<RadioGroup
-			className="grid grid-cols-3 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
+			className="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
 			value={value}
+			onChange={onChangeAction}
 		>
 			{operations.map((operation) => (
 				<Radio
@@ -39,7 +44,7 @@ export default function OperationSelector({ value }: RadioGroupProps) {
 				>
 					{({ checked }) => (
 						<>
-							<operation.icon className="h-4 w-4" />
+							<operation.icon className={clsx('size-5')} />
 							<span>{operation.value}</span>
 						</>
 					)}
