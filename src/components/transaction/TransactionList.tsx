@@ -1,7 +1,6 @@
 'use client';
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { useOptimistic, useState } from 'react';
 
@@ -9,20 +8,25 @@ type TransactionProps = {
 	initialTransactions: Transaction[];
 };
 export default function TransactionList({ initialTransactions }: TransactionProps) {
+	const sortTransactionsByDate = (transactions: Transaction[]): Transaction[] => {
+		return transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	};
+
 	const [transactions, setTransactions] = useState(initialTransactions);
 
-	const [optimisticTransactions, addOptimistic] = useOptimistic(
+	const [optimisticTransactions, addOptimisticTransaction] = useOptimistic(
 		transactions,
-		(current, newTransaction: Transaction) => [newTransaction, ...current],
+		(currentList: Transaction[], newTx: Transaction) =>
+			sortTransactionsByDate([...currentList, newTx]),
 	);
 
-	const handleAddOptimistic = (transaction: Transaction) => {
-		addOptimistic(transaction);
+	const handleConfirmSave = (tempId: number, savedTransaction: Transaction) => {
+		setTransactions((prev) =>
+			sortTransactionsByDate([savedTransaction, ...prev.filter((t) => t.id !== tempId)]),
+		);
 	};
 
-	const handleConfirmSave = (tempId: number, realTransaction: Transaction) => {
-		setTransactions((prev) => [realTransaction, ...prev.filter((t) => t.id !== tempId)]);
-	};
+	const handleAddOptimistic = (transaction: Transaction) => addOptimisticTransaction(transaction);
 
 	return (
 		<div>

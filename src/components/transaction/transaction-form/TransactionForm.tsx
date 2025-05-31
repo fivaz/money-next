@@ -32,16 +32,24 @@ export default function TransactionForm({
 	const [isPending, startTransition] = useTransition();
 
 	async function handleSubmit(formData: FormData) {
-		const id = transaction?.id ?? Date.now();
+		const id = transaction?.id || Date.now();
 
-		const optimisticTransaction = buildTransaction(id, formData);
+		const newTransaction = buildTransaction(formData);
 
-		onAddOptimisticAction(optimisticTransaction);
+		onAddOptimisticAction({ id, ...newTransaction });
 
 		startTransition(async () => {
-			const saved = await saveTransaction(optimisticTransaction);
-			onConfirmSaveAction(id, saved);
-			closeFormAction();
+			try {
+				const saved = await saveTransaction(newTransaction);
+				onConfirmSaveAction(id, saved);
+				closeFormAction();
+			} catch (err) {
+				if (err instanceof Error) {
+					console.error(err.message); // log to dev console
+				} else {
+					console.error(err);
+				}
+			}
 		});
 	}
 

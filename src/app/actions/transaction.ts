@@ -44,7 +44,11 @@ export async function saveTransaction(transaction: Transaction) {
 
 	const method = transaction.id ? 'PUT' : 'POST';
 
+	console.log('transaction', transaction);
+
 	const url = transaction.id ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
+
+	console.log(url);
 
 	const res = await fetch(url, {
 		method,
@@ -56,8 +60,14 @@ export async function saveTransaction(transaction: Transaction) {
 	});
 
 	if (!res.ok) {
-		const msg = await res.text();
-		throw new Error(`Failed to save transaction: ${msg}`);
+		let errorMsg = 'Failed to save transaction';
+		try {
+			errorMsg = await res.text(); // or use `await res.json()` if your backend sends structured errors
+		} catch (err) {
+			console.error('Error reading error message:', err);
+		}
+		console.error('Save failed:', res.status, errorMsg);
+		throw new Error(errorMsg);
 	}
 
 	return await res.json();

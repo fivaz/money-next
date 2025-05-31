@@ -1,8 +1,8 @@
 import { Transaction } from '@/lib/transaction/transaction.model';
 
-export function buildTransaction(id: number, formData: FormData): Transaction {
+export function buildTransaction(formData: FormData): Transaction {
 	return {
-		id,
+		id: Number(formData.get('id')),
 		description: formData.get('description') as string,
 		amount: parseFloat(formData.get('amount') as string),
 		date: formData.get('date') as string,
