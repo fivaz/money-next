@@ -1,10 +1,7 @@
 import { z } from 'zod';
 
 export const TransactionSchema = z.object({
-	id: z.number().int().optional(), // int64 format, optional
-	userId: z.string().optional(),
 	description: z.string(),
-	createdAt: z.string().optional(),
 	amount: z.number(),
 	date: z
 		.string()
@@ -12,7 +9,11 @@ export const TransactionSchema = z.object({
 			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/,
 			'Date must be in YYYY-MM-DDTHH:mm format (e.g., 2025-05-30T23:53)',
 		), // Validate local datetime format
-	referenceDate: z.string().date().nullable(), // date format
+	// optional
+	id: z.number().int().optional(),
+	userId: z.string().optional(),
+	createdAt: z.string().optional(),
+	referenceDate: z.string().date().optional(),
 	isPaid: z.boolean().optional(),
 	isDeleted: z.boolean().optional(),
 });

@@ -33,6 +33,7 @@ export async function getCurrentMonthTransactions(): Promise<Transaction[]> {
 	}
 
 	const data = await res.json();
+	console.log(data);
 	return validateTransactions(data);
 }
 
