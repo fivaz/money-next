@@ -7,6 +7,7 @@ import TransactionFormButton from '@/components/transaction/transaction-form/Tra
 import { Transaction } from '@/lib/transaction/transaction.model';
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionList from '@/components/transaction/TransactionList';
+import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 
 export default async function HomePage() {
 	let balance: number;
@@ -25,6 +26,7 @@ export default async function HomePage() {
 			<MText size="2xl" className="font-bold">
 				Money
 			</MText>
+			<DateSwitcher />
 			<p className="mt-4 text-lg">
 				Your current balance is:
 				<span className="ml-2 font-mono text-blue-600">
