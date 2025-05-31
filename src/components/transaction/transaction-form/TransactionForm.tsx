@@ -11,11 +11,11 @@ import { DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { saveTransaction } from '@/app/actions/transaction';
 
-type TransactionFormProps = PropsWithChildren<{
+type TransactionFormProps = {
 	transaction?: Transaction;
-}>;
+};
 
-export default function TransactionForm({ children, transaction }: TransactionFormProps) {
+export default function TransactionForm({ transaction }: TransactionFormProps) {
 	async function handleSubmit(formData: FormData) {
 		'use server';
 		await saveTransaction(formData);

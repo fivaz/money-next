@@ -5,6 +5,7 @@ import TransactionForm from '@/components/transaction/transaction-form/Transacti
 import MText from '@/components/MText';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
+import TransactionItem from '@/components/transaction/TransactionItem';
 
 export default async function HomePage() {
 	let balance: number;
@@ -19,11 +20,9 @@ export default async function HomePage() {
 	}
 
 	const transaction: Transaction = {
-		id: '',
 		description: 'description',
 		amount: 9999,
 		date: '2025-05-30T23:53',
-		referenceDate: '',
 		isPaid: true,
 	};
 
@@ -39,10 +38,8 @@ export default async function HomePage() {
 				</span>
 			</p>
 			<ul>
-				{transactions.map((tx: any) => (
-					<li key={tx.id}>
-						<strong>{tx.date}</strong>: {tx.description} — ${tx.amount}
-					</li>
+				{transactions.map((transaction) => (
+					<TransactionItem key={transaction.id} transaction={transaction} />
 				))}
 			</ul>
 			<TransactionFormButton>

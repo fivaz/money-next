@@ -2,10 +2,16 @@
 
 import { cookies } from 'next/headers';
 import { BACKEND_URL } from '@/lib/const';
+import {
+	Transaction,
+	TransactionSchema,
+	validateTransactions,
+} from '@/lib/transaction/transaction.model';
+import z from 'zod';
 
 const TransactionRoute = `${BACKEND_URL}/transactions`;
 
-export async function getCurrentMonthTransactions() {
+export async function getCurrentMonthTransactions(): Promise<Transaction[]> {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
@@ -26,7 +32,8 @@ export async function getCurrentMonthTransactions() {
 		throw new Error(`Failed to fetch transactions: ${message}`);
 	}
 
-	return await res.json();
+	const data = await res.json();
+	return validateTransactions(data);
 }
 
 export async function saveTransaction(formData: FormData) {
