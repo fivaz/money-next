@@ -8,6 +8,7 @@ import TransactionForm, {
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
+import MoneyText from '@/components/MoneyText';
 
 type TransactionItemProps = {
 	transaction: Transaction;
@@ -50,7 +51,7 @@ export default function TransactionItem({
 				</div>
 			</div>
 			<div className="flex items-center gap-2">
-				<Text>{transaction.amount}</Text>
+				<MoneyText>{transaction.amount}</MoneyText>
 
 				<TransactionFormButton
 					transaction={transaction}
