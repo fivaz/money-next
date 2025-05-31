@@ -12,6 +12,7 @@ import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { saveTransaction } from '@/app/actions/transaction';
 import { XIcon } from 'lucide-react';
+import { buildTransaction } from '@/lib/transaction/transaction.utils';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -21,15 +22,8 @@ export type TransactionFormProps = {
 	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
 };
 
-const transactionExample: Transaction = {
-	description: 'description',
-	amount: 9999,
-	date: '2025-05-30T23:53',
-	isPaid: true,
-};
-
 export default function TransactionForm({
-	transaction = transactionExample,
+	transaction,
 	isOpen,
 	closeFormAction,
 	onAddOptimisticAction,
@@ -38,24 +32,15 @@ export default function TransactionForm({
 	const [isPending, startTransition] = useTransition();
 
 	async function handleSubmit(formData: FormData) {
-		const fakeId = Date.now();
+		const id = transaction?.id ?? Date.now();
 
-		const optimisticTransaction: Transaction = {
-			id: fakeId,
-			description: formData.get('description') as string,
-			amount: parseFloat(formData.get('amount') as string),
-			date: formData.get('date') as string,
-			isPaid: formData.get('isPaid') === 'on',
-			referenceDate: (formData.get('referenceDate') as string) || '',
-			createdAt: new Date().toISOString(),
-			isDeleted: false,
-		};
+		const optimisticTransaction = buildTransaction(id, formData);
 
 		onAddOptimisticAction(optimisticTransaction);
 
 		startTransition(async () => {
-			const saved = await saveTransaction(formData);
-			onConfirmSaveAction(fakeId, saved);
+			const saved = await saveTransaction(optimisticTransaction);
+			onConfirmSaveAction(id, saved);
 			closeFormAction();
 		});
 	}

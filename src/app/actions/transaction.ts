@@ -37,23 +37,14 @@ export async function getCurrentMonthTransactions(): Promise<Transaction[]> {
 	return validateTransactions(data);
 }
 
-export async function saveTransaction(formData: FormData) {
+export async function saveTransaction(transaction: Transaction) {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
 
-	const payload = {
-		id: formData.get('id') || '',
-		description: formData.get('description'),
-		amount: parseFloat(formData.get('amount') as string),
-		date: formData.get('date'),
-		isPaid: formData.get('isPaid') === 'on',
-		referenceDate: formData.get('referenceDate'),
-	};
+	const method = transaction.id ? 'PUT' : 'POST';
 
-	const method = payload.id ? 'PUT' : 'POST';
-
-	const url = payload.id ? `${TransactionRoute}/${payload.id}` : TransactionRoute;
+	const url = transaction.id ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
 
 	const res = await fetch(url, {
 		method,
@@ -61,7 +52,7 @@ export async function saveTransaction(formData: FormData) {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		},
-		body: JSON.stringify(payload),
+		body: JSON.stringify(transaction),
 	});
 
 	if (!res.ok) {
