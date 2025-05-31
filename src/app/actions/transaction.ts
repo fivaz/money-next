@@ -28,3 +28,38 @@ export async function getCurrentMonthTransactions() {
 
 	return await res.json();
 }
+
+export async function saveTransaction(formData: FormData) {
+	const token = (await cookies()).get('firebase_token')?.value;
+
+	if (!token) throw new Error('User not authenticated');
+
+	const payload = {
+		id: formData.get('id') || '',
+		description: formData.get('description'),
+		amount: parseFloat(formData.get('amount') as string),
+		date: formData.get('date'),
+		isPaid: formData.get('isPaid') === 'on',
+		referenceDate: formData.get('referenceDate'),
+	};
+
+	const method = payload.id ? 'PUT' : 'POST';
+
+	const url = payload.id ? `${TransactionRoute}/${payload.id}` : TransactionRoute;
+
+	const res = await fetch(url, {
+		method,
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify(payload),
+	});
+
+	if (!res.ok) {
+		const msg = await res.text();
+		throw new Error(`Failed to save transaction: ${msg}`);
+	}
+
+	return await res.json();
+}

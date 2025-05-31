@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import MText from '@/components/MText';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
+import { Transaction } from '@/lib/transaction/transaction.model';
 
 export default async function HomePage() {
 	let balance: number;
@@ -16,6 +17,15 @@ export default async function HomePage() {
 		console.error('Failed to fetch balance:', error);
 		balance = NaN; // or you can show a fallback
 	}
+
+	const transaction: Transaction = {
+		id: '',
+		description: 'description',
+		amount: 9999,
+		date: '2025-05-30T23:53',
+		referenceDate: '',
+		isPaid: true,
+	};
 
 	return (
 		<main>
@@ -36,7 +46,7 @@ export default async function HomePage() {
 				))}
 			</ul>
 			<TransactionFormButton>
-				<TransactionForm />
+				<TransactionForm transaction={transaction} />
 			</TransactionFormButton>
 		</main>
 	);

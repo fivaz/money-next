@@ -9,18 +9,24 @@ import { Input } from '@/components/base/input';
 import { Switch, SwitchField } from '@/components/base/switch';
 import { DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
+import { saveTransaction } from '@/app/actions/transaction';
 
 type TransactionFormProps = PropsWithChildren<{
 	transaction?: Transaction;
 }>;
 
 export default function TransactionForm({ children, transaction }: TransactionFormProps) {
+	async function handleSubmit(formData: FormData) {
+		'use server';
+		await saveTransaction(formData);
+	}
+
 	return (
 		<>
 			<DialogTitle className="font-semibold">
 				{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}
 			</DialogTitle>
-			<form className="z-20 mt-4 space-y-4">
+			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
 				<OperationSelector value={transaction?.id ? 'income' : 'expense'} />
 				<Field>
 					<Label>Description</Label>
@@ -43,7 +49,7 @@ export default function TransactionForm({ children, transaction }: TransactionFo
 
 					<SwitchField>
 						<Label>is paid</Label>
-						<Switch name="isPaid" />
+						<Switch name="isPaid" defaultChecked={transaction?.isPaid} />
 					</SwitchField>
 				</div>
 
