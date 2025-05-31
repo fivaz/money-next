@@ -25,7 +25,7 @@ export default function MoneyInput({ value, onChange, name, ...props }: MoneyInp
 
 	return (
 		<>
-			<Input value={displayValue} onChange={handleChange} {...props} />;
+			<Input value={displayValue} onChange={handleChange} {...props} />
 			{/*so the formData.get('name') will get the true value, instead of the value the user sees*/}
 			<input type="hidden" name={name} value={value} />
 		</>

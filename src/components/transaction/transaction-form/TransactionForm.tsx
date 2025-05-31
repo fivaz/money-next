@@ -1,5 +1,5 @@
 'use client';
-import { type PropsWithChildren, useState, useTransition } from 'react';
+import { type PropsWithChildren, useState, useTransition, useRef } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Heading } from '@/components/base/heading';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
@@ -37,24 +37,25 @@ export default function TransactionForm({
 		transaction?.amount && transaction.amount > 0 ? 'income' : 'expense',
 	);
 	const [amount, setAmount] = useState<string>(transaction?.amount.toString() || '');
+	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
 	const isEditing = !!transaction?.id;
 
+	function parseAmount(amount: string, operation: 'expense' | 'income'): string {
+		const positiveValue = Math.abs(Number(amount));
+		return (operation === 'income' ? positiveValue : positiveValue * -1).toString();
+	}
+
 	const handleOperationChange = (newOperation: 'expense' | 'income') => {
 		setOperation(newOperation);
-		setAmount((amount) => {
-			const positiveValue = Math.abs(Number(amount));
-
-			return (newOperation === 'income' ? positiveValue : positiveValue * -1).toString();
-		});
+		setAmount((amount) => parseAmount(amount, newOperation));
 	};
+
+	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? transaction.id! : Date.now();
-
 		const newTransaction = buildTransaction(formData);
-
-		console.log('newTransaction', newTransaction);
 
 		onAddOptimisticAction({ id, ...newTransaction });
 
@@ -62,6 +63,10 @@ export default function TransactionForm({
 			try {
 				const saved = await saveTransaction(newTransaction);
 				onConfirmSaveAction(id, saved);
+				// Reset form and state after successful submission
+				formRef.current?.reset(); // Reset form inputs
+				setAmount(''); // Reset controlled amount input
+				setOperation('expense'); // Reset operation
 				closeFormAction();
 			} catch (err) {
 				console.error('Failed to save transaction:', err);
@@ -84,7 +89,7 @@ export default function TransactionForm({
 				</Button>
 			</DialogTitle>
 
-			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
+			<form className="z-20 mt-4 space-y-4" action={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
@@ -94,12 +99,18 @@ export default function TransactionForm({
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Date</Label>
-						<Input name="date" type="datetime-local" defaultValue={transaction?.date} autoFocus />
+						<Input
+							name="date"
+							required
+							type="datetime-local"
+							defaultValue={transaction?.date}
+							autoFocus
+						/>
 					</Field>
 
 					<Field className="col-span-1">
 						<Label>Amount {amount}</Label>
-						<MoneyInput name="amount" value={amount} onChange={setAmount} />
+						<MoneyInput name="amount" value={amount} onChange={handleChangeAmount} />
 					</Field>
 				</div>
 
@@ -123,8 +134,9 @@ export default function TransactionForm({
 							Delete
 						</Button>
 					)}
-
-					<Button type="submit"> {isPending ? 'Saving...' : 'Save'}</Button>
+					<Button type="submit" disabled={isPending}>
+						{isPending ? 'Saving...' : 'Save'}
+					</Button>
 				</DialogActions>
 			</form>
 		</Dialog>
