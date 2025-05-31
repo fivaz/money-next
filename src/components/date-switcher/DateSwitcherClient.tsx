@@ -1,12 +1,12 @@
 'use client';
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
-import { Button } from '../base/button';
 import { atom, useAtom } from 'jotai';
 import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ChangeEvent, useMemo, useRef, useEffect, useState } from 'react';
+import { ChangeEvent, useMemo, useRef } from 'react';
 import { Text } from '@/components/base/text';
 import MoneyText from '@/components/MoneyText';
-import { getBalance } from '@/app/actions/get-balance';
+import { Button } from '@/components/base/button';
+import { Heading, Subheading } from '@/components/base/heading';
 
 // Define the atom for current date
 export const currentDateAtom = atom(new Date());
@@ -59,13 +59,13 @@ export default function DateSwitcherClient({ actualBalance }: DateSwitcherClient
 
 	return (
 		<div className="flex items-center justify-between gap-3 p-3">
-			<Button onClick={handlePrevMonth}>
+			<Button outline onClick={handlePrevMonth}>
 				<ChevronLeft className="size-7" />
 			</Button>
 			<div className="flex flex-col items-center">
 				<div className="flex items-center justify-center gap-2">
-					<Text>{formattedDate}</Text>
-					<Button size="p-1" className="focus:outline-none" onClick={showDatePicker}>
+					<Heading>{formattedDate}</Heading>
+					<Button outline size="p-1" className="focus:outline-none" onClick={showDatePicker}>
 						<Calendar1Icon
 							className="size-4 text-yellow-500 dark:text-yellow-400"
 							aria-hidden="true"
@@ -80,15 +80,15 @@ export default function DateSwitcherClient({ actualBalance }: DateSwitcherClient
 					/>
 				</div>
 				<div className="flex items-center gap-2">
-					<Text>
+					<Subheading>
 						<MoneyText>{actualBalance}</MoneyText>
-					</Text>
-					<Text>
+					</Subheading>
+					<Subheading>
 						( <MoneyText className={balanceClass}>{balanceDifference}</MoneyText> )
-					</Text>
+					</Subheading>
 				</div>
 			</div>
-			<Button onClick={handleNextMonth}>
+			<Button outline onClick={handleNextMonth}>
 				<ChevronRight className="size-7" />
 			</Button>
 		</div>
