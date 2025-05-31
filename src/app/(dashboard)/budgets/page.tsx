@@ -1,18 +1,18 @@
-import { getCurrentMonthTransactions } from '@/lib/transaction/transaction.actions';
-import TransactionList from '@/components/transaction/TransactionList';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { Suspense } from 'react';
 import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
+import { getBudgets } from '@/lib/budget/budget.actions';
+import BudgetList from '@/components/budget/BudgetList';
 
 export default async function HomePage() {
-	const transactions = await getCurrentMonthTransactions();
+	const budgets = await getBudgets();
 
 	return (
 		<main>
 			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>
 				<DateSwitcher />
 			</Suspense>
-			<TransactionList initialTransactions={transactions} />
+			<BudgetList initialBudgets={budgets} />
 		</main>
 	);
 }

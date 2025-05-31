@@ -7,14 +7,19 @@ import { Text } from '@/components/base/text';
 import MoneyText from '@/components/MoneyText';
 import { Button } from '@/components/base/button';
 import { Heading, Subheading } from '@/components/base/heading';
+import { Skeleton } from '@/components/Skeleton';
 
 // Define the atom for current date
 export const currentDateAtom = atom(new Date());
 
 type DateSwitcherClientProps = {
 	actualBalance: number;
+	isLoading?: boolean;
 };
-export default function DateSwitcherClient({ actualBalance }: DateSwitcherClientProps) {
+export default function DateSwitcherClient({
+	actualBalance,
+	isLoading = false,
+}: DateSwitcherClientProps) {
 	const [date, setDate] = useAtom(currentDateAtom);
 	const dateInput = useRef<HTMLInputElement>(null);
 
@@ -81,10 +86,16 @@ export default function DateSwitcherClient({ actualBalance }: DateSwitcherClient
 				</div>
 				<div className="flex items-center gap-2">
 					<Subheading>
-						<MoneyText>{actualBalance}</MoneyText>
+						{isLoading ? <Skeleton /> : <MoneyText>{actualBalance}</MoneyText>}
 					</Subheading>
 					<Subheading>
-						( <MoneyText className={balanceClass}>{balanceDifference}</MoneyText> )
+						(
+						{isLoading ? (
+							<Skeleton />
+						) : (
+							<MoneyText className={balanceClass}>{balanceDifference}</MoneyText>
+						)}
+						)
 					</Subheading>
 				</div>
 			</div>
