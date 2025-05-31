@@ -33,11 +33,13 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 	};
 
 	return (
-		<div>
-			<TransactionFormButton
-				onAddOptimisticAction={handleAddOptimistic}
-				onConfirmSaveAction={handleConfirmSave}
-			/>
+		<div className="flex flex-col gap-4">
+			<div className="flex justify-end">
+				<TransactionFormButton
+					onAddOptimisticAction={handleAddOptimistic}
+					onConfirmSaveAction={handleConfirmSave}
+				/>
+			</div>
 			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
 				{optimisticTransactions.map((transaction) => (
 					<TransactionItem
