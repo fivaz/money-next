@@ -63,15 +63,15 @@ export default function TransactionForm({
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
-			<DialogTitle className="font-semibold">
+			<DialogTitle className="flex items-center justify-between">
 				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
-				<Button onClick={closeFormAction}>
+				<Button onClick={closeFormAction} outline size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
 
 			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
-				<OperationSelector value={transaction?.id ? 'income' : 'expense'} />
+				<OperationSelector value="" />
 				<Field>
 					<Label>Description</Label>
 					<Textarea name="description" defaultValue={transaction?.description} />
