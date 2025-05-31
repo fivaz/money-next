@@ -47,7 +47,6 @@ export default function TransactionForm({
 			date: formData.get('date') as string,
 			isPaid: formData.get('isPaid') === 'on',
 			referenceDate: (formData.get('referenceDate') as string) || '',
-			userId: 'you',
 			createdAt: new Date().toISOString(),
 			isDeleted: false,
 		};

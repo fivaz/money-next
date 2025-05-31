@@ -28,7 +28,12 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 		<div>
 			<ul>
 				{optimisticTransactions.map((transaction) => (
-					<TransactionItem key={transaction.id} transaction={transaction} />
+					<TransactionItem
+						key={transaction.id}
+						transaction={transaction}
+						onAddOptimisticAction={handleAddOptimistic}
+						onConfirmSaveAction={handleConfirmSave}
+					/>
 				))}
 			</ul>
 			<TransactionFormButton
