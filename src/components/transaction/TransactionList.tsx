@@ -32,8 +32,8 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 				))}
 			</ul>
 			<TransactionFormButton
-				onAddOptimistic={handleAddOptimistic}
-				onConfirmSave={handleConfirmSave}
+				onAddOptimisticAction={handleAddOptimistic}
+				onConfirmSaveAction={handleConfirmSave}
 			/>
 		</div>
 	);

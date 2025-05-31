@@ -16,9 +16,9 @@ import { XIcon } from 'lucide-react';
 export type TransactionFormProps = {
 	transaction?: Transaction;
 	isOpen: boolean;
-	closeForm: () => void;
-	onAddOptimistic: (transaction: Transaction) => void;
-	onConfirmSave: (tempId: number, realTransaction: Transaction) => void;
+	closeFormAction: () => void;
+	onAddOptimisticAction: (transaction: Transaction) => void;
+	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
 };
 
 const transactionExample: Transaction = {
@@ -31,9 +31,9 @@ const transactionExample: Transaction = {
 export default function TransactionForm({
 	transaction = transactionExample,
 	isOpen,
-	closeForm,
-	onAddOptimistic,
-	onConfirmSave,
+	closeFormAction,
+	onAddOptimisticAction,
+	onConfirmSaveAction,
 }: TransactionFormProps) {
 	const [isPending, startTransition] = useTransition();
 
@@ -52,19 +52,20 @@ export default function TransactionForm({
 			isDeleted: false,
 		};
 
-		onAddOptimistic(optimisticTransaction);
+		onAddOptimisticAction(optimisticTransaction);
 
 		startTransition(async () => {
 			const saved = await saveTransaction(formData);
-			onConfirmSave(fakeId, saved);
+			onConfirmSaveAction(fakeId, saved);
+			closeFormAction();
 		});
 	}
 
 	return (
-		<Dialog open={isOpen} onClose={closeForm}>
+		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="font-semibold">
 				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
-				<Button onClick={closeForm}>
+				<Button onClick={closeFormAction}>
 					<XIcon />
 				</Button>
 			</DialogTitle>
