@@ -13,6 +13,7 @@ import { Button } from '@/components/base/button';
 import { saveTransaction } from '@/app/actions/transaction';
 import { XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
+import MoneyInput from '@/components/MoneyInput';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -35,31 +36,25 @@ export default function TransactionForm({
 	const [operation, setOperation] = useState<'expense' | 'income'>(
 		transaction?.amount && transaction.amount > 0 ? 'income' : 'expense',
 	);
-	const [amount, setAmount] = useState(transaction?.amount?.toString() || '');
+	const [amount, setAmount] = useState<string>(transaction?.amount.toString() || '');
 
 	const isEditing = !!transaction?.id;
 
 	const handleOperationChange = (newOperation: 'expense' | 'income') => {
 		setOperation(newOperation);
-		// Update amount based on operation
-		if (amount) {
-			const numericAmount = parseFloat(amount);
-			if (!isNaN(numericAmount)) {
-				setAmount(
-					newOperation === 'expense' && numericAmount > 0
-						? (-numericAmount).toString()
-						: newOperation === 'income' && numericAmount < 0
-							? Math.abs(numericAmount).toString()
-							: amount,
-				);
-			}
-		}
+		setAmount((amount) => {
+			const positiveValue = Math.abs(Number(amount));
+
+			return (newOperation === 'income' ? positiveValue : positiveValue * -1).toString();
+		});
 	};
 
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? transaction.id! : Date.now();
 
 		const newTransaction = buildTransaction(formData);
+
+		console.log('newTransaction', newTransaction);
 
 		onAddOptimisticAction({ id, ...newTransaction });
 
@@ -90,7 +85,7 @@ export default function TransactionForm({
 			</DialogTitle>
 
 			<form className="z-20 mt-4 space-y-4" action={handleSubmit}>
-				<input type="hidden" defaultValue={transaction?.id} />
+				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
 					<Label>Description</Label>
@@ -103,12 +98,8 @@ export default function TransactionForm({
 					</Field>
 
 					<Field className="col-span-1">
-						<Label>Amount</Label>
-						<Input
-							name="amount"
-							value={Math.abs(Number(amount))}
-							onChange={(event) => setAmount(event.target.value)}
-						/>
+						<Label>Amount {amount}</Label>
+						<MoneyInput name="amount" value={amount} onChange={setAmount} />
 					</Field>
 				</div>
 

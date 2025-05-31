@@ -46,7 +46,8 @@ export async function saveTransaction(transaction: Transaction) {
 
 	const url = transaction.id ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
 
-	console.log(url);
+	console.log('url', url);
+	console.log('method', method);
 
 	const res = await fetch(url, {
 		method,
