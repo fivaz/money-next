@@ -1,33 +1,45 @@
+'use client';
+
 import { Input } from '@/components/base/input';
-import { ChangeEvent, InputHTMLAttributes, useMemo } from 'react';
-import * as Headless from '@headlessui/react';
+import { ChangeEvent, InputHTMLAttributes, useEffect, useState } from 'react';
 
 type MoneyInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> & {
-	value: string;
-	onChange: (value: string) => void;
+	value?: string; // now optional for uncontrolled use
+	defaultValue?: string; // added for uncontrolled mode
+	onChange?: (value: string) => void;
 };
 
-export default function MoneyInput({ value, onChange, name, ...props }: MoneyInputProps) {
-	const displayValue = (Math.abs(Number(value)) / 100).toFixed(2);
+export default function MoneyInput({
+	value: controlledValue,
+	defaultValue,
+	onChange,
+	name,
+	...props
+}: MoneyInputProps) {
+	const isControlled = controlledValue !== undefined;
+
+	const [internalValue, setInternalValue] = useState(defaultValue ?? '0');
+
+	// use the actual value to compute the display value
+	const rawValue = isControlled ? controlledValue : internalValue;
+	const displayValue = (Math.abs(Number(rawValue)) / 100).toFixed(2);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const input = (e.target as HTMLInputElement)?.value;
+		const input = e.target.value;
+		const numericInput = input.replace(/\D/g, '');
+		const newValue = numericInput ? parseInt(numericInput).toString() : '0';
 
-		// Remove non-numeric characters except decimal point
-		let numericInput = input.replace(/\D/g, '');
-
-		// Ensure only one decimal point
-		const value = numericInput ? parseInt(numericInput) : 0;
-
-		// Trigger onChange with cents value
-		onChange(value.toString());
+		if (isControlled) {
+			onChange?.(newValue);
+		} else {
+			setInternalValue(newValue);
+		}
 	};
 
 	return (
 		<>
 			<Input value={displayValue} onChange={handleChange} {...props} />
-			{/*so the formData.get('name') will get the true value, instead of the value the user sees*/}
-			<input type="hidden" name={name} value={value} />
+			<input type="hidden" name={name} value={rawValue} />
 		</>
 	);
 }

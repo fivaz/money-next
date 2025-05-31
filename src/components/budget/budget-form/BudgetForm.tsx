@@ -13,6 +13,7 @@ import { saveBudget } from '@/lib/budget/budget.actions';
 import { XIcon } from 'lucide-react';
 import { buildBudget } from '@/lib/budget/budget.utils';
 import MoneyInput from '@/components/MoneyInput';
+import IconPicker from '@/components/icon-picker/IconPicker';
 
 export type BudgetFormProps = {
 	budget?: Budget;
@@ -94,16 +95,18 @@ export default function BudgetForm({
 
 			<form className="z-20 mt-4 space-y-4" action={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={budget?.id} />
-				<Field>
-					<Label>Description</Label>
-					<Input name="name" defaultValue={budget?.name} />
-				</Field>
 				<div className="grid grid-cols-3 gap-4">
+					<Field className="col-span-2">
+						<Label>Name</Label>
+						<Input name="name" defaultValue={budget?.name} />
+					</Field>
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<MoneyInput name="amount" value={amount} onChange={handleChangeAmount} />
+						<MoneyInput name="amount" defaultValue={amount} />
 					</Field>
 				</div>
+
+				<IconPicker value={budget?.icon} onChange={handleOperationChange} />
 
 				<DialogActions>
 					<div>
