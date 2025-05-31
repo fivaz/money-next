@@ -17,7 +17,7 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 	const [optimisticTransactions, addOptimisticTransaction] = useOptimistic(
 		transactions,
 		(currentList: Transaction[], newTx: Transaction) =>
-			sortTransactionsByDate([...currentList, newTx]),
+			sortTransactionsByDate([...currentList.filter((t) => t.id !== newTx.id), newTx]),
 	);
 
 	const handleConfirmSave = (tempId: number, savedTransaction: Transaction) => {

@@ -51,29 +51,33 @@ export default function TransactionForm({
 		setAmount((amount) => parseAmount(amount, newOperation));
 	};
 
+	const resetForm = () => {
+		// Reset form and state after successful submission
+		formRef.current?.reset(); // Reset form inputs
+		setAmount(''); // Reset controlled amount input
+		setOperation('expense'); // Reset operation
+	};
+
 	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? transaction.id! : Date.now();
-		const newTransaction = buildTransaction(formData);
+		const newTransactionWithoutId = buildTransaction(formData);
+		const newTransaction = { id, ...newTransactionWithoutId };
 
-		onAddOptimisticAction({ id, ...newTransaction });
+		onAddOptimisticAction(newTransaction);
 
 		startTransition(async () => {
 			try {
-				const saved = await saveTransaction(newTransaction);
+				const saved = await saveTransaction(newTransaction, isEditing);
 				onConfirmSaveAction(id, saved);
-				// Reset form and state after successful submission
-				formRef.current?.reset(); // Reset form inputs
-				setAmount(''); // Reset controlled amount input
-				setOperation('expense'); // Reset operation
+				resetForm();
 				closeFormAction();
 			} catch (err) {
 				console.error('Failed to save transaction:', err);
 			}
 		});
 	}
-
 	function handleDelete() {
 		if (transaction && onDeleteAction) {
 			onDeleteAction(transaction);
@@ -129,11 +133,13 @@ export default function TransactionForm({
 				</Field>
 
 				<DialogActions>
-					{isEditing && onDeleteAction && (
-						<Button type="button" color="red" onClick={handleDelete}>
-							Delete
-						</Button>
-					)}
+					<div>
+						{isEditing && onDeleteAction && (
+							<Button type="button" color="red" onClick={handleDelete}>
+								Delete
+							</Button>
+						)}
+					</div>
 					<Button type="submit" disabled={isPending}>
 						{isPending ? 'Saving...' : 'Save'}
 					</Button>

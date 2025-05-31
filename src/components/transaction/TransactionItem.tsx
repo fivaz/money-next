@@ -31,7 +31,6 @@ export default function TransactionItem({
 		<li className="flex items-center justify-between bg-white px-3 py-2 dark:bg-gray-700">
 			<div className="flex min-w-0 items-center gap-4">
 				<Text className="flex shrink-0 items-center gap-2">
-					{transaction.id}
 					<CalendarIcon className="hidden size-4 shrink-0 md:block" />
 					<span className="block md:hidden">{date.short}</span>
 					<span className="hidden md:block">{date.long}</span>

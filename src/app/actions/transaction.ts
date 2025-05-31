@@ -37,17 +37,14 @@ export async function getCurrentMonthTransactions(): Promise<Transaction[]> {
 	return validateTransactions(data);
 }
 
-export async function saveTransaction(transaction: Transaction) {
+export async function saveTransaction(transaction: Transaction, isEditing: boolean) {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
 
-	const method = transaction.id ? 'PUT' : 'POST';
+	const method = isEditing ? 'PUT' : 'POST';
 
-	const url = transaction.id ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
-
-	console.log('url', url);
-	console.log('method', method);
+	const url = isEditing ? `${TransactionRoute}/${transaction.id}` : TransactionRoute;
 
 	const res = await fetch(url, {
 		method,
