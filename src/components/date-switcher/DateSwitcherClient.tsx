@@ -7,7 +7,7 @@ import MoneyText from '@/components/MoneyText';
 import { Button } from '@/components/base/button';
 import { Heading, Subheading } from '@/components/base/heading';
 import { Skeleton } from '@/components/Skeleton';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const currentDateAtom = atom(new Date());
 
@@ -20,6 +20,7 @@ export default function DateSwitcherClient({
 	isLoading = false,
 }: DateSwitcherClientProps) {
 	const router = useRouter();
+	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
 	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
@@ -52,8 +53,13 @@ export default function DateSwitcherClient({
 		changeRoute(newDate);
 	};
 
-	const changeRoute = (date: Date) =>
-		router.push(`/?year=${date.getFullYear()}&month=${date.getMonth() + 1}`);
+	const changeRoute = (date: Date) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set('year', date.getFullYear().toString());
+		params.set('month', (date.getMonth() + 1).toString());
+
+		router.push(`${pathname}?${params.toString()}`);
+	};
 
 	const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newDate = new Date(e.target.value);

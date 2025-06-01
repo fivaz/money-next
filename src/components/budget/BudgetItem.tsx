@@ -43,7 +43,7 @@ export default function BudgetItem({
 		useTransactionsWithOptimistic(url);
 
 	return (
-		<Disclosure ref={ref} as="div">
+		<Disclosure ref={ref} as="div" defaultOpen>
 			{({ open }) => (
 				<li className="rounded-lg border border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-800">
 					<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
