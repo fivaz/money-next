@@ -1,7 +1,7 @@
 'use client';
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, ReceiptTextIcon } from 'lucide-react';
 import TransactionForm, {
 	type TransactionFormProps,
 } from '@/components/transaction/transaction-form/TransactionForm';
@@ -29,8 +29,8 @@ export default function TransactionFormButton({
 			<Button onClick={openDialog}>
 				{children || (
 					<>
-						<PlusIcon />
-						Transaction
+						<ReceiptTextIcon />
+						Add Transaction
 					</>
 				)}
 			</Button>

@@ -38,7 +38,7 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 					onConfirmSaveAction={handleConfirmSave}
 				/>
 			</div>
-			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
+			<ul className="mt-4 space-y-2">
 				{optimisticBudgets.map((budget) => (
 					<BudgetItem
 						key={budget.id}

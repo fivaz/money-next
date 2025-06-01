@@ -1,7 +1,7 @@
 'use client';
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
-import { PlusIcon } from 'lucide-react';
+import { PiggyBankIcon, PlusIcon } from 'lucide-react';
 import BudgetForm, { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
 
 type BudgetFormButtonProps = PropsWithChildren &
@@ -27,8 +27,8 @@ export default function BudgetFormButton({
 			<Button onClick={openDialog}>
 				{children || (
 					<>
-						<PlusIcon />
-						Budget
+						<PiggyBankIcon className="size-5" />
+						Add Budget
 					</>
 				)}
 			</Button>
