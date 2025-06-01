@@ -1,8 +1,9 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { BACKEND_URL } from '@/lib/const';
+import { BACKEND_URL, ROUTES } from '@/lib/const';
 import { Transaction, validateTransactions } from '@/lib/transaction/transaction.model';
+import { revalidatePath } from 'next/cache';
 
 const TransactionRoute = `${BACKEND_URL}/transactions`;
 
@@ -61,7 +62,9 @@ export async function saveTransaction(transaction: Transaction, isEditing: boole
 		throw new Error(errorMsg);
 	}
 
-	return await res.json();
+	const saved = await res.json();
+	revalidatePath(ROUTES.ROOT.path);
+	return saved;
 }
 
 export async function deleteTransaction(id: number): Promise<void> {
@@ -79,4 +82,6 @@ export async function deleteTransaction(id: number): Promise<void> {
 		const msg = await res.text();
 		throw new Error(`Delete failed: ${msg}`);
 	}
+
+	revalidatePath(ROUTES.ROOT.path);
 }

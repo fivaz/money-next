@@ -23,7 +23,6 @@ const fetcher = (url: string) =>
 
 export default function TransactionList({ initialTransactions }: TransactionProps) {
 	const date = useAtomValue(currentDateAtom);
-	const isFirstRender = useRef(true);
 
 	const {
 		items: transactions,
