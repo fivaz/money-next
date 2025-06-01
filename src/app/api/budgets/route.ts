@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { validateBudgetsWithTransactions } from '@/lib/budget/budget-transaction.model';
-import { BackEndBudgetRoute, validateBudgets } from '@/lib/budget/budget.model';
-import { BACKEND_URL } from '@/lib/const';
+import { BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 
 export async function GET(request: NextRequest) {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
 
-	const res = await fetch(BackEndBudgetRoute, {
+	const res = await fetch(BUDGETS_URL, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},

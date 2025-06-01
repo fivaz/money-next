@@ -1,6 +1,6 @@
 export const ROUTES = {
 	ROOT: {
-		name: 'Accounts',
+		name: 'Transactions',
 		path: '/',
 	},
 	BUDGETS: {
@@ -30,3 +30,8 @@ export const navLinks = [ROUTES.ROOT, ROUTES.BUDGETS, ROUTES.SOURCES];
 export const profileLinks = [ROUTES.PROFILE];
 
 export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
+
+export const API = {
+	TRANSACTIONS: 'transactions',
+	BUDGETS: 'budgets',
+};

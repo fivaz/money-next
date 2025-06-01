@@ -1,15 +1,16 @@
 import { getDate, getDaysInMonth, startOfDay } from 'date-fns';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
-import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
+import { type Budget } from '@/lib/budget/budget.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
 // Define props interface
 interface ProgressBarProps {
-	budget: BudgetWithTransactions;
+	budget: Budget;
+	transactions: Transaction[];
 }
 
-export default function ProgressBar({ budget }: ProgressBarProps) {
+export default function ProgressBar({ budget, transactions }: ProgressBarProps) {
 	// Get current date information using date-fns
 	const currentDate = startOfDay(new Date());
 	const currentDay = getDate(currentDate);
@@ -19,7 +20,7 @@ export default function ProgressBar({ budget }: ProgressBarProps) {
 	const dayOfMonthPercentage = Math.round((currentDay / daysInMonth) * 100);
 
 	// Calculate total spent from transactions
-	const totalSpent = budget.transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+	const totalSpent = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
 	// Calculate actual percentage (can exceed 100%)
 	const actualPercentage = Math.round((totalSpent / budget.amount) * 100);

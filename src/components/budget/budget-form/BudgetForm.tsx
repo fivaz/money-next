@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState, useTransition } from 'react';
-import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
+import { type Budget } from '@/lib/budget/budget.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
@@ -12,12 +12,12 @@ import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
 
 export type BudgetFormProps = {
-	budget?: BudgetWithTransactions;
+	budget?: Budget;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOptimisticAction: (budget: BudgetWithTransactions) => void;
-	onConfirmSaveAction: (tempId: number, realBudget: BudgetWithTransactions) => void;
-	onDeleteAction?: (budget: BudgetWithTransactions) => void;
+	onAddOptimisticAction: (budget: Budget) => void;
+	onConfirmSaveAction: (tempId: number, realBudget: Budget) => void;
+	onDeleteAction?: (budget: Budget) => void;
 };
 
 export default function BudgetForm({

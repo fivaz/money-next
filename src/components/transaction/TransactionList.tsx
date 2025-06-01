@@ -6,6 +6,7 @@ import { useEffect, useOptimistic, useState, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { currentDateAtom } from '@/components/date-switcher/DateSwitcherClient';
 import useSWR from 'swr';
+import { API } from '@/lib/const';
 
 type TransactionProps = {
 	initialTransactions: Transaction[];
@@ -22,7 +23,7 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 	const isFirstRender = useRef(true);
 
 	// SWR key is always valid, but we will conditionally enable fetching after first render
-	const swrKey = `/api/transactions?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
+	const swrKey = `/api/${API.TRANSACTIONS}?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
 
 	// Pass a boolean `shouldFetch` to control fetching, initially false
 	const {
