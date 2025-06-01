@@ -8,6 +8,7 @@ import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
 import { DATE_FORMAT } from '@/lib/shared.model';
+import IconView from '@/components/icon-picker/IconView';
 
 type TransactionItemProps = {
 	transaction: Transaction;
@@ -31,16 +32,24 @@ export default function TransactionItem({
 	return (
 		<li className="flex items-center justify-between bg-white px-3 py-2 dark:bg-gray-700">
 			<div className="flex min-w-0 items-center gap-4">
-				<Text className="flex shrink-0 items-center gap-2">
-					<CalendarIcon className="hidden size-4 shrink-0 md:block" />
-					<span className="block md:hidden">{date.short}</span>
-					<span className="hidden md:block">{date.long}</span>
-				</Text>
-				<Text className="hidden shrink-0 items-center gap-2 md:flex">
-					<ClockIcon className="size-4 shrink-0" />
-					<span className="w-8">{date.time}</span>
-				</Text>
-				<Strong className="min-w-0 flex-1 truncate">{transaction.description}</Strong>
+				<div className="flex min-w-0 items-center gap-2">
+					<Text className="flex shrink-0 items-center gap-2">
+						<CalendarIcon className="hidden size-4 shrink-0 md:block" />
+						<span className="block md:hidden">{date.short}</span>
+						<span className="hidden md:block">{date.long}</span>
+					</Text>
+					<Text className="hidden shrink-0 items-center gap-2 md:flex">
+						<ClockIcon className="size-4 shrink-0" />
+						<span className="">{date.time}</span>
+					</Text>
+				</div>
+
+				<div className="flex items-center gap-2 truncate">
+					<Strong>
+						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
+					</Strong>
+					<Strong className="min-w-0 flex-1 truncate">{transaction.description}</Strong>
+				</div>
 			</div>
 
 			<div className="flex shrink-0 items-center gap-2">
