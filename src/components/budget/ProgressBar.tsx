@@ -3,6 +3,9 @@ import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
+import { useEffect, useMemo } from 'react';
+import clsx from 'clsx';
+import { sumTransactions } from '@/lib/transaction/transaction.utils';
 
 // Define props interface
 interface ProgressBarProps {
@@ -20,7 +23,7 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 	const dayOfMonthPercentage = Math.round((currentDay / daysInMonth) * 100);
 
 	// Calculate total spent from transactions
-	const totalSpent = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+	const totalSpent = sumTransactions(transactions);
 
 	// Calculate actual percentage (can exceed 100%)
 	const actualPercentage = Math.round((totalSpent / budget.amount) * 100);
@@ -31,14 +34,16 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 	// Determine progress bar color based on if budget is exceeded
 	const progressColor = totalSpent > budget.amount ? 'bg-red-500' : 'bg-yellow-500';
 
-	// Dynamic classes
-	const progressBarClass = `${progressColor} h-3 rounded-full transition-all duration-300 ease-in-out relative`;
-	const containerClass = `bg-gray-200 h-3 rounded-full flex-1`;
-
 	return (
 		<div className="flex items-center gap-2">
-			<div className={containerClass} style={{ position: 'relative' }}>
-				<div className={progressBarClass} style={{ width: `${progressPercentage}%` }}>
+			<div className="h-3 flex-1 rounded-full bg-gray-200" style={{ position: 'relative' }}>
+				<div
+					className={clsx(
+						'relative h-3 rounded-full transition-all duration-300 ease-in-out',
+						progressColor,
+					)}
+					style={{ width: `${progressPercentage}%` }}
+				>
 					{progressPercentage >= 5 && (
 						<span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-stone-600">
 							{actualPercentage}%

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { BACKEND_URL, ROUTES } from '@/lib/const';
 import { type Budget, BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 import { revalidatePath } from 'next/cache';
-import { fetchWithAuth } from '@/lib/shared/shared.actions';
+import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
 export async function getBudgets(): Promise<Budget[]> {
 	const data = await fetchWithAuth(BUDGETS_URL);

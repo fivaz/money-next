@@ -19,3 +19,6 @@ export const buildTransaction = (
 
 export const sortTransactions = (transactions: Transaction[]): Transaction[] =>
 	transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+export const sumTransactions = (transactions: Transaction[]): number =>
+	transactions.reduce((sum, t) => sum - t.amount, 0);

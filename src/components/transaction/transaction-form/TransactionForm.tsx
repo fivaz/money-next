@@ -1,5 +1,12 @@
 'use client';
-import { type PropsWithChildren, useState, useTransition, useRef, useEffect } from 'react';
+import {
+	type PropsWithChildren,
+	useState,
+	useTransition,
+	useRef,
+	useEffect,
+	FormEvent,
+} from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Heading } from '@/components/base/heading';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
@@ -17,12 +24,7 @@ import MoneyInput from '@/components/MoneyInput';
 import { Listbox, ListboxOption } from '@/components/base/listbox';
 import { Budget } from '@/lib/budget/budget.model';
 import useSWR from 'swr';
-
-const fetcher = (url: string) =>
-	fetch(url, { credentials: 'include' }).then((res) => {
-		if (!res.ok) throw new Error('Failed to fetch');
-		return res.json();
-	});
+import { fetcher } from '@/lib/shared/api-client.utils';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -41,7 +43,6 @@ export default function TransactionForm({
 	onConfirmSaveAction,
 	onDeleteAction,
 }: TransactionFormProps) {
-	const [isPending, startTransition] = useTransition();
 	const [operation, setOperation] = useState<'expense' | 'income'>(
 		transaction?.amount && transaction.amount > 0 ? 'income' : 'expense',
 	);
@@ -71,24 +72,25 @@ export default function TransactionForm({
 
 	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
-	const handleSubmit = async (formData: FormData) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+
 		const id = isEditing ? transaction.id! : -Date.now();
 		const newTransactionWithoutId = buildTransaction(formData, budgets);
 
 		const newTransaction = { id, ...newTransactionWithoutId };
 
 		onAddOptimisticAction(newTransaction);
+		resetForm();
+		closeFormAction();
 
-		startTransition(async () => {
-			try {
-				const saved = await saveTransaction(newTransaction, isEditing);
-				onConfirmSaveAction(id, saved);
-				resetForm();
-				closeFormAction();
-			} catch (err) {
-				console.error('Failed to save transaction:', err);
-			}
-		});
+		try {
+			const saved = await saveTransaction(newTransaction, isEditing);
+			onConfirmSaveAction(id, saved);
+		} catch (err) {
+			console.error('Failed to save transaction:', err);
+		}
 	};
 
 	const handleDelete = () => {
@@ -106,7 +108,7 @@ export default function TransactionForm({
 				</Button>
 			</DialogTitle>
 
-			<form className="z-20 mt-4 space-y-4" action={handleSubmit} ref={formRef}>
+			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
@@ -178,9 +180,7 @@ export default function TransactionForm({
 							</Button>
 						)}
 					</div>
-					<Button type="submit" disabled={isPending}>
-						{isPending ? 'Saving...' : 'Save'}
-					</Button>
+					<Button type="submit">Save</Button>
 				</DialogActions>
 			</form>
 		</Dialog>

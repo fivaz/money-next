@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
 import { Transaction } from '@/lib/transaction/transaction.model';
-
-const fetcher = (url: string) =>
-	fetch(url, { credentials: 'include' }).then((res) => {
-		if (!res.ok) throw new Error('Failed to fetch');
-		return res.json();
-	});
+import { fetcher } from '@/lib/shared/api-client.utils';
 
 export function useTransactionsWithOptimistic(url: string | null) {
 	const { data: swrTransactions, error, mutate } = useSWR<Transaction[]>(url, fetcher);
