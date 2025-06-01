@@ -1,5 +1,5 @@
 'use client';
-import { type PropsWithChildren, useState, useTransition, useRef } from 'react';
+import { type PropsWithChildren, useState, useTransition, useRef, useEffect } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Heading } from '@/components/base/heading';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
@@ -11,11 +11,18 @@ import { Switch, SwitchField } from '@/components/base/switch';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { saveTransaction } from '@/lib/transaction/transaction.actions';
-import { XIcon } from 'lucide-react';
+import { LoaderCircleIcon, XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import MoneyInput from '@/components/MoneyInput';
 import { Listbox, ListboxOption } from '@/components/base/listbox';
 import { Budget } from '@/lib/budget/budget.model';
+import useSWR from 'swr';
+
+const fetcher = (url: string) =>
+	fetch(url, { credentials: 'include' }).then((res) => {
+		if (!res.ok) throw new Error('Failed to fetch');
+		return res.json();
+	});
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -25,8 +32,6 @@ export type TransactionFormProps = {
 	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
 	onDeleteAction?: (transaction: Transaction) => void;
 };
-
-const budgets: Budget[] = [];
 
 export default function TransactionForm({
 	transaction,
@@ -43,12 +48,18 @@ export default function TransactionForm({
 	const [amount, setAmount] = useState<string>(transaction?.amount.toString() || '');
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
+	const { data: budgets, error } = useSWR<Budget[]>('/api/budgets', fetcher);
+
+	useEffect(() => {
+		console.log(budgets);
+	}, [budgets]);
+
 	const isEditing = !!transaction?.id;
 
-	function parseAmount(amount: string, operation: 'expense' | 'income'): string {
+	const parseAmount = (amount: string, operation: 'expense' | 'income'): string => {
 		const positiveValue = Math.abs(Number(amount));
 		return (operation === 'income' ? positiveValue : positiveValue * -1).toString();
-	}
+	};
 
 	const handleOperationChange = (newOperation: 'expense' | 'income') => {
 		setOperation(newOperation);
@@ -64,9 +75,11 @@ export default function TransactionForm({
 
 	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
-	async function handleSubmit(formData: FormData) {
+	const handleSubmit = async (formData: FormData) => {
 		const id = isEditing ? transaction.id! : Date.now();
 		const newTransactionWithoutId = buildTransaction(formData, budgets);
+
+		console.log(newTransactionWithoutId);
 		const newTransaction = { id, ...newTransactionWithoutId };
 
 		onAddOptimisticAction(newTransaction);
@@ -81,12 +94,13 @@ export default function TransactionForm({
 				console.error('Failed to save transaction:', err);
 			}
 		});
-	}
-	function handleDelete() {
+	};
+
+	const handleDelete = () => {
 		if (transaction && onDeleteAction) {
 			onDeleteAction(transaction);
 		}
-	}
+	};
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
@@ -125,12 +139,24 @@ export default function TransactionForm({
 				<div className="flex items-center gap-4">
 					<Field className="flex-1">
 						<Label>Budget</Label>
-						<Listbox name="budget" defaultValue={transaction?.budget?.id}>
-							<ListboxOption value={null}>No budget</ListboxOption>
-							{budgets.map((budget) => (
-								<ListboxOption value={budget.id}>{budget.name}</ListboxOption>
-							))}
-						</Listbox>
+						{!budgets ? (
+							<Text>
+								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
+							</Text>
+						) : (
+							<Listbox
+								name="budget"
+								defaultValue={transaction?.budget?.id}
+								placeholder="Select budget&hellip;"
+							>
+								<ListboxOption value={null}>No budget</ListboxOption>
+								{budgets.map((budget) => (
+									<ListboxOption key={budget.id} value={budget.id}>
+										{budget.name}
+									</ListboxOption>
+								))}
+							</Listbox>
+						)}
 					</Field>
 
 					<Field className="flex h-[73px] flex-col items-center justify-between">

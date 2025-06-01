@@ -1,7 +1,10 @@
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Budget } from '@/lib/budget/budget.model';
 
-export function buildTransaction(formData: FormData, budgets: Budget[]): Omit<Transaction, 'id'> {
+export function buildTransaction(
+	formData: FormData,
+	budgets: Budget[] = [],
+): Omit<Transaction, 'id'> {
 	const budget = budgets.find((budget) => budget.id === Number(formData.get('budget'))) || null;
 
 	return {

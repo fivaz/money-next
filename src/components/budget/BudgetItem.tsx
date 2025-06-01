@@ -1,5 +1,6 @@
 'use client';
 import { Strong } from '@/components/base/text';
+import { Text } from '@/components/base/text';
 import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
 import { CogIcon } from 'lucide-react';
 import { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
@@ -23,7 +24,9 @@ export default function BudgetItem({
 			<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
-						<IconView className="size-5" name={budget.icon} />
+						<Text>
+							<IconView className="size-5" name={budget.icon} />
+						</Text>
 
 						<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
 					</div>

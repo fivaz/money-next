@@ -32,7 +32,7 @@ export default function ProgressBar({ budget }: ProgressBarProps) {
 
 	// Dynamic classes
 	const progressBarClass = `${progressColor} h-3 rounded-full transition-all duration-300 ease-in-out relative`;
-	const containerClass = `bg-gray-200 h-3 rounded-full w-full`;
+	const containerClass = `bg-gray-200 h-3 rounded-full flex-1`;
 
 	return (
 		<div className="flex items-center gap-2">
