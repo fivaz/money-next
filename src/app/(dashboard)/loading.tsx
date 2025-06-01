@@ -1,20 +1,10 @@
-import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
-import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import TransactionItem from '@/components/transaction/TransactionItem';
-import { CalendarIcon, ClockIcon, CogIcon, LoaderIcon, ReceiptTextIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, LoaderIcon } from 'lucide-react';
 import Button from '@/components/Button';
-import { Strong, Text } from '@/components/base/text';
 import IconView from '@/components/icon-picker/IconView';
-import MoneyText from '@/components/MoneyText';
 import { Skeleton } from '@/components/Skeleton';
 
 export default function Loading() {
-	return (
-		<main>
-			<DateSwitcherClient actualBalance={0} isLoading />
-			<TransactionListSkeleton />
-		</main>
-	);
+	return <TransactionListSkeleton />;
 }
 
 export function TransactionListSkeleton() {

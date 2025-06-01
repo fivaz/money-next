@@ -7,12 +7,5 @@ import BudgetList from '@/components/budget/BudgetList';
 export default async function BudgetsPage() {
 	const budgets = await getBudgets();
 
-	return (
-		<main>
-			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>
-				<DateSwitcher />
-			</Suspense>
-			<BudgetList initialBudgets={budgets} />
-		</main>
-	);
+	return <BudgetList initialBudgets={budgets} />;
 }

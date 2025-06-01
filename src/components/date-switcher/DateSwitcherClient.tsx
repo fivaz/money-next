@@ -9,14 +9,14 @@ import { Heading, Subheading } from '@/components/base/heading';
 import { Skeleton } from '@/components/Skeleton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export const currentDateAtom = atom(new Date());
-
 type DateSwitcherClientProps = {
 	actualBalance: number;
+	expectedBalance: number;
 	isLoading?: boolean;
 };
 export default function DateSwitcherClient({
 	actualBalance,
+	expectedBalance,
 	isLoading = false,
 }: DateSwitcherClientProps) {
 	const router = useRouter();
@@ -30,8 +30,6 @@ export default function DateSwitcherClient({
 
 	const dateInput = useRef<HTMLInputElement>(null);
 
-	// Mock data for balance; replace with actual data source
-	const expectedBalance = 0; // Example value
 	const balanceDifference = expectedBalance - actualBalance;
 	const balanceClass = balanceDifference >= 0 ? 'text-green-500' : 'text-red-500';
 

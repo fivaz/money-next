@@ -1,8 +1,10 @@
 import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
-import { getBalance } from '@/app/actions/get-balance';
+import { getActualBalance } from '@/app/actions/get-balance';
+import { getExpectedBalance } from '@/lib/source/source.actions';
 
 export default async function DateSwitcher() {
-	const balance = await getBalance();
+	const actualBalance = await getActualBalance();
+	const expectedBalance = await getExpectedBalance();
 
-	return <DateSwitcherClient actualBalance={balance} />;
+	return <DateSwitcherClient actualBalance={actualBalance} expectedBalance={expectedBalance} />;
 }

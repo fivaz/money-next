@@ -19,9 +19,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
 	return (
 		<main>
-			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>
-				<DateSwitcher />
-			</Suspense>
 			<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
 				<TransactionListWithData year={year} month={month} />
 			</Suspense>
