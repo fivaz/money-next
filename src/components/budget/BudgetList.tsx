@@ -2,52 +2,45 @@
 import BudgetItem from '@/components/budget/BudgetItem';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import { type Budget } from '@/lib/budget/budget.model';
-import { useOptimistic, useState } from 'react';
+import { useOptimisticBudgets } from '@/lib/budget/budge.hook';
+import { DragDropProvider } from '@dnd-kit/react';
+import { move } from '@dnd-kit/helpers';
+import { reorderBudgets } from '@/lib/budget/budget.actions';
 
 type BudgetProps = {
 	initialBudgets: Budget[];
 };
 export default function BudgetList({ initialBudgets }: BudgetProps) {
-	const sortBudgets = (budgets: Budget[]): Budget[] => {
-		return budgets.toSorted((a, b) => b.sortOrder - a.sortOrder);
-	};
+	const { budgets, confirmSave, addOrUpdateOptimistic, deleteOptimistic, setBudgets } =
+		useOptimisticBudgets(initialBudgets);
 
-	const [budgets, setBudgets] = useState(initialBudgets);
-
-	const [optimisticBudgets, addOptimisticBudget] = useOptimistic(
-		budgets,
-		(currentList: Budget[], newTx: Budget) =>
-			sortBudgets([...currentList.filter((t) => t.id !== newTx.id), newTx]),
-	);
-
-	const handleConfirmSave = (tempId: number, savedBudget: Budget) => {
-		setBudgets((prev) => sortBudgets([savedBudget, ...prev.filter((t) => t.id !== tempId)]));
-	};
-
-	const handleAddOptimistic = (budget: Budget) => addOptimisticBudget(budget);
-
-	const handleDelete = (budget: Budget) => {
-		setBudgets((prev) => prev.filter((t) => t.id !== budget.id));
+	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
+		const newBudgets = move(budgets, event);
+		setBudgets(newBudgets);
+		reorderBudgets(newBudgets);
 	};
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-end">
 				<BudgetFormButton
-					onAddOptimisticAction={handleAddOptimistic}
-					onConfirmSaveAction={handleConfirmSave}
+					onAddOptimisticAction={addOrUpdateOptimistic}
+					onConfirmSaveAction={confirmSave}
 				/>
 			</div>
 			<ul className="mt-4 space-y-2">
-				{optimisticBudgets.map((budget) => (
-					<BudgetItem
-						key={budget.id}
-						budget={budget}
-						onAddOptimisticAction={handleAddOptimistic}
-						onConfirmSaveAction={handleConfirmSave}
-						onDeleteAction={handleDelete}
-					/>
-				))}
+				<DragDropProvider onDragEnd={handleDragEnd}>
+					{budgets.map((budget, index) => (
+						<BudgetItem
+							index={index}
+							key={budget.id}
+							budget={budget}
+							onAddOptimisticAction={addOrUpdateOptimistic}
+							onConfirmSaveAction={confirmSave}
+							onDeleteAction={deleteOptimistic}
+						/>
+					))}
+				</DragDropProvider>
 			</ul>
 		</div>
 	);

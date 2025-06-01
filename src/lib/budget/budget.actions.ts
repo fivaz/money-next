@@ -2,9 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { BACKEND_URL } from '@/lib/const';
-import { type Budget, validateBudgets } from '@/lib/budget/budget.model';
-
-const BudgetRoute = `${BACKEND_URL}/budgets`;
+import { type Budget, BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 
 export async function getBudgets(): Promise<Budget[]> {
 	const token = (await cookies()).get('firebase_token')?.value;
@@ -15,7 +13,7 @@ export async function getBudgets(): Promise<Budget[]> {
 	const month = now.getMonth() + 1; // JS months are 0-indexed
 	const year = now.getFullYear();
 
-	const res = await fetch(BudgetRoute, {
+	const res = await fetch(BUDGETS_URL, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -39,7 +37,7 @@ export async function saveBudget(budget: Budget, isEditing: boolean) {
 
 	const method = isEditing ? 'PUT' : 'POST';
 
-	const url = isEditing ? `${BudgetRoute}/${budget.id}` : BudgetRoute;
+	const url = isEditing ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
 
 	const res = await fetch(url, {
 		method,
@@ -68,11 +66,30 @@ export async function deleteBudget(id: number): Promise<void> {
 	const token = (await cookies()).get('firebase_token')?.value;
 	if (!token) throw new Error('Not authenticated');
 
-	const res = await fetch(`${BudgetRoute}/${id}`, {
+	const res = await fetch(`${BUDGETS_URL}/${id}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
+	});
+
+	if (!res.ok) {
+		const msg = await res.text();
+		throw new Error(`Delete failed: ${msg}`);
+	}
+}
+
+export async function reorderBudgets(budgets: Budget[]): Promise<void> {
+	const token = (await cookies()).get('firebase_token')?.value;
+	if (!token) throw new Error('Not authenticated');
+
+	const res = await fetch(`${BUDGETS_URL}/reorder`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify(budgets.map(({ id }) => ({ id }))),
 	});
 
 	if (!res.ok) {

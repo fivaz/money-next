@@ -9,8 +9,8 @@ export const BudgetSchema = z.object({
 	icon: z.string(),
 	sortOrder: z.number(),
 	parent: z.string().nullable(),
+	id: z.number().int(),
 	// optional
-	id: z.number().int().optional(),
 	userId: z.string().optional(),
 	createdAt: z.string().optional(),
 	isDeleted: z.boolean().optional(),

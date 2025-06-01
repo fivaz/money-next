@@ -5,7 +5,8 @@ import { API } from '@/lib/const';
 import { BUDGETS_URL } from '@/lib/budget/budget.model';
 
 export async function GET(request: NextRequest, { params }: { params: { budgetId: string } }) {
-	const { budgetId } = params;
+	// await is correct
+	const { budgetId } = await params;
 
 	const token = (await cookies()).get('firebase_token')?.value;
 

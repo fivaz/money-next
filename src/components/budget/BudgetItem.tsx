@@ -19,9 +19,11 @@ import clsx from 'clsx';
 import { Fragment, useEffect, useOptimistic } from 'react';
 import { useTransactionsWithOptimistic } from '@/lib/transaction/transaction.hook';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
+import { useSortable } from '@dnd-kit/react/sortable';
 
 type BudgetItemProps = {
 	budget: Budget;
+	index: number;
 } & Pick<BudgetFormProps, 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'>;
 
 export default function BudgetItem({
@@ -29,8 +31,11 @@ export default function BudgetItem({
 	onAddOptimisticAction,
 	onConfirmSaveAction,
 	onDeleteAction,
+	index,
 }: BudgetItemProps) {
 	const date = useAtomValue(currentDateAtom);
+
+	const { ref } = useSortable({ id: budget.id, index });
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
 
@@ -38,7 +43,7 @@ export default function BudgetItem({
 		useTransactionsWithOptimistic(url);
 
 	return (
-		<Disclosure>
+		<Disclosure ref={ref} as="div">
 			{({ open }) => (
 				<li className="rounded-lg border border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-800">
 					<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
