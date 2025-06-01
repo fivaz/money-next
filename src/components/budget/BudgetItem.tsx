@@ -20,6 +20,7 @@ import { Fragment, useEffect, useOptimistic } from 'react';
 import { useTransactionsWithOptimistic } from '@/lib/transaction/transaction.hook';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
+import { useSearchParams } from 'next/navigation';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -33,11 +34,14 @@ export default function BudgetItem({
 	onDeleteAction,
 	index,
 }: BudgetItemProps) {
-	const date = useAtomValue(currentDateAtom);
+	const searchParams = useSearchParams();
+
+	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
+	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
 
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
+	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${currentYear}&month=${currentMonth}`;
 
 	const { transactions, error, isLoading, addOrUpdateOptimistic, confirmSave } =
 		useTransactionsWithOptimistic(url);

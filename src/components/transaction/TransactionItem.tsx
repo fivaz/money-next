@@ -48,7 +48,9 @@ export default function TransactionItem({
 					<Strong>
 						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
 					</Strong>
-					<Strong className="min-w-0 flex-1 truncate">{transaction.description}</Strong>
+					<Strong className="min-w-0 flex-1 truncate">
+						{transaction.description || transaction.budget?.name}
+					</Strong>
 				</div>
 			</div>
 
