@@ -3,17 +3,16 @@ import { Transaction, TransactionSchema } from '@/lib/transaction/transaction.mo
 import { validateSchema } from '@/lib/shared/shared.model';
 import { API, BACKEND_URL } from '@/lib/const';
 
-export const BudgetSchema = z.object({
+export const SourceSchema = z.object({
 	id: z.number().int(),
 	name: z.string(),
-	amount: z.number(),
+	balance: z.number(),
 	icon: z.string(),
 	sortOrder: z.number(),
-	parent: z.string().nullable(),
 });
 
-export type Budget = z.infer<typeof BudgetSchema>;
+export type Source = z.infer<typeof SourceSchema>;
 
-export const validateBudgets = (data: unknown) => validateSchema(data, BudgetSchema, 'budget');
+export const validateSources = (data: unknown) => validateSchema(data, SourceSchema, 'source');
 
-export const BUDGETS_URL = `${BACKEND_URL}/${API.BUDGETS}`;
+export const SOURCES_URL = `${BACKEND_URL}/${API.SOURCES}`;

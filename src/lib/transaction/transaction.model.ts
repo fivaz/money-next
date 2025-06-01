@@ -15,11 +15,8 @@ export const TransactionSchema = z.object({
 		), // Validate local datetime format
 	// optional
 	budget: BudgetSchema.nullable(),
-	userId: z.string().optional(),
-	createdAt: z.string().optional(),
 	referenceDate: z.string().date().optional(),
 	isPaid: z.boolean().optional(),
-	isDeleted: z.boolean().optional(),
 });
 
 export type Transaction = z.infer<typeof TransactionSchema>;

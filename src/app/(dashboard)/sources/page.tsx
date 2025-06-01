@@ -1,18 +1,18 @@
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { Suspense } from 'react';
 import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
-import { getBudgets } from '@/lib/budget/budget.actions';
-import BudgetList from '@/components/budget/BudgetList';
+import { getSources } from '@/lib/source/source.actions';
+import SourceList from '@/components/source/SourceList';
 
-export default async function BudgetsPage() {
-	const budgets = await getBudgets();
+export default async function SourcesPage() {
+	const sources = await getSources();
 
 	return (
 		<main>
 			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>
 				<DateSwitcher />
 			</Suspense>
-			<BudgetList initialBudgets={budgets} />
+			<SourceList initialSources={sources} />
 		</main>
 	);
 }

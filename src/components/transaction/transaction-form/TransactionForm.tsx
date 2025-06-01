@@ -17,7 +17,7 @@ import { Input } from '@/components/base/input';
 import { Switch, SwitchField } from '@/components/base/switch';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
-import { saveTransaction } from '@/lib/transaction/transaction.actions';
+import { deleteTransaction, saveTransaction } from '@/lib/transaction/transaction.actions';
 import { LoaderCircleIcon, XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import MoneyInput from '@/components/MoneyInput';
@@ -93,9 +93,10 @@ export default function TransactionForm({
 		}
 	};
 
-	const handleDelete = () => {
+	const handleDelete = async () => {
 		if (transaction && onDeleteAction) {
 			onDeleteAction(transaction);
+			await deleteTransaction(transaction.id);
 		}
 	};
 

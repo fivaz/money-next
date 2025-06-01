@@ -31,7 +31,7 @@ export default function DateSwitcherClient({
 	const dateInput = useRef<HTMLInputElement>(null);
 
 	// Mock data for balance; replace with actual data source
-	const expectedBalance = 1000; // Example value
+	const expectedBalance = 0; // Example value
 	const balanceDifference = expectedBalance - actualBalance;
 	const balanceClass = balanceDifference >= 0 ? 'text-green-500' : 'text-red-500';
 
