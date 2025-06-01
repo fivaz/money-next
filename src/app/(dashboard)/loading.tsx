@@ -17,7 +17,7 @@ export default function Loading() {
 	);
 }
 
-function TransactionListSkeleton() {
+export function TransactionListSkeleton() {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-end">

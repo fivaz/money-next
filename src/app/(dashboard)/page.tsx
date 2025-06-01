@@ -3,24 +3,28 @@ import TransactionList from '@/components/transaction/TransactionList';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { Suspense } from 'react';
 import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
+import TransactionListWithData from '@/components/transaction/TransactionListWithData';
+import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 
-export default async function HomePage({
-	searchParams,
-}: {
+type HomePageProps = {
 	searchParams: { month?: string; year?: string };
-}) {
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
 	const resolved = await searchParams;
 	const year = Number(resolved.year) || new Date().getFullYear();
 	const month = Number(resolved.month) || new Date().getMonth() + 1;
 
-	const transactions = await getCurrentMonthTransactions({ year, month });
+	const suspenseKey = `${year}-${month}`;
 
 	return (
 		<main>
 			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>
 				<DateSwitcher />
 			</Suspense>
-			<TransactionList initialTransactions={transactions} />
+			<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
+				<TransactionListWithData year={year} month={month} />
+			</Suspense>
 		</main>
 	);
 }

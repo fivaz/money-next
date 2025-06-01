@@ -6,10 +6,10 @@ import { sortTransactions } from '@/lib/transaction/transaction.utils';
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 
 type TransactionProps = {
-	initialTransactions: Transaction[];
+	transactions: Transaction[];
 };
 
-export default function TransactionList({ initialTransactions }: TransactionProps) {
+export default function TransactionList({ transactions: initialTransactions }: TransactionProps) {
 	const {
 		items: transactions,
 		confirmSave,
