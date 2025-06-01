@@ -2,11 +2,10 @@
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { useEffect, useOptimistic, useState } from 'react';
+import { useEffect, useOptimistic, useState, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { currentDateAtom } from '@/components/date-switcher/DateSwitcherClient';
 import useSWR from 'swr';
-import { isSameMonth } from 'date-fns';
 
 type TransactionProps = {
 	initialTransactions: Transaction[];
@@ -20,28 +19,38 @@ const fetcher = (url: string) =>
 
 export default function TransactionList({ initialTransactions }: TransactionProps) {
 	const date = useAtomValue(currentDateAtom);
+	const isFirstRender = useRef(true);
 
-	// Helper to check if date is current month
-	const isCurrentMonth = (d: Date) => isSameMonth(d, new Date());
+	// SWR key is always valid, but we will conditionally enable fetching after first render
+	const swrKey = `/api/transactions?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
 
-	// SWR key: fetch only if NOT current month; else return null (disable fetch)
-	const swrKey = !isCurrentMonth(date)
-		? `/api/transactions?year=${date.getFullYear()}&month=${date.getMonth() + 1}`
-		: null;
+	// Pass a boolean `shouldFetch` to control fetching, initially false
+	const {
+		data: fetchedTransactions,
+		error,
+		mutate,
+	} = useSWR<Transaction[]>(isFirstRender.current ? null : swrKey, fetcher);
 
-	const { data: fetchedTransactions, error } = useSWR<Transaction[]>(swrKey, fetcher);
+	// Base transactions: on first render use initialTransactions, else use fetched data or fallback
+	const baseTransactions =
+		isFirstRender.current && initialTransactions.length > 0
+			? initialTransactions
+			: (fetchedTransactions ?? []);
 
-	// Base transactions state: use initialTransactions for current month, else use fetched data
-	const baseTransactions = isCurrentMonth(date) ? initialTransactions : (fetchedTransactions ?? []);
-
-	// Your existing sorting function
 	const sortTransactionsByDate = (transactions: Transaction[]): Transaction[] => {
 		return transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	};
 
 	const [transactions, setTransactions] = useState(baseTransactions);
 
-	// When fetchedTransactions change (and are defined), update transactions state
+	// After first render, set the flag to false to enable fetching next changes
+	useEffect(() => {
+		if (isFirstRender.current) {
+			isFirstRender.current = false;
+		}
+	}, []);
+
+	// Update transactions when fetchedTransactions change
 	useEffect(() => {
 		if (fetchedTransactions) {
 			setTransactions(sortTransactionsByDate(fetchedTransactions));

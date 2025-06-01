@@ -50,10 +50,6 @@ export default function TransactionForm({
 
 	const { data: budgets, error } = useSWR<Budget[]>('/api/budgets', fetcher);
 
-	useEffect(() => {
-		console.log(budgets);
-	}, [budgets]);
-
 	const isEditing = !!transaction?.id;
 
 	const parseAmount = (amount: string, operation: 'expense' | 'income'): string => {
@@ -79,7 +75,6 @@ export default function TransactionForm({
 		const id = isEditing ? transaction.id! : Date.now();
 		const newTransactionWithoutId = buildTransaction(formData, budgets);
 
-		console.log(newTransactionWithoutId);
 		const newTransaction = { id, ...newTransactionWithoutId };
 
 		onAddOptimisticAction(newTransaction);
