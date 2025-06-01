@@ -7,8 +7,6 @@ import BudgetList from '@/components/budget/BudgetList';
 export default async function HomePage() {
 	const budgets = await getBudgets();
 
-	console.log(budgets);
-
 	return (
 		<main>
 			<Suspense fallback={<DateSwitcherClient actualBalance={0} isLoading />}>

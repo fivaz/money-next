@@ -1,15 +1,15 @@
 import { z } from 'zod';
 import { Transaction, TransactionSchema } from '@/lib/transaction/transaction.model';
-import { validateSchema } from '@/lib/shared.model';
+import { validateSchema } from '@/lib/shared/shared.model';
 import { API, BACKEND_URL } from '@/lib/const';
 
 export const BudgetSchema = z.object({
+	id: z.number().int(),
 	name: z.string(),
 	amount: z.number(),
 	icon: z.string(),
 	sortOrder: z.number(),
 	parent: z.string().nullable(),
-	id: z.number().int(),
 	// optional
 	userId: z.string().optional(),
 	createdAt: z.string().optional(),

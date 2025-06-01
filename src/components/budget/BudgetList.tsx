@@ -2,22 +2,28 @@
 import BudgetItem from '@/components/budget/BudgetItem';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import { type Budget } from '@/lib/budget/budget.model';
-import { useOptimisticBudgets } from '@/lib/budget/budge.hook';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 import { reorderBudgets } from '@/lib/budget/budget.actions';
+import { useOptimisticList } from '@/lib/shared/optmistic.hook';
+import { sortBudgets } from '@/lib/budget/budget.utils';
 
 type BudgetProps = {
 	initialBudgets: Budget[];
 };
 export default function BudgetList({ initialBudgets }: BudgetProps) {
-	const { budgets, confirmSave, addOrUpdateOptimistic, deleteOptimistic, setBudgets } =
-		useOptimisticBudgets(initialBudgets);
+	const {
+		items: budgets,
+		confirmSave,
+		addOrUpdateOptimistic,
+		deleteOptimistic,
+		setItems: setBudgets,
+	} = useOptimisticList(initialBudgets, sortBudgets);
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
-		setBudgets(newBudgets);
-		reorderBudgets(newBudgets);
+		setBudgets(() => newBudgets);
+		void reorderBudgets(newBudgets);
 	};
 
 	return (

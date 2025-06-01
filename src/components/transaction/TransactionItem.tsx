@@ -7,7 +7,7 @@ import TransactionFormButton from '@/components/transaction/transaction-form/Tra
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
-import { DATE_FORMAT } from '@/lib/shared.model';
+import { DATE_FORMAT } from '@/lib/shared/shared.model';
 import IconView from '@/components/icon-picker/IconView';
 
 type TransactionItemProps = {

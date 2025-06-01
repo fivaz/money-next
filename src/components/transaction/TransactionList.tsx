@@ -7,6 +7,9 @@ import { useAtomValue } from 'jotai';
 import { currentDateAtom } from '@/components/date-switcher/DateSwitcherClient';
 import useSWR from 'swr';
 import { API } from '@/lib/const';
+import { sortBudgets } from '@/lib/budget/budget.utils';
+import { sortTransactions } from '@/lib/transaction/transaction.utils';
+import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 
 type TransactionProps = {
 	initialTransactions: Transaction[];
@@ -22,76 +25,42 @@ export default function TransactionList({ initialTransactions }: TransactionProp
 	const date = useAtomValue(currentDateAtom);
 	const isFirstRender = useRef(true);
 
+	const {
+		items: transactions,
+		confirmSave,
+		addOrUpdateOptimistic,
+		deleteOptimistic,
+		setItems: setTransactions,
+	} = useOptimisticList(initialTransactions, sortTransactions);
+
 	// SWR key is always valid, but we will conditionally enable fetching after first render
 	const swrKey = `/api/${API.TRANSACTIONS}?year=${date.getFullYear()}&month=${date.getMonth() + 1}`;
 
 	// Pass a boolean `shouldFetch` to control fetching, initially false
-	const {
-		data: fetchedTransactions,
-		error,
-		mutate,
-	} = useSWR<Transaction[]>(isFirstRender.current ? null : swrKey, fetcher);
+	const { data: fetchedTransactions, error, mutate } = useSWR<Transaction[]>(swrKey, fetcher);
 
-	// Base transactions: on first render use initialTransactions, else use fetched data or fallback
-	const baseTransactions =
-		isFirstRender.current && initialTransactions.length > 0
-			? initialTransactions
-			: (fetchedTransactions ?? []);
-
-	const sortTransactionsByDate = (transactions: Transaction[]): Transaction[] => {
-		return transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	};
-
-	const [transactions, setTransactions] = useState(baseTransactions);
-
-	// After first render, set the flag to false to enable fetching next changes
-	useEffect(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false;
-		}
-	}, []);
-
-	// Update transactions when fetchedTransactions change
 	useEffect(() => {
 		if (fetchedTransactions) {
-			setTransactions(sortTransactionsByDate(fetchedTransactions));
+			setTransactions(() => fetchedTransactions);
 		}
 	}, [fetchedTransactions]);
-
-	const [optimisticTransactions, addOptimisticTransaction] = useOptimistic(
-		transactions,
-		(currentList: Transaction[], newTx: Transaction) =>
-			sortTransactionsByDate([...currentList.filter((t) => t.id !== newTx.id), newTx]),
-	);
-
-	const handleConfirmSave = (tempId: number, savedTransaction: Transaction) => {
-		setTransactions((prev) =>
-			sortTransactionsByDate([savedTransaction, ...prev.filter((t) => t.id !== tempId)]),
-		);
-	};
-
-	const handleAddOptimistic = (transaction: Transaction) => addOptimisticTransaction(transaction);
-
-	const handleDelete = (transaction: Transaction) => {
-		setTransactions((prev) => prev.filter((t) => t.id !== transaction.id));
-	};
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-end">
 				<TransactionFormButton
-					onAddOptimisticAction={handleAddOptimistic}
-					onConfirmSaveAction={handleConfirmSave}
+					onAddOptimisticAction={addOrUpdateOptimistic}
+					onConfirmSaveAction={confirmSave}
 				/>
 			</div>
 			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-				{optimisticTransactions.map((transaction) => (
+				{transactions.map((transaction) => (
 					<TransactionItem
 						key={transaction.id}
 						transaction={transaction}
-						onAddOptimisticAction={handleAddOptimistic}
-						onConfirmSaveAction={handleConfirmSave}
-						onDeleteAction={handleDelete}
+						onAddOptimisticAction={addOrUpdateOptimistic}
+						onConfirmSaveAction={confirmSave}
+						onDeleteAction={deleteOptimistic}
 					/>
 				))}
 			</ul>

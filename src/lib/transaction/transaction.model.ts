@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { validateSchema } from '@/lib/shared.model';
+import { validateSchema } from '@/lib/shared/shared.model';
 import { BudgetSchema } from '@/lib/budget/budget.model';
 import { BACKEND_URL } from '@/lib/const';
 
 export const TransactionSchema = z.object({
+	id: z.number().int(),
 	description: z.string(),
 	amount: z.number(),
 	date: z
@@ -13,7 +14,6 @@ export const TransactionSchema = z.object({
 			'Date must be in YYYY-MM-DDTHH:mm format (e.g., 2025-05-30T23:53)',
 		), // Validate local datetime format
 	// optional
-	id: z.number().int().optional(),
 	budget: BudgetSchema.nullable(),
 	userId: z.string().optional(),
 	createdAt: z.string().optional(),

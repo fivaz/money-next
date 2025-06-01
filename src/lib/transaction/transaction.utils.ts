@@ -1,10 +1,10 @@
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { Budget } from '@/lib/budget/budget.model';
 
-export function buildTransaction(
+export const buildTransaction = (
 	formData: FormData,
 	budgets: Budget[] = [],
-): Omit<Transaction, 'id'> {
+): Omit<Transaction, 'id'> => {
 	const budget = budgets.find((budget) => budget.id === Number(formData.get('budget'))) || null;
 
 	return {
@@ -15,4 +15,7 @@ export function buildTransaction(
 		isPaid: formData.get('isPaid') === 'on',
 		referenceDate: formData.get('referenceDate') as string,
 	};
-}
+};
+
+export const sortTransactions = (transactions: Transaction[]): Transaction[] =>
+	transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

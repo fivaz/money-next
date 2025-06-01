@@ -72,7 +72,7 @@ export default function TransactionForm({
 	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
 	const handleSubmit = async (formData: FormData) => {
-		const id = isEditing ? transaction.id! : Date.now();
+		const id = isEditing ? transaction.id! : -Date.now();
 		const newTransactionWithoutId = buildTransaction(formData, budgets);
 
 		const newTransaction = { id, ...newTransactionWithoutId };

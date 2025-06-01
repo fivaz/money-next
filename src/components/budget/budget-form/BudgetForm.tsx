@@ -40,7 +40,7 @@ export default function BudgetForm({
 	};
 
 	async function handleSubmit(formData: FormData) {
-		const id = isEditing ? budget.id! : Date.now();
+		const id = isEditing ? budget.id! : -Date.now();
 		const newBudgetWithoutId = buildBudget(formData);
 		const newBudget = { id, ...newBudgetWithoutId, transactions: [] };
 
