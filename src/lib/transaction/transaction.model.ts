@@ -13,6 +13,7 @@ export const TransactionSchema = z.object({
 		), // Validate local datetime format
 	// optional
 	id: z.number().int().optional(),
+	budget: BudgetSchema.nullable(),
 	userId: z.string().optional(),
 	createdAt: z.string().optional(),
 	referenceDate: z.string().date().optional(),

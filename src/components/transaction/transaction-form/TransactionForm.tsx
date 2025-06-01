@@ -14,6 +14,8 @@ import { saveTransaction } from '@/lib/transaction/transaction.actions';
 import { XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import MoneyInput from '@/components/MoneyInput';
+import { Listbox, ListboxOption } from '@/components/base/listbox';
+import { Budget } from '@/lib/budget/budget.model';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -23,6 +25,8 @@ export type TransactionFormProps = {
 	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
 	onDeleteAction?: (transaction: Transaction) => void;
 };
+
+const budgets: Budget[] = [];
 
 export default function TransactionForm({
 	transaction,
@@ -62,7 +66,7 @@ export default function TransactionForm({
 
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? transaction.id! : Date.now();
-		const newTransactionWithoutId = buildTransaction(formData);
+		const newTransactionWithoutId = buildTransaction(formData, budgets);
 		const newTransaction = { id, ...newTransactionWithoutId };
 
 		onAddOptimisticAction(newTransaction);
@@ -119,12 +123,25 @@ export default function TransactionForm({
 				</div>
 
 				<div className="flex items-center gap-4">
-					<Text>budget</Text>
+					<Field className="flex-1">
+						<Label>Budget</Label>
+						<Listbox name="budget" defaultValue={transaction?.budget?.id}>
+							<ListboxOption value={null}>No budget</ListboxOption>
+							{budgets.map((budget) => (
+								<ListboxOption value={budget.id}>{budget.name}</ListboxOption>
+							))}
+						</Listbox>
+					</Field>
 
-					<SwitchField>
-						<Label>is paid</Label>
-						<Switch name="isPaid" defaultChecked={transaction?.isPaid} />
-					</SwitchField>
+					<Field className="flex h-[73px] flex-col items-center justify-between">
+						<Label>Is paid</Label>
+						<Switch
+							className="mb-2"
+							name="isPaid"
+							color="amber"
+							defaultChecked={transaction?.isPaid}
+						/>
+					</Field>
 				</div>
 
 				<Field className="col-span-2">

@@ -1,7 +1,7 @@
 'use client';
 import BudgetItem from '@/components/budget/BudgetItem';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
-import { BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
 import { useOptimistic, useState } from 'react';
 
 type BudgetProps = {

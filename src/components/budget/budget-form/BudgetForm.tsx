@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState, useTransition } from 'react';
-import { BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';

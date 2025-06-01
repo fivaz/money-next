@@ -15,15 +15,6 @@ export const BudgetSchema = z.object({
 	isDeleted: z.boolean().optional(),
 });
 
-export const BudgetWithTransactionsSchema = BudgetSchema.extend({
-	transactions: z.array(TransactionSchema),
-});
-
 export type Budget = z.infer<typeof BudgetSchema>;
 
-export type BudgetWithTransactions = z.infer<typeof BudgetWithTransactionsSchema>;
-
 export const validateBudgets = (data: unknown) => validateSchema(data, BudgetSchema, 'budget');
-
-export const validateBudgetsWithTransactions = (data: unknown) =>
-	validateSchema(data, BudgetWithTransactionsSchema, 'budget with transactions');

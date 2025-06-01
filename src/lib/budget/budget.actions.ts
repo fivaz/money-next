@@ -3,10 +3,10 @@
 import { cookies } from 'next/headers';
 import { BACKEND_URL } from '@/lib/const';
 import {
-	Budget,
-	BudgetWithTransactions,
+	type BudgetWithTransactions,
 	validateBudgetsWithTransactions,
-} from '@/lib/budget/budget.model';
+} from '@/lib/budget/budget-transaction.model';
+import { type Budget } from '@/lib/budget/budget.model';
 
 const BudgetRoute = `${BACKEND_URL}/budgets`;
 

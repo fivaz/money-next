@@ -1,6 +1,6 @@
 'use client';
 import { Strong } from '@/components/base/text';
-import { Budget, BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
 import { CogIcon } from 'lucide-react';
 import { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';

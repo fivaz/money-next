@@ -1,7 +1,7 @@
 import { getDate, getDaysInMonth, startOfDay } from 'date-fns';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
-import { Budget, BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { type BudgetWithTransactions } from '@/lib/budget/budget-transaction.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
 // Define props interface
