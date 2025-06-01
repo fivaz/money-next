@@ -2,12 +2,15 @@
 
 import { cookies } from 'next/headers';
 import { BACKEND_URL } from '@/lib/const';
-import { Budget, BudgetSchema, validateBudgets } from '@/lib/budget/budget.model';
-import z from 'zod';
+import {
+	Budget,
+	BudgetWithTransactions,
+	validateBudgetsWithTransactions,
+} from '@/lib/budget/budget.model';
 
 const BudgetRoute = `${BACKEND_URL}/budgets`;
 
-export async function getBudgets(): Promise<Budget[]> {
+export async function getBudgets(): Promise<BudgetWithTransactions[]> {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
@@ -16,7 +19,7 @@ export async function getBudgets(): Promise<Budget[]> {
 	const month = now.getMonth() + 1; // JS months are 0-indexed
 	const year = now.getFullYear();
 
-	const res = await fetch(BudgetRoute, {
+	const res = await fetch(`${BudgetRoute}/current-month?year=${year}&month=${month}`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -30,7 +33,7 @@ export async function getBudgets(): Promise<Budget[]> {
 
 	const data = await res.json();
 	console.log(data);
-	return validateBudgets(data);
+	return validateBudgetsWithTransactions(data);
 }
 
 export async function saveBudget(budget: Budget, isEditing: boolean) {

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { validateSchema } from '@/lib/shared.model';
+import { BudgetSchema } from '@/lib/budget/budget.model';
 
 export const TransactionSchema = z.object({
 	description: z.string(),
@@ -21,28 +23,5 @@ export const TransactionSchema = z.object({
 export type Transaction = z.infer<typeof TransactionSchema>;
 
 // Function to validate transactions and filter out invalid ones
-export function validateTransactions(data: unknown): Transaction[] {
-	// Ensure data is an array
-	if (!Array.isArray(data)) {
-		console.warn('Expected an array of transactions, received:', data);
-		return [];
-	}
-
-	// Validate each transaction individually
-	const validTransactions: Transaction[] = [];
-	data.forEach((item, index) => {
-		const result = TransactionSchema.safeParse(item);
-		if (result.success) {
-			validTransactions.push(result.data);
-		} else {
-			console.warn(`Invalid transaction at index ${index}:`, {
-				item,
-				errors: result.error.format(),
-			});
-		}
-	});
-
-	return validTransactions;
-}
-
-export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
+export const validateTransactions = (data: unknown) =>
+	validateSchema(data, TransactionSchema, 'transaction');

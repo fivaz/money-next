@@ -1,12 +1,8 @@
 'use client';
-import { type PropsWithChildren, useState, useTransition, useRef } from 'react';
-import { Budget } from '@/lib/budget/budget.model';
-import { Heading } from '@/components/base/heading';
-import { Field, Fieldset, Label } from '@/components/base/fieldset';
-import { Textarea } from '@/components/base/textarea';
-import { Text } from '@/components/base/text';
+import { useRef, useState, useTransition } from 'react';
+import { BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
-import { Switch, SwitchField } from '@/components/base/switch';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { saveBudget } from '@/lib/budget/budget.actions';
@@ -16,12 +12,12 @@ import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
 
 export type BudgetFormProps = {
-	budget?: Budget;
+	budget?: BudgetWithTransactions;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOptimisticAction: (budget: Budget) => void;
-	onConfirmSaveAction: (tempId: number, realBudget: Budget) => void;
-	onDeleteAction?: (budget: Budget) => void;
+	onAddOptimisticAction: (budget: BudgetWithTransactions) => void;
+	onConfirmSaveAction: (tempId: number, realBudget: BudgetWithTransactions) => void;
+	onDeleteAction?: (budget: BudgetWithTransactions) => void;
 };
 
 export default function BudgetForm({
@@ -46,7 +42,7 @@ export default function BudgetForm({
 	async function handleSubmit(formData: FormData) {
 		const id = isEditing ? budget.id! : Date.now();
 		const newBudgetWithoutId = buildBudget(formData);
-		const newBudget = { id, ...newBudgetWithoutId };
+		const newBudget = { id, ...newBudgetWithoutId, transactions: [] };
 
 		onAddOptimisticAction(newBudget);
 
@@ -61,6 +57,7 @@ export default function BudgetForm({
 			}
 		});
 	}
+
 	function handleDelete() {
 		if (budget && onDeleteAction) {
 			onDeleteAction(budget);

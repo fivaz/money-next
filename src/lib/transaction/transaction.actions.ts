@@ -2,12 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { BACKEND_URL } from '@/lib/const';
-import {
-	Transaction,
-	TransactionSchema,
-	validateTransactions,
-} from '@/lib/transaction/transaction.model';
-import z from 'zod';
+import { Transaction, validateTransactions } from '@/lib/transaction/transaction.model';
 
 const TransactionRoute = `${BACKEND_URL}/transactions`;
 

@@ -1,16 +1,15 @@
 'use client';
-import { Strong, Text } from '@/components/base/text';
-import { Budget } from '@/lib/budget/budget.model';
-import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
+import { Strong } from '@/components/base/text';
+import { Budget, BudgetWithTransactions } from '@/lib/budget/budget.model';
+import { CogIcon } from 'lucide-react';
 import { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
-import { format, parse } from 'date-fns';
-import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
+import ProgressBar from '@/components/budget/ProgressBar';
 
 type BudgetItemProps = {
-	budget: Budget;
+	budget: BudgetWithTransactions;
 } & Pick<BudgetFormProps, 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'>;
 
 export default function BudgetItem({
@@ -41,6 +40,8 @@ export default function BudgetItem({
 						</BudgetFormButton>
 					</div>
 				</div>
+
+				<ProgressBar budget={budget} />
 			</div>
 		</li>
 	);

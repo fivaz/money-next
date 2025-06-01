@@ -1,12 +1,13 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
-import { DATE_FORMAT, Transaction } from '@/lib/transaction/transaction.model';
+import { Transaction } from '@/lib/transaction/transaction.model';
 import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
 import { type TransactionFormProps } from '@/components/transaction/transaction-form/TransactionForm';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
+import { DATE_FORMAT } from '@/lib/shared.model';
 
 type TransactionItemProps = {
 	transaction: Transaction;

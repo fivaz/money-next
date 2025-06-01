@@ -1,14 +1,14 @@
 'use client';
 import BudgetItem from '@/components/budget/BudgetItem';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
-import { Budget } from '@/lib/budget/budget.model';
+import { BudgetWithTransactions } from '@/lib/budget/budget.model';
 import { useOptimistic, useState } from 'react';
 
 type BudgetProps = {
-	initialBudgets: Budget[];
+	initialBudgets: BudgetWithTransactions[];
 };
 export default function BudgetList({ initialBudgets }: BudgetProps) {
-	const sortBudgets = (budgets: Budget[]): Budget[] => {
+	const sortBudgets = (budgets: BudgetWithTransactions[]): BudgetWithTransactions[] => {
 		return budgets.toSorted((a, b) => b.sortOrder - a.sortOrder);
 	};
 
@@ -16,17 +16,17 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 
 	const [optimisticBudgets, addOptimisticBudget] = useOptimistic(
 		budgets,
-		(currentList: Budget[], newTx: Budget) =>
+		(currentList: BudgetWithTransactions[], newTx: BudgetWithTransactions) =>
 			sortBudgets([...currentList.filter((t) => t.id !== newTx.id), newTx]),
 	);
 
-	const handleConfirmSave = (tempId: number, savedBudget: Budget) => {
+	const handleConfirmSave = (tempId: number, savedBudget: BudgetWithTransactions) => {
 		setBudgets((prev) => sortBudgets([savedBudget, ...prev.filter((t) => t.id !== tempId)]));
 	};
 
-	const handleAddOptimistic = (budget: Budget) => addOptimisticBudget(budget);
+	const handleAddOptimistic = (budget: BudgetWithTransactions) => addOptimisticBudget(budget);
 
-	const handleDelete = (budget: Budget) => {
+	const handleDelete = (budget: BudgetWithTransactions) => {
 		setBudgets((prev) => prev.filter((t) => t.id !== budget.id));
 	};
 
