@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { Transaction, TransactionSchema } from '@/lib/transaction/transaction.model';
 import { validateSchema } from '@/lib/shared.model';
+import { BACKEND_URL } from '@/lib/const';
 
 export const BudgetSchema = z.object({
 	name: z.string(),
@@ -18,3 +19,7 @@ export const BudgetSchema = z.object({
 export type Budget = z.infer<typeof BudgetSchema>;
 
 export const validateBudgets = (data: unknown) => validateSchema(data, BudgetSchema, 'budget');
+
+export const BackEndBudgetRoute = `${BACKEND_URL}/budgets`;
+
+export const ApiBudgetRoute = `/api/budgets`;

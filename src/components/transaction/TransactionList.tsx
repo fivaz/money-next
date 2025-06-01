@@ -2,17 +2,51 @@
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { useOptimistic, useState } from 'react';
+import { useEffect, useOptimistic, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { currentDateAtom } from '@/components/date-switcher/DateSwitcherClient';
+import useSWR from 'swr';
+import { isSameMonth } from 'date-fns';
 
 type TransactionProps = {
 	initialTransactions: Transaction[];
 };
+
+const fetcher = (url: string) =>
+	fetch(url, { credentials: 'include' }).then((res) => {
+		if (!res.ok) throw new Error('Failed to fetch');
+		return res.json();
+	});
+
 export default function TransactionList({ initialTransactions }: TransactionProps) {
+	const date = useAtomValue(currentDateAtom);
+
+	// Helper to check if date is current month
+	const isCurrentMonth = (d: Date) => isSameMonth(d, new Date());
+
+	// SWR key: fetch only if NOT current month; else return null (disable fetch)
+	const swrKey = !isCurrentMonth(date)
+		? `/api/transactions?year=${date.getFullYear()}&month=${date.getMonth() + 1}`
+		: null;
+
+	const { data: fetchedTransactions, error } = useSWR<Transaction[]>(swrKey, fetcher);
+
+	// Base transactions state: use initialTransactions for current month, else use fetched data
+	const baseTransactions = isCurrentMonth(date) ? initialTransactions : (fetchedTransactions ?? []);
+
+	// Your existing sorting function
 	const sortTransactionsByDate = (transactions: Transaction[]): Transaction[] => {
 		return transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	};
 
-	const [transactions, setTransactions] = useState(initialTransactions);
+	const [transactions, setTransactions] = useState(baseTransactions);
+
+	// When fetchedTransactions change (and are defined), update transactions state
+	useEffect(() => {
+		if (fetchedTransactions) {
+			setTransactions(sortTransactionsByDate(fetchedTransactions));
+		}
+	}, [fetchedTransactions]);
 
 	const [optimisticTransactions, addOptimisticTransaction] = useOptimistic(
 		transactions,

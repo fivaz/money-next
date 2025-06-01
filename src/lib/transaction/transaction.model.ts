@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { validateSchema } from '@/lib/shared.model';
 import { BudgetSchema } from '@/lib/budget/budget.model';
+import { BACKEND_URL } from '@/lib/const';
 
 export const TransactionSchema = z.object({
 	description: z.string(),
@@ -26,3 +27,5 @@ export type Transaction = z.infer<typeof TransactionSchema>;
 // Function to validate transactions and filter out invalid ones
 export const validateTransactions = (data: unknown) =>
 	validateSchema(data, TransactionSchema, 'transaction');
+
+export const ApiTransactionRoute = `/api/transactions`;
