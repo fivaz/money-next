@@ -7,16 +7,18 @@ import { revalidatePath } from 'next/cache';
 
 const TransactionRoute = `${BACKEND_URL}/transactions`;
 
-export async function getCurrentMonthTransactions(): Promise<Transaction[]> {
+export async function getCurrentMonthTransactions({
+	year,
+	month,
+}: {
+	year: number;
+	month: number;
+}): Promise<Transaction[]> {
 	const token = (await cookies()).get('firebase_token')?.value;
 
 	if (!token) throw new Error('User not authenticated');
 
-	const now = new Date();
-	const month = now.getMonth() + 1; // JS months are 0-indexed
-	const year = now.getFullYear();
-
-	const res = await fetch(`${TransactionRoute}/current-month?year=${year}&month=${month}`, {
+	const res = await fetch(`${TransactionRoute}/by-date?year=${year}&month=${month}`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},

@@ -1,15 +1,14 @@
 'use client';
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
-import { atom, useAtom } from 'jotai';
+import { atom } from 'jotai';
 import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
-import { Text } from '@/components/base/text';
 import MoneyText from '@/components/MoneyText';
 import { Button } from '@/components/base/button';
 import { Heading, Subheading } from '@/components/base/heading';
 import { Skeleton } from '@/components/Skeleton';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-// Define the atom for current date
 export const currentDateAtom = atom(new Date());
 
 type DateSwitcherClientProps = {
@@ -20,7 +19,14 @@ export default function DateSwitcherClient({
 	actualBalance,
 	isLoading = false,
 }: DateSwitcherClientProps) {
-	const [date, setDate] = useAtom(currentDateAtom);
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
+	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
+
+	const date = useMemo(() => new Date(currentYear, currentMonth - 1), [currentYear, currentMonth]);
+
 	const dateInput = useRef<HTMLInputElement>(null);
 
 	// Mock data for balance; replace with actual data source
@@ -37,17 +43,22 @@ export default function DateSwitcherClient({
 	}, [date]);
 
 	const handlePrevMonth = () => {
-		setDate((prevDate) => subMonths(prevDate, 1));
+		const newDate = subMonths(date, 1);
+		changeRoute(newDate);
 	};
 
 	const handleNextMonth = () => {
-		setDate((prevDate) => addMonths(prevDate, 1));
+		const newDate = addMonths(date, 1);
+		changeRoute(newDate);
 	};
+
+	const changeRoute = (date: Date) =>
+		router.push(`/?year=${date.getFullYear()}&month=${date.getMonth() + 1}`);
 
 	const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newDate = new Date(e.target.value);
 		if (!isNaN(newDate.getTime())) {
-			setDate(newDate);
+			changeRoute(newDate);
 		}
 	};
 
