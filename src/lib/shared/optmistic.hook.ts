@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, SetStateAction, Dispatch } from 'react';
 
 export function useOptimisticList<I extends { id: number | string }>(
 	initialItems: I[],
@@ -13,7 +13,7 @@ export function useOptimisticList<I extends { id: number | string }>(
 		}
 	}, [initialItems]);
 
-	const setItems = (updater: (prev: I[]) => I[]) => {
+	const setItems = (updater: SetStateAction<I[]>) => {
 		setHasOptimisticUpdates(true);
 		setItemsState(updater);
 	};

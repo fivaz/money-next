@@ -22,7 +22,7 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
-		setBudgets(() => newBudgets);
+		setBudgets(newBudgets);
 		void reorderBudgets(newBudgets);
 	};
 

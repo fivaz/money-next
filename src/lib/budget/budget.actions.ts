@@ -1,99 +1,49 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { BACKEND_URL } from '@/lib/const';
+import { BACKEND_URL, ROUTES } from '@/lib/const';
 import { type Budget, BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
+import { revalidatePath } from 'next/cache';
+import { fetchWithAuth } from '@/lib/shared/shared.actions';
 
 export async function getBudgets(): Promise<Budget[]> {
-	const token = (await cookies()).get('firebase_token')?.value;
-
-	if (!token) throw new Error('User not authenticated');
-
-	const now = new Date();
-	const month = now.getMonth() + 1; // JS months are 0-indexed
-	const year = now.getFullYear();
-
-	const res = await fetch(BUDGETS_URL, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-		cache: 'no-store',
-	});
-
-	if (!res.ok) {
-		const message = await res.text();
-		throw new Error(`Failed to fetch budgets: ${message}`);
-	}
-
-	const data = await res.json();
-	console.log(data);
+	const data = await fetchWithAuth(BUDGETS_URL);
 	return validateBudgets(data);
 }
 
 export async function saveBudget(budget: Budget, isEditing: boolean) {
-	const token = (await cookies()).get('firebase_token')?.value;
-
-	if (!token) throw new Error('User not authenticated');
-
 	const method = isEditing ? 'PUT' : 'POST';
-
 	const url = isEditing ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
 
-	const res = await fetch(url, {
+	return fetchWithAuth(url, {
 		method,
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
-		},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(budget),
 	});
-
-	if (!res.ok) {
-		let errorMsg = 'Failed to save budget';
-		try {
-			errorMsg = await res.text(); // or use `await res.json()` if your backend sends structured errors
-		} catch (err) {
-			console.error('Error reading error message:', err);
-		}
-		console.error('Save failed:', res.status, errorMsg);
-		throw new Error(errorMsg);
-	}
-
-	return await res.json();
 }
 
 export async function deleteBudget(id: number): Promise<void> {
-	const token = (await cookies()).get('firebase_token')?.value;
-	if (!token) throw new Error('Not authenticated');
-
-	const res = await fetch(`${BUDGETS_URL}/${id}`, {
-		method: 'DELETE',
-		headers: {
-			Authorization: `Bearer ${token}`,
+	await fetchWithAuth(
+		`${BUDGETS_URL}/${id}`,
+		{
+			method: 'DELETE',
 		},
-	});
+		false,
+	); // false = we don't expect JSON response
 
-	if (!res.ok) {
-		const msg = await res.text();
-		throw new Error(`Delete failed: ${msg}`);
-	}
+	revalidatePath(ROUTES.BUDGETS.path);
 }
 
 export async function reorderBudgets(budgets: Budget[]): Promise<void> {
-	const token = (await cookies()).get('firebase_token')?.value;
-	if (!token) throw new Error('Not authenticated');
-
-	const res = await fetch(`${BUDGETS_URL}/reorder`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
+	await fetchWithAuth(
+		`${BUDGETS_URL}/reorder`,
+		{
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(budgets.map(({ id }) => ({ id }))),
 		},
-		body: JSON.stringify(budgets.map(({ id }) => ({ id }))),
-	});
+		false,
+	);
 
-	if (!res.ok) {
-		const msg = await res.text();
-		throw new Error(`Delete failed: ${msg}`);
-	}
+	revalidatePath(ROUTES.BUDGETS.path);
 }
