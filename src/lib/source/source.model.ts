@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Transaction, TransactionSchema } from '@/lib/transaction/transaction.model';
 import { validateSchema } from '@/lib/shared/shared.model';
 import { API, BACKEND_URL } from '@/lib/const';
 

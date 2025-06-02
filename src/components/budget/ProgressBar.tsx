@@ -3,7 +3,6 @@ import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { useEffect, useMemo } from 'react';
 import clsx from 'clsx';
 import { sumTransactions } from '@/lib/transaction/transaction.utils';
 

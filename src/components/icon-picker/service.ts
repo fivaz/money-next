@@ -18,7 +18,6 @@ import {
 	Stethoscope,
 	TriangleAlert,
 	FireExtinguisher,
-	CircleAlert,
 	ScanIcon, // Default icon
 } from 'lucide-react';
 import { ComponentType } from 'react';

@@ -3,7 +3,7 @@
 import { DisclosureButton } from '@headlessui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { navLinks, ROUTES } from '@/lib/const';
+import { navLinks } from '@/lib/const';
 
 interface NavLinksProps {
 	mobile?: boolean;

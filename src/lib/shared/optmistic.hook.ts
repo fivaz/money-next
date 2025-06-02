@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, SetStateAction, Dispatch } from 'react';
+import { useState, useEffect, useMemo, SetStateAction } from 'react';
 
 export function useOptimisticList<I extends { id: number | string }>(
 	initialItems: I[],

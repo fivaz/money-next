@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
-import { Strong, Text } from '@/components/base/text';
 
 type MoneyTextProps = PropsWithChildren<{
 	className?: string;

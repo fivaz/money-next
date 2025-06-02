@@ -1,7 +1,7 @@
 'use client';
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
-import { PlusIcon, ReceiptTextIcon } from 'lucide-react';
+import { ReceiptTextIcon } from 'lucide-react';
 import TransactionForm, {
 	type TransactionFormProps,
 } from '@/components/transaction/transaction-form/TransactionForm';

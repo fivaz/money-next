@@ -1,5 +1,5 @@
 import { LoaderCircle } from 'lucide-react';
-import { FC, ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 
 type ButtonColor = 'default' | 'primary' | 'secondary' | 'error';
 

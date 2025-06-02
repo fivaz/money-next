@@ -6,7 +6,6 @@ import { sortTransactions, sumTransactions } from '@/lib/transaction/transaction
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
-import { useEffect } from 'react';
 
 type TransactionProps = {
 	transactions: Transaction[];

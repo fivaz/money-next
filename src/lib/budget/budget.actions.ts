@@ -1,7 +1,6 @@
 'use server';
 
-import { cookies } from 'next/headers';
-import { BACKEND_URL, ROUTES } from '@/lib/const';
+import { ROUTES } from '@/lib/const';
 import { type Budget, BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';

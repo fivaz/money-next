@@ -1,7 +1,7 @@
 'use client';
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
-import { PiggyBankIcon, PlusIcon } from 'lucide-react';
+import { PiggyBankIcon } from 'lucide-react';
 import BudgetForm, { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
 
 type BudgetFormButtonProps = PropsWithChildren &

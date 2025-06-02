@@ -1,7 +1,7 @@
 'use client';
 
 import { Input } from '@/components/base/input';
-import { ChangeEvent, InputHTMLAttributes, useEffect, useState } from 'react';
+import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
 
 type MoneyInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> & {
 	value?: string; // now optional for uncontrolled use

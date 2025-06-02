@@ -1,8 +1,7 @@
 'use client';
 
 import { RadioGroup, Radio } from '@headlessui/react';
-import { ArrowLeftFromLine, ArrowLeftRight, ArrowRightToLine } from 'lucide-react';
-import { JSX, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import ExpenseIcon from '@/components/icons/ExpenseIcon';
 import IncomeIcon from '@/components/icons/IncomeIcon';
 import clsx from 'clsx';

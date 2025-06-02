@@ -1,4 +1,4 @@
-import { Disclosure, DisclosureButton } from '@headlessui/react';
+import { DisclosureButton } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
 import DarkMode from './DarkMode';

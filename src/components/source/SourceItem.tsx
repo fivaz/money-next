@@ -1,17 +1,14 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { type Source } from '@/lib/source/source.model';
-import { ChevronDownIcon, CogIcon } from 'lucide-react';
+import { CogIcon } from 'lucide-react';
 import { type SourceFormProps } from '@/components/source/source-form/SourceForm';
 import SourceFormButton from '@/components/source/source-form/SourceFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
 import { API } from '@/lib/const';
-import { Disclosure, DisclosureButton } from '@headlessui/react';
-import clsx from 'clsx';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
 
 type SourceItemProps = {
 	source: Source;

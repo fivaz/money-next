@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import type { Viewport } from 'next';
 import './globals.css';
 import { ReactNode } from 'react';
-import Navbar from '@/components/Navbar/Navbar';
 import ClientWrapper from '@/app/TokenRefresher';
 
 export const metadata: Metadata = {
