@@ -46,8 +46,11 @@ export default function SourceItem({
 						<Strong className="min-w-0 flex-1 truncate">{source.name}</Strong>
 					</div>
 					<div className="flex shrink-0 items-center gap-2">
-						<SimpleMoneyText>{source.balance}</SimpleMoneyText>
-
+						<Text>
+							<MoneyText addColor={false} addSign={false}>
+								{source.balance}
+							</MoneyText>
+						</Text>
 						<SourceFormButton
 							source={source}
 							onAddOptimisticAction={onAddOptimisticAction}
@@ -61,13 +64,4 @@ export default function SourceItem({
 			</div>
 		</li>
 	);
-}
-
-type SimpleMoneyTextProps = PropsWithChildren<{ className?: string }>;
-
-function SimpleMoneyText({ children, className }: SimpleMoneyTextProps) {
-	const moneyInCents = Number(children);
-	const formattedMoney = (Math.abs(moneyInCents) / 100).toFixed(2);
-
-	return <Text className={clsx(className)}>{formattedMoney} $</Text>;
 }

@@ -2,8 +2,11 @@
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { sortTransactions } from '@/lib/transaction/transaction.utils';
+import { sortTransactions, sumTransactions } from '@/lib/transaction/transaction.utils';
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
+import MoneyText from '@/components/MoneyText';
+import { Text } from '@/components/base/text';
+import { useEffect } from 'react';
 
 type TransactionProps = {
 	transactions: Transaction[];
@@ -17,9 +20,14 @@ export default function TransactionList({ transactions: initialTransactions }: T
 		deleteOptimistic,
 	} = useOptimisticList(initialTransactions, sortTransactions);
 
+	const balance = sumTransactions(transactions);
+
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex justify-end">
+			<div className="flex items-center justify-end gap-4">
+				<Text>
+					<MoneyText>{balance}</MoneyText>
+				</Text>
 				<TransactionFormButton
 					onAddOptimisticAction={addOrUpdateOptimistic}
 					onConfirmSaveAction={confirmSave}

@@ -1,9 +1,19 @@
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
+import { Strong, Text } from '@/components/base/text';
 
-type MoneyTextProps = PropsWithChildren<{ className?: string }>;
+type MoneyTextProps = PropsWithChildren<{
+	className?: string;
+	addColor?: boolean;
+	addSign?: boolean;
+}>;
 
-export default function MoneyText({ children, className }: MoneyTextProps) {
+export default function MoneyText({
+	children,
+	className,
+	addColor = true,
+	addSign = true,
+}: MoneyTextProps) {
 	const moneyInCents = Number(children);
 	const isNegative = moneyInCents < 0;
 	const formattedMoney = (Math.abs(moneyInCents) / 100).toFixed(2);
@@ -11,8 +21,10 @@ export default function MoneyText({ children, className }: MoneyTextProps) {
 	const colorClass = isNegative ? 'text-red-500' : 'text-green-500';
 
 	return (
-		<span className={clsx(colorClass, className)}>
-			{sign} {formattedMoney} $
+		<span className={clsx({ [colorClass]: addColor && moneyInCents !== 0 }, className)}>
+			<>
+				{addSign && moneyInCents !== 0 && sign} {formattedMoney} $
+			</>
 		</span>
 	);
 }

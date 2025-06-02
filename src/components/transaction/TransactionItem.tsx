@@ -55,7 +55,9 @@ export default function TransactionItem({
 			</div>
 
 			<div className="flex shrink-0 items-center gap-2">
-				<MoneyText>{transaction.amount}</MoneyText>
+				<Text>
+					<MoneyText addColor={transaction.isPaid}>{transaction.amount}</MoneyText>
+				</Text>
 
 				<TransactionFormButton
 					transaction={transaction}

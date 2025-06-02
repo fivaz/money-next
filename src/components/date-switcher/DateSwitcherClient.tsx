@@ -1,6 +1,5 @@
 'use client';
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
-import { atom } from 'jotai';
 import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import MoneyText from '@/components/MoneyText';
@@ -8,6 +7,7 @@ import { Button } from '@/components/base/button';
 import { Heading, Subheading } from '@/components/base/heading';
 import { Skeleton } from '@/components/Skeleton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import clsx from 'clsx';
 
 type DateSwitcherClientProps = {
 	actualBalance: number;
@@ -31,7 +31,6 @@ export default function DateSwitcherClient({
 	const dateInput = useRef<HTMLInputElement>(null);
 
 	const balanceDifference = expectedBalance - actualBalance;
-	const balanceClass = balanceDifference >= 0 ? 'text-green-500' : 'text-red-500';
 
 	const formattedDate = useMemo(() => {
 		if (isSameYear(date, new Date())) {
@@ -101,16 +100,27 @@ export default function DateSwitcherClient({
 				</div>
 				<div className="flex items-center gap-2">
 					<Subheading>
-						{isLoading ? <Skeleton /> : <MoneyText>{actualBalance}</MoneyText>}
-					</Subheading>
-					<Subheading>
-						(
 						{isLoading ? (
 							<Skeleton />
 						) : (
-							<MoneyText className={balanceClass}>{balanceDifference}</MoneyText>
+							<MoneyText
+								addColor={false}
+								className={clsx(
+									balanceDifference >= 0 ? 'text-gray-800 dark:text-white' : 'text-red-500',
+								)}
+							>
+								{actualBalance}
+							</MoneyText>
 						)}
-						)
+					</Subheading>
+					<Subheading>
+						{isLoading ? (
+							<Skeleton />
+						) : (
+							<>
+								(<MoneyText>{balanceDifference}</MoneyText>)
+							</>
+						)}
 					</Subheading>
 				</div>
 			</div>
