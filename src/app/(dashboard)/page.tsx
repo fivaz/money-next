@@ -3,13 +3,14 @@ import TransactionListWithData from '@/components/transaction/TransactionListWit
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 
 type HomePageProps = {
-	searchParams: { month?: string; year?: string };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-	const resolved = await searchParams;
-	const year = Number(resolved.year) || new Date().getFullYear();
-	const month = Number(resolved.month) || new Date().getMonth() + 1;
+	const { year: yearParam, month: monthParam } = await searchParams;
+
+	const year = Number(yearParam) || new Date().getFullYear();
+	const month = Number(monthParam) || new Date().getMonth() + 1;
 
 	const suspenseKey = `${year}-${month}`;
 

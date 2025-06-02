@@ -4,7 +4,10 @@ import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { API } from '@/lib/const';
 import { BUDGETS_URL } from '@/lib/budget/budget.model';
 
-export async function GET(request: NextRequest, { params }: { params: { budgetId: string } }) {
+export async function GET(
+	request: NextRequest,
+	{ params }: { params: Promise<{ budgetId: string }> },
+) {
 	// await is correct
 	const { budgetId } = await params;
 

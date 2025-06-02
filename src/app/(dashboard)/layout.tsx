@@ -1,7 +1,7 @@
 import { ReactNode, Suspense } from 'react';
 import Navbar from '@/components/Navbar/Navbar';
-import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
+import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 
 export default function Layout({
 	children,
@@ -25,9 +25,7 @@ export default function Layout({
 
 			<main>
 				<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-					<Suspense
-						fallback={<DateSwitcherClient actualBalance={0} expectedBalance={0} isLoading />}
-					>
+					<Suspense fallback={<DateSwitcherSkeleton />}>
 						<DateSwitcher />
 					</Suspense>
 					{children}
