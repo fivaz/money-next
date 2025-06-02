@@ -1,8 +1,4 @@
-import { getCurrentMonthTransactions } from '@/lib/transaction/transaction.actions';
-import TransactionList from '@/components/transaction/TransactionList';
-import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { Suspense } from 'react';
-import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
 import TransactionListWithData from '@/components/transaction/TransactionListWithData';
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 

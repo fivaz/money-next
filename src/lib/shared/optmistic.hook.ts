@@ -11,7 +11,7 @@ export function useOptimisticList<I extends { id: number | string }>(
 		if (!hasOptimisticUpdates) {
 			setItemsState(initialItems);
 		}
-	}, [initialItems]);
+	}, [initialItems, hasOptimisticUpdates]);
 
 	const setItems = (updater: SetStateAction<I[]>) => {
 		setHasOptimisticUpdates(true);

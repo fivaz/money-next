@@ -2,35 +2,34 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: InterVariable, sans-serif;
-  --color-brown: #6b4b46;
-  --color-brown-50: #f2eceb;
-  --color-brown-100: #e0d1cf;
-  --color-brown-200: #c9b2af;
-  --color-brown-300: #b2928f;
-  --color-brown-400: #977876;
-  --color-brown-500: #6b4b46;
-  --color-brown-600: #5f433f;
-  --color-brown-700: #4f3835;
-  --color-brown-800: #402d2a;
-  --color-brown-900: #342422;
+	--font-sans: InterVariable, sans-serif;
+	--color-brown: #6b4b46;
+	--color-brown-50: #f2eceb;
+	--color-brown-100: #e0d1cf;
+	--color-brown-200: #c9b2af;
+	--color-brown-300: #b2928f;
+	--color-brown-400: #977876;
+	--color-brown-500: #6b4b46;
+	--color-brown-600: #5f433f;
+	--color-brown-700: #4f3835;
+	--color-brown-800: #402d2a;
+	--color-brown-900: #342422;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 /*setup for base-ui-components/react*/
 .root {
-  isolation: isolate;
+	isolation: isolate;
 }
 
 .Tooltip {
-  background-color: #444;
-  color: white;
-  font-size: 90%;
-  padding: 4px 8px;
-  border-radius: 4px;
-  box-sizing: border-box;
-  width: max-content;
-  max-width: calc(100vw - 10px);
+	background-color: #444;
+	color: white;
+	font-size: 90%;
+	padding: 4px 8px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	width: max-content;
+	max-width: calc(100vw - 10px);
 }
