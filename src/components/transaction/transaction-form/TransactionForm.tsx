@@ -1,9 +1,5 @@
 'use client';
-import {
-	useState,
-	useRef,
-	FormEvent,
-} from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
@@ -11,7 +7,7 @@ import { Textarea } from '@/components/base/textarea';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
 import { Switch } from '@/components/base/switch';
-import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
+import { Dialog, DialogActions, DialogBody, DialogTitle } from '@/components/base/dialog';
 import { Button } from '@/components/base/button';
 import { deleteTransaction, saveTransaction } from '@/lib/transaction/transaction.actions';
 import { LoaderCircleIcon, XIcon } from 'lucide-react';
@@ -21,6 +17,7 @@ import { Listbox, ListboxOption } from '@/components/base/listbox';
 import { Budget } from '@/lib/budget/budget.model';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
+import IconView from '@/components/icon-picker/IconView';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -105,7 +102,7 @@ export default function TransactionForm({
 				</Button>
 			</DialogTitle>
 
-			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
+			<form className="mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
@@ -143,9 +140,13 @@ export default function TransactionForm({
 								defaultValue={transaction?.budget?.id}
 								placeholder="Select budget&hellip;"
 							>
-								<ListboxOption value={null}>No budget</ListboxOption>
+								<ListboxOption value={null} className="flex gap-2">
+									<IconView name={''} className="size-4" />
+									No budget
+								</ListboxOption>
 								{budgets.map((budget) => (
-									<ListboxOption key={budget.id} value={budget.id}>
+									<ListboxOption key={budget.id} value={budget.id} className="flex gap-2">
+										<IconView name={budget.icon} className="size-4" />
 										{budget.name}
 									</ListboxOption>
 								))}
