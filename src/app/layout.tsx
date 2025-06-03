@@ -3,6 +3,7 @@ import type { Viewport } from 'next';
 import './globals.css';
 import { ReactNode } from 'react';
 import ClientWrapper from '@/app/TokenRefresher';
+import { ThemeProvider } from 'next-themes';
 
 export const metadata: Metadata = {
 	title: 'Money',
@@ -19,11 +20,13 @@ export default function RootLayout({
 	children: ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body>
-				<ClientWrapper>
-					<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
-				</ClientWrapper>
+				<ThemeProvider attribute="class">
+					<ClientWrapper>
+						<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+					</ClientWrapper>
+				</ThemeProvider>
 			</body>
 		</html>
 	);

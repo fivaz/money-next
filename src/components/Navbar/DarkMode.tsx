@@ -4,32 +4,27 @@ import { Moon, Sun } from 'lucide-react';
 import { Switch } from '@headlessui/react';
 import { useState, useEffect } from 'react';
 import clsx from 'clsx';
+import { useTheme } from 'next-themes';
+import { Skeleton } from '@/components/Skeleton';
 
 export default function DarkMode({ className }: { className?: string }) {
-	const [isDark, setIsDark] = useState(false);
+	const { theme, setTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
 
-	function getDarkMode() {
-		return (
-			localStorage.theme === 'dark' ||
-			(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		);
-	}
+	const isDark = theme === 'dark';
 
 	useEffect(() => {
-		const darkMode = getDarkMode();
-		setIsDark(darkMode);
-		document.documentElement.classList.toggle('dark', darkMode);
+		setMounted(true);
 	}, []);
 
-	useEffect(() => {
-		localStorage.theme = isDark ? 'dark' : 'light';
-		document.documentElement.classList.toggle('dark', isDark);
-	}, [isDark]);
+	if (!mounted) {
+		return <Skeleton />;
+	}
 
 	return (
 		<Switch
 			checked={isDark}
-			onChange={setIsDark}
+			onChange={() => setTheme(isDark ? 'light' : 'dark')}
 			className={clsx(
 				className,
 				'relative inline-flex h-8 w-14 items-center rounded-full ring-2 ring-gray-500 transition-colors outline-none dark:focus:ring-white',
