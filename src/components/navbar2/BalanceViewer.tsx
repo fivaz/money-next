@@ -11,8 +11,8 @@ export default async function BalanceViewer() {
 	const balanceDifference = expectedBalance - actualBalance;
 
 	return (
-		<div className="flex items-center gap-2">
-			<Subheading>
+		<div className="flex shrink-0 items-center gap-2 text-sm font-semibold">
+			<div className="flex gap-2">
 				<span className="hidden md:block">balance:</span>
 				<MoneyText
 					addColor={false}
@@ -22,15 +22,15 @@ export default async function BalanceViewer() {
 				>
 					{actualBalance}
 				</MoneyText>
-			</Subheading>
-			<Subheading>
+			</div>
+			<div className="flex">
 				{balanceDifference !== 0 && (
 					<>
-						(<span className="hidden md:block">difference:</span>
+						(<span className="mr-2 hidden md:block">difference:</span>
 						<MoneyText>{balanceDifference}</MoneyText>)
 					</>
 				)}
-			</Subheading>
+			</div>
 		</div>
 	);
 }
