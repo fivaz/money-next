@@ -8,12 +8,8 @@ import DarkMode from './DarkMode';
 import ProfileDropdown from './ProfileDropdown/ProfileDropdown';
 import MobileUserInfo from './MobileUserInfo';
 import Tooltip from '@/components/Navbar/Tooltip';
-import { useUser } from '@/lib/user/user.hook';
-
 export default function Navbar() {
 	const commitHash = `current commit: ${process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'}`;
-
-	const { user } = useUser();
 
 	return (
 		<Disclosure as="nav" className="bg-white shadow-xs dark:bg-gray-800">
@@ -30,7 +26,7 @@ export default function Navbar() {
 							<div className="hidden sm:ml-6 sm:flex sm:items-center">
 								<DarkMode />
 
-								<ProfileDropdown user={user} />
+								<ProfileDropdown />
 							</div>
 							<div className="-mr-2 flex items-center sm:hidden">
 								<MobileMenuButton open={open} />
@@ -39,7 +35,7 @@ export default function Navbar() {
 					</div>
 					<DisclosurePanel className="sm:hidden">
 						<NavLinks mobile />
-						<MobileUserInfo user={user} />
+						<MobileUserInfo />
 					</DisclosurePanel>
 				</>
 			)}

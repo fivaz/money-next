@@ -3,8 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --turbopack",
-		"build": "next build",
+		"dev": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next dev --turbo",
+		"build": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next build",
 		"start": "next start",
 		"lint": "next lint --fix",
 		"tsc": "tsc --noEmit --watch",

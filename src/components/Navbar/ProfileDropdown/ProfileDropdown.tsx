@@ -1,15 +1,16 @@
+'use client';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
 import SignOutButton from './SignOutButton';
 import { profileLinks } from '@/lib/const';
-import { User } from '@/lib/user/user.model';
+import { useUser } from '@/lib/user/user.hook';
 
-interface ProfileDropdownProps {
-	user: User | null;
-}
+interface ProfileDropdownProps {}
 
-export default function ProfileDropdown({ user }: ProfileDropdownProps) {
+export default function ProfileDropdown({}: ProfileDropdownProps) {
+	const { user } = useUser();
+
 	return (
 		<Menu as="div" className="relative ml-3">
 			<div>

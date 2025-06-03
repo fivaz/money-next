@@ -1,3 +1,5 @@
+'use client';
+
 import { DisclosureButton } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
@@ -5,12 +7,13 @@ import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import { profileLinks } from '@/lib/const';
 import { User } from '@/lib/user/user.model';
+import { useUser } from '@/lib/user/user.hook';
 
-type MobileUserInfoProps = {
-	user: User | null;
-};
+type MobileUserInfoProps = {};
 
-export default function MobileUserInfo({ user }: MobileUserInfoProps) {
+export default function MobileUserInfo({}: MobileUserInfoProps) {
+	const { user } = useUser();
+
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">
 			<div className="flex items-center px-4">
