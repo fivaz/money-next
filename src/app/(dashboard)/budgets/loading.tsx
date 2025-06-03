@@ -5,18 +5,16 @@ import DateSwitcher from '@/components/DateSwitcher';
 import { Suspense } from 'react';
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import TransactionListWithData from '@/components/transaction/TransactionListWithData';
-import BudgetsPageSkeleton from '@/app/(dashboard)/budgets/loading';
+import BudgetListSkeleton from '@/components/budget/BudgetListSkeleton';
 
-export default async function BudgetsPage() {
-	const budgets = await getBudgets();
-
+export default async function BudgetsPageSkeleton() {
 	return (
 		<main className="flex flex-col gap-5">
 			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 				<Heading>Budgets</Heading>
 				<DateSwitcher />
 			</div>
-			<BudgetList initialBudgets={budgets} />
+			<BudgetListSkeleton />
 		</main>
 	);
 }

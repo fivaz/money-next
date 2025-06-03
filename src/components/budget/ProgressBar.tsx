@@ -35,7 +35,7 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 
 	return (
 		<div className="flex items-center gap-2">
-			<div className="h-3 flex-1 rounded-full bg-gray-200" style={{ position: 'relative' }}>
+			<div className="relative h-3 flex-1 rounded-full bg-gray-200">
 				<div
 					className={clsx(
 						'relative h-3 rounded-full transition-all duration-300 ease-in-out',

@@ -17,7 +17,7 @@ export function TransactionListSkeleton() {
 				</Button>
 			</div>
 			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-				{[...Array(3)].map((_, index) => (
+				{[...Array(100)].map((_, index) => (
 					<TransactionItemSkeleton key={index} />
 				))}
 			</ul>
