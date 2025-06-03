@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, useTransition } from 'react';
+import { FormEvent, useRef, useState, useTransition } from 'react';
 import { type Source } from '@/lib/source/source.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
@@ -28,35 +28,32 @@ export default function SourceForm({
 	onConfirmSaveAction,
 	onDeleteAction,
 }: SourceFormProps) {
-	const [isPending, startTransition] = useTransition();
-	const [balance, setBalance] = useState<string>(source?.balance.toString() || '');
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
 	const isEditing = !!source?.id;
 
-	const resetForm = () => {
-		// Reset form and state after successful submission
-		formRef.current?.reset(); // Reset form inputs
-	};
+	const resetForm = () => formRef.current?.reset();
 
-	async function handleSubmit(formData: FormData) {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+
 		const id = isEditing ? source.id! : -Date.now();
 		const newSourceWithoutId = buildSource(formData);
-		const newSource = { id, ...newSourceWithoutId, transactions: [] };
+
+		const newSource = { id, ...newSourceWithoutId };
 
 		onAddOptimisticAction(newSource);
+		resetForm();
+		closeFormAction();
 
-		startTransition(async () => {
-			try {
-				const saved = await saveSource(newSource, isEditing);
-				onConfirmSaveAction(id, saved);
-				resetForm();
-				closeFormAction();
-			} catch (err) {
-				console.error('Failed to save source:', err);
-			}
-		});
-	}
+		try {
+			const saved = await saveSource(newSource, isEditing);
+			onConfirmSaveAction(id, saved);
+		} catch (err) {
+			console.error('Failed to save source:', err);
+		}
+	};
 
 	async function handleDelete() {
 		if (source && onDeleteAction) {
@@ -74,16 +71,16 @@ export default function SourceForm({
 				</Button>
 			</DialogTitle>
 
-			<form className="z-20 mt-4 space-y-4" action={handleSubmit} ref={formRef}>
+			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={source?.id} />
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Name</Label>
-						<Input name="name" defaultValue={source?.name} />
+						<Input name="name" required defaultValue={source?.name} />
 					</Field>
 					<Field className="col-span-1">
 						<Label>Balance</Label>
-						<MoneyInput name="balance" defaultValue={balance} />
+						<MoneyInput required name="balance" defaultValue={source?.balance.toString()} />
 					</Field>
 				</div>
 
@@ -97,9 +94,7 @@ export default function SourceForm({
 							</Button>
 						)}
 					</div>
-					<Button type="submit" disabled={isPending}>
-						{isPending ? 'Saving...' : 'Save'}
-					</Button>
+					<Button type="submit">Save</Button>
 				</DialogActions>
 			</form>
 		</Dialog>

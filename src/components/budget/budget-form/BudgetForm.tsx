@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, useTransition } from 'react';
+import { FormEvent, useRef, useState, useTransition } from 'react';
 import { type Budget } from '@/lib/budget/budget.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
@@ -10,6 +10,8 @@ import { XIcon } from 'lucide-react';
 import { buildBudget } from '@/lib/budget/budget.utils';
 import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
+import { buildSource } from '@/lib/source/source.utils';
+import { saveSource } from '@/lib/source/source.actions';
 
 export type BudgetFormProps = {
 	budget?: Budget;
@@ -28,35 +30,32 @@ export default function BudgetForm({
 	onConfirmSaveAction,
 	onDeleteAction,
 }: BudgetFormProps) {
-	const [isPending, startTransition] = useTransition();
-	const [amount, setAmount] = useState<string>(budget?.amount.toString() || '');
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
 	const isEditing = !!budget?.id;
 
-	const resetForm = () => {
-		// Reset form and state after successful submission
-		formRef.current?.reset(); // Reset form inputs
-	};
+	const resetForm = () => formRef.current?.reset();
 
-	async function handleSubmit(formData: FormData) {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+
 		const id = isEditing ? budget.id! : -Date.now();
 		const newBudgetWithoutId = buildBudget(formData);
+
 		const newBudget = { id, ...newBudgetWithoutId, transactions: [] };
 
 		onAddOptimisticAction(newBudget);
+		resetForm();
+		closeFormAction();
 
-		startTransition(async () => {
-			try {
-				const saved = await saveBudget(newBudget, isEditing);
-				onConfirmSaveAction(id, saved);
-				resetForm();
-				closeFormAction();
-			} catch (err) {
-				console.error('Failed to save budget:', err);
-			}
-		});
-	}
+		try {
+			const saved = await saveBudget(newBudget, isEditing);
+			onConfirmSaveAction(id, saved);
+		} catch (err) {
+			console.error('Failed to save source:', err);
+		}
+	};
 
 	async function handleDelete() {
 		if (budget && onDeleteAction) {
@@ -74,7 +73,7 @@ export default function BudgetForm({
 				</Button>
 			</DialogTitle>
 
-			<form className="z-20 mt-4 space-y-4" action={handleSubmit} ref={formRef}>
+			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={budget?.id} />
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
@@ -83,7 +82,7 @@ export default function BudgetForm({
 					</Field>
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<MoneyInput name="amount" defaultValue={amount} />
+						<MoneyInput name="amount" defaultValue={budget?.amount.toString()} />
 					</Field>
 				</div>
 
@@ -97,9 +96,7 @@ export default function BudgetForm({
 							</Button>
 						)}
 					</div>
-					<Button type="submit" disabled={isPending}>
-						{isPending ? 'Saving...' : 'Save'}
-					</Button>
+					<Button type="submit">Save</Button>
 				</DialogActions>
 			</form>
 		</Dialog>

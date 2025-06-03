@@ -18,11 +18,11 @@ export default function MoneyInput({
 }: MoneyInputProps) {
 	const isControlled = controlledValue !== undefined;
 
-	const [internalValue, setInternalValue] = useState(defaultValue ?? '0');
+	const [internalValue, setInternalValue] = useState(defaultValue ?? '');
 
 	// use the actual value to compute the display value
 	const rawValue = isControlled ? controlledValue : internalValue;
-	const displayValue = (Math.abs(Number(rawValue)) / 100).toFixed(2);
+	const displayValue = rawValue ? (Math.abs(Number(rawValue)) / 100).toFixed(2) : '';
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const input = e.target.value;
