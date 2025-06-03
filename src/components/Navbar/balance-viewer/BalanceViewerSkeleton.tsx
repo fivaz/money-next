@@ -1,4 +1,4 @@
-import DateSwitcherClient from '@/components/date-switcher/DateSwitcherClient';
+import DateSwitcher from '@/components/DateSwitcher';
 import { getActualBalance } from '@/app/actions/get-balance';
 import { getExpectedBalance } from '@/lib/source/source.actions';
 import { Subheading } from '@/components/base/heading';

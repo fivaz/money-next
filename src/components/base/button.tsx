@@ -63,6 +63,9 @@ const styles = {
 			'dark:text-white dark:[--btn-bg:var(--color-zinc-600)] dark:[--btn-hover-overlay:var(--color-white)]/5',
 			'[--btn-icon:var(--color-zinc-400)] data-active:[--btn-icon:var(--color-zinc-300)] data-hover:[--btn-icon:var(--color-zinc-300)]',
 		],
+		'light/dark': [
+			'border-gray-200 dark:border-gray-400 bg-white text-amber-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-yellow-500 dark:ring-0 dark:hover:bg-white/20',
+		],
 		light: [
 			'text-zinc-950 [--btn-bg:white] [--btn-border:var(--color-zinc-950)]/10 [--btn-hover-overlay:var(--color-zinc-950)]/2.5 data-active:[--btn-border:var(--color-zinc-950)]/15 data-hover:[--btn-border:var(--color-zinc-950)]/15',
 			'dark:text-white dark:[--btn-hover-overlay:var(--color-white)]/5 dark:[--btn-bg:var(--color-zinc-800)]',
@@ -159,7 +162,7 @@ const styles = {
 	},
 };
 
-type ButtonProps = (
+export type ButtonProps = (
 	| { color?: keyof typeof styles.colors; outline?: never; plain?: never }
 	| { color?: never; outline: true; plain?: never }
 	| { color?: never; outline?: never; plain: true }

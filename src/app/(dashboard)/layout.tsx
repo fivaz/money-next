@@ -1,8 +1,7 @@
-import { ReactNode, Suspense } from 'react';
-import DateSwitcher from '@/components/date-switcher/DateSwitcher';
-import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
-import Navbar2 from '@/components/Navbar/Navbar';
+import { ReactNode } from 'react';
+import DateSwitcher from '@/components/DateSwitcher';
 import Navbar from '@/components/Navbar/Navbar';
+import { Heading } from '@/components/base/heading';
 
 export default function Layout({
 	children,
@@ -15,12 +14,7 @@ export default function Layout({
 				<Navbar />
 			</header>
 
-			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-				<Suspense fallback={<DateSwitcherSkeleton />}>
-					<DateSwitcher />
-				</Suspense>
-				{children}
-			</main>
+			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
 		</>
 	);
 }

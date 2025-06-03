@@ -3,6 +3,7 @@ import { getExpectedBalance } from '@/lib/source/source.actions';
 import { Subheading } from '@/components/base/heading';
 import MoneyText from '@/components/MoneyText';
 import clsx from 'clsx';
+import { Text } from '@/components/base/text';
 
 export default async function BalanceViewer() {
 	const actualBalance = await getActualBalance();
@@ -11,26 +12,27 @@ export default async function BalanceViewer() {
 	const balanceDifference = expectedBalance - actualBalance;
 
 	return (
-		<div className="flex shrink-0 items-center gap-2 text-sm font-semibold">
-			<div className="flex gap-2">
-				<span className="hidden md:block">balance:</span>
+		<div className="flex shrink-0 items-center gap-2 text-sm">
+			<div className="flex items-center gap-2">
+				<Text className="hidden md:block">balance:</Text>
 				<MoneyText
 					addColor={false}
 					className={clsx(
+						'font-semibold',
 						balanceDifference >= 0 ? 'text-gray-800 dark:text-white' : 'text-red-500',
 					)}
 				>
 					{actualBalance}
 				</MoneyText>
 			</div>
-			<div className="flex">
+			<Text className="flex items-center">
 				{balanceDifference !== 0 && (
 					<>
 						(<span className="mr-2 hidden md:block">difference:</span>
 						<MoneyText>{balanceDifference}</MoneyText>)
 					</>
 				)}
-			</div>
+			</Text>
 		</div>
 	);
 }

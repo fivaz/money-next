@@ -2,23 +2,12 @@
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
-import MoneyText from '@/components/MoneyText';
 import { Button } from '@/components/base/button';
-import { Heading, Subheading } from '@/components/base/heading';
-import { Skeleton } from '@/components/Skeleton';
+import { Text } from '@/components/base/text';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import clsx from 'clsx';
 
-type DateSwitcherClientProps = {
-	actualBalance: number;
-	expectedBalance: number;
-	isLoading?: boolean;
-};
-export default function DateSwitcherClient({
-	actualBalance,
-	expectedBalance,
-	isLoading = false,
-}: DateSwitcherClientProps) {
+type DateSwitcherClientProps = {};
+export default function DateSwitcher({}: DateSwitcherClientProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -29,8 +18,6 @@ export default function DateSwitcherClient({
 	const date = useMemo(() => new Date(currentYear, currentMonth - 1), [currentYear, currentMonth]);
 
 	const dateInput = useRef<HTMLInputElement>(null);
-
-	const balanceDifference = expectedBalance - actualBalance;
 
 	const formattedDate = useMemo(() => {
 		if (isSameYear(date, new Date())) {
@@ -77,13 +64,13 @@ export default function DateSwitcherClient({
 	};
 
 	return (
-		<div className="flex items-center justify-between gap-3 p-3">
-			<Button outline onClick={handlePrevMonth}>
-				<ChevronLeft className="size-7" />
+		<div className="flex items-center gap-5">
+			<Button color="light/dark" onClick={handlePrevMonth}>
+				<ChevronLeft className="size-6" />
 			</Button>
 			<div className="flex flex-col items-center">
 				<div className="flex items-center justify-center gap-2">
-					<Heading>{formattedDate}</Heading>
+					<Text size="text-lg">{formattedDate}</Text>
 					<Button outline size="p-1" className="focus:outline-none" onClick={showDatePicker}>
 						<Calendar1Icon
 							className="size-4 text-yellow-500 dark:text-yellow-400"
@@ -98,34 +85,9 @@ export default function DateSwitcherClient({
 						className="pointer-events-none absolute opacity-0"
 					/>
 				</div>
-				<div className="flex items-center gap-2">
-					<Subheading>
-						{isLoading ? (
-							<Skeleton />
-						) : (
-							<MoneyText
-								addColor={false}
-								className={clsx(
-									balanceDifference >= 0 ? 'text-gray-800 dark:text-white' : 'text-red-500',
-								)}
-							>
-								{actualBalance}
-							</MoneyText>
-						)}
-					</Subheading>
-					<Subheading>
-						{isLoading ? (
-							<Skeleton />
-						) : (
-							<>
-								(<MoneyText>{balanceDifference}</MoneyText>)
-							</>
-						)}
-					</Subheading>
-				</div>
 			</div>
-			<Button outline onClick={handleNextMonth}>
-				<ChevronRight className="size-7" />
+			<Button color="light/dark" onClick={handleNextMonth}>
+				<ChevronRight className="size-6" />
 			</Button>
 		</div>
 	);

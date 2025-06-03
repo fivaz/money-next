@@ -21,6 +21,7 @@ export default function Navbar() {
 							<Tooltip message={commitHash}>
 								<Logo className="size-10 self-center" />
 							</Tooltip>
+							<NavLinks />
 						</div>
 						<div className="flex">
 							<Suspense fallback={<BalanceViewerSkeleton />}>

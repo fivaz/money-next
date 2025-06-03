@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 import TransactionListWithData from '@/components/transaction/TransactionListWithData';
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
+import { Heading } from '@/components/base/heading';
+import DateSwitcher from '@/components/DateSwitcher';
+import { Divider } from '@/components/base/divider';
 
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -15,7 +18,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 	const suspenseKey = `${year}-${month}`;
 
 	return (
-		<main>
+		<main className="flex flex-col gap-5">
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<Heading>Transactions</Heading>
+				<DateSwitcher />
+			</div>
 			<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
 				<TransactionListWithData year={year} month={month} />
 			</Suspense>
