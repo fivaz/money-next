@@ -133,7 +133,7 @@ export default function TransactionForm({
 					</Field>
 
 					<Field className="col-span-1">
-						<Label>Amount {transaction.amount}</Label>
+						<Label>Amount</Label>
 						<MoneyInput name="amount" onChange={handleAmountChange} value={transaction.amount} />
 					</Field>
 				</div>
