@@ -1,45 +1,70 @@
 'use client';
 
+import {
+	forwardRef,
+	useState,
+	useRef,
+	ChangeEvent,
+	InputHTMLAttributes,
+	useImperativeHandle,
+} from 'react';
 import { Input } from '@/components/base/input';
-import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
 
 type MoneyInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> & {
-	value?: string; // now optional for uncontrolled use
-	defaultValue?: string; // added for uncontrolled mode
-	onChange?: (value: string) => void;
+	value?: string;
+	defaultValue?: string;
+	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function MoneyInput({
-	value: controlledValue,
-	defaultValue,
-	onChange,
-	name,
-	...props
-}: MoneyInputProps) {
-	const isControlled = controlledValue !== undefined;
+const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
+	({ value: controlledValue, defaultValue, onChange, name, ...props }, ref) => {
+		const isControlled = controlledValue !== undefined;
+		const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+		const inputRef = useRef<HTMLInputElement>(null);
 
-	const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+		// Let parent access the internal input
+		useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
-	// use the actual value to compute the display value
-	const rawValue = isControlled ? controlledValue : internalValue;
-	const displayValue = rawValue ? (Math.abs(Number(rawValue)) / 100).toFixed(2) : '';
+		const rawValue = isControlled ? controlledValue : internalValue;
+		const displayValue = rawValue ? (Math.abs(Number(rawValue)) / 100).toFixed(2) : '';
 
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const input = e.target.value;
-		const numericInput = input.replace(/\D/g, '');
-		const newValue = numericInput ? parseInt(numericInput).toString() : '0';
+		const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+			const input = e.target.value;
+			const numericInput = input.replace(/\D/g, '');
+			const newValue = numericInput ? parseInt(numericInput).toString() : '0';
 
-		if (isControlled) {
-			onChange?.(newValue);
-		} else {
-			setInternalValue(newValue);
-		}
-	};
+			if (!isControlled) {
+				setInternalValue(newValue);
+			}
 
-	return (
-		<>
-			<Input value={displayValue} onChange={handleChange} {...props} />
-			<input type="hidden" name={name} value={rawValue} />
-		</>
-	);
-}
+			if (onChange && inputRef.current) {
+				const syntheticEvent = {
+					...e,
+					target: {
+						...inputRef.current,
+						value: newValue,
+					},
+				} as ChangeEvent<HTMLInputElement>;
+
+				onChange(syntheticEvent);
+			}
+		};
+
+		return (
+			<>
+				<Input
+					ref={inputRef}
+					value={displayValue}
+					onChange={handleChange}
+					inputMode="numeric"
+					pattern="[0-9]*"
+					{...props}
+				/>
+				<input type="hidden" name={name} value={rawValue} />
+			</>
+		);
+	},
+);
+
+MoneyInput.displayName = 'MoneyInput';
+export default MoneyInput;

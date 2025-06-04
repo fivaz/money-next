@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, FormEvent } from 'react';
+import { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
@@ -46,14 +46,20 @@ export default function TransactionForm({
 
 	const { data: budgets } = useSWR<Budget[]>('/api/budgets', fetcher);
 
-	const parseAmount = (amount: string, operation: 'expense' | 'income'): string => {
-		const positiveValue = Math.abs(Number(amount));
-		return (operation === 'income' ? positiveValue : positiveValue * -1).toString();
+	function applySign(value: string | number, operation: 'income' | 'expense'): string {
+		const num = Math.abs(Number(value));
+		const signedValue = operation === 'expense' ? -num : num;
+		return signedValue === 0 ? '' : signedValue.toString();
+	}
+
+	const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newValue = applySign(e.target.value, operation);
+		setAmount(newValue);
 	};
 
-	const handleOperationChange = (newOperation: 'expense' | 'income') => {
+	const handleOperationChange = (newOperation: 'income' | 'expense') => {
 		setOperation(newOperation);
-		setAmount((amount) => parseAmount(amount, newOperation));
+		setAmount((prev) => applySign(prev, newOperation));
 	};
 
 	const resetForm = () => {
@@ -62,8 +68,6 @@ export default function TransactionForm({
 		setAmount(''); // Reset controlled amount input
 		setOperation('expense'); // Reset operation
 	};
-
-	const handleChangeAmount = (newAmount: string) => setAmount(parseAmount(newAmount, operation));
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -128,7 +132,7 @@ export default function TransactionForm({
 
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<MoneyInput name="amount" value={amount} onChange={handleChangeAmount} />
+						<MoneyInput required name="amount" value={amount} onChange={handleAmountChange} />
 					</Field>
 				</div>
 
