@@ -14,11 +14,15 @@ export async function saveBudget(budget: Budget, isEditing: boolean) {
 	const method = isEditing ? 'PUT' : 'POST';
 	const url = isEditing ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
 
-	return fetchWithAuth(url, {
+	const saved = fetchWithAuth(url, {
 		method,
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(budget),
 	});
+
+	revalidatePath(ROUTES.BUDGETS.path);
+
+	return saved;
 }
 
 export async function deleteBudget(id: number): Promise<void> {

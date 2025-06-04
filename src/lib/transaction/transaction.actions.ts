@@ -31,6 +31,7 @@ export async function saveTransaction(transaction: Transaction, isEditing: boole
 	});
 
 	revalidatePath(ROUTES.ROOT.path);
+
 	return saved;
 }
 

@@ -18,11 +18,15 @@ export async function saveSource(source: Source, isEditing: boolean) {
 	const method = isEditing ? 'PUT' : 'POST';
 	const url = isEditing ? `${SOURCES_URL}/${source.id}` : SOURCES_URL;
 
-	return fetchWithAuth(url, {
+	const saved = fetchWithAuth(url, {
 		method,
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(source),
 	});
+
+	revalidatePath(ROUTES.SOURCES.path);
+
+	return saved;
 }
 
 export async function deleteSource(id: number): Promise<void> {
