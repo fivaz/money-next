@@ -23,6 +23,7 @@ import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import IconView from '@/components/icon-picker/IconView';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
+import { formatForInput } from '@/lib/shared/date.utils';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -111,7 +112,7 @@ export default function TransactionForm({
 				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
 				<Field>
 					<Label>Description</Label>
-					<Textarea name="description" defaultValue={transaction?.description} />
+					<Textarea name="description" defaultValue={transaction?.description} autoFocus />
 				</Field>
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
@@ -120,7 +121,7 @@ export default function TransactionForm({
 							name="date"
 							required
 							type="datetime-local"
-							defaultValue={transaction?.date}
+							defaultValue={transaction?.date || formatForInput()}
 							autoFocus
 						/>
 					</Field>
