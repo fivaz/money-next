@@ -7,13 +7,13 @@ import SourceForm, { type SourceFormProps } from '@/components/source/source-for
 type SourceFormButtonProps = PropsWithChildren &
 	Pick<
 		SourceFormProps,
-		'source' | 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'
+		'source' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
 	>;
 
 export default function SourceFormButton({
 	children,
 	source,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: SourceFormButtonProps) {
@@ -35,7 +35,7 @@ export default function SourceFormButton({
 
 			<SourceForm
 				source={source}
-				onAddOptimisticAction={onAddOptimisticAction}
+				onAddOrUpdateAction={onAddOrUpdateAction}
 				onConfirmSaveAction={onConfirmSaveAction}
 				isOpen={isOpen}
 				closeFormAction={closeDialog}

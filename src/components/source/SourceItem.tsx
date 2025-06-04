@@ -11,11 +11,11 @@ import { useSearchParams } from 'next/navigation';
 type SourceItemProps = {
 	source: Source;
 	index: number;
-} & Pick<SourceFormProps, 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'>;
+} & Pick<SourceFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
 
 export default function SourceItem({
 	source,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 	index,
@@ -44,7 +44,7 @@ export default function SourceItem({
 						</Text>
 						<SourceFormButton
 							source={source}
-							onAddOptimisticAction={onAddOptimisticAction}
+							onAddOrUpdateAction={onAddOrUpdateAction}
 							onConfirmSaveAction={onConfirmSaveAction}
 							onDeleteAction={onDeleteAction}
 						>

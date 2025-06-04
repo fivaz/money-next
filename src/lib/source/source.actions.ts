@@ -14,9 +14,9 @@ export async function getSources(): Promise<Source[]> {
 	return validateSources(data);
 }
 
-export async function saveSource(source: Source, isEditing: boolean) {
-	const method = isEditing ? 'PUT' : 'POST';
-	const url = isEditing ? `${SOURCES_URL}/${source.id}` : SOURCES_URL;
+export async function saveSource(source: Source) {
+	const method = source.id ? 'PUT' : 'POST';
+	const url = source.id ? `${SOURCES_URL}/${source.id}` : SOURCES_URL;
 
 	const saved = fetchWithAuth(url, {
 		method,

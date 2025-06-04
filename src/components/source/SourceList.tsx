@@ -15,7 +15,7 @@ export default function SourceList({ initialSources }: SourceProps) {
 	const {
 		items: sources,
 		confirmSave,
-		addOrUpdateOptimistic,
+		addOrUpdate,
 		deleteOptimistic,
 		setItems: setSources,
 	} = useOptimisticList(initialSources, sortSources);
@@ -29,10 +29,7 @@ export default function SourceList({ initialSources }: SourceProps) {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="-mt-14 flex justify-end">
-				<SourceFormButton
-					onAddOptimisticAction={addOrUpdateOptimistic}
-					onConfirmSaveAction={confirmSave}
-				/>
+				<SourceFormButton onAddOrUpdateAction={addOrUpdate} onConfirmSaveAction={confirmSave} />
 			</div>
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
@@ -41,7 +38,7 @@ export default function SourceList({ initialSources }: SourceProps) {
 							index={index}
 							key={source.id}
 							source={source}
-							onAddOptimisticAction={addOrUpdateOptimistic}
+							onAddOrUpdateAction={addOrUpdate}
 							onConfirmSaveAction={confirmSave}
 							onDeleteAction={deleteOptimistic}
 						/>

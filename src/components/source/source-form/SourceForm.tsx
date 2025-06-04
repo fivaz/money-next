@@ -15,7 +15,7 @@ export type SourceFormProps = {
 	source?: Source;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOptimisticAction: (source: Source) => void;
+	onAddOrUpdateAction: (source: Source) => number;
 	onConfirmSaveAction: (tempId: number, realSource: Source) => void;
 	onDeleteAction?: (source: Source) => void;
 };
@@ -24,7 +24,7 @@ export default function SourceForm({
 	source,
 	isOpen,
 	closeFormAction,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: SourceFormProps) {
@@ -37,19 +37,15 @@ export default function SourceForm({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
+		const newSource = buildSource(formData);
 
-		const id = isEditing ? source.id! : -Date.now();
-		const newSourceWithoutId = buildSource(formData);
-
-		const newSource = { id, ...newSourceWithoutId };
-
-		onAddOptimisticAction(newSource);
+		const tempId = onAddOrUpdateAction(newSource);
 		resetForm();
 		closeFormAction();
 
 		try {
-			const saved = await saveSource(newSource, isEditing);
-			onConfirmSaveAction(id, saved);
+			const saved = await saveSource(newSource);
+			onConfirmSaveAction(tempId, saved);
 		} catch (err) {
 			console.error('Failed to save source:', err);
 		}

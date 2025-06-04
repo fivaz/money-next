@@ -1,7 +1,8 @@
 import { Source } from '@/lib/source/source.model';
 
-export const buildSource = (formData: FormData): Omit<Source, 'id'> => {
+export const buildSource = (formData: FormData): Source => {
 	return {
+		id: Number(formData.get('id')),
 		name: formData.get('name') as string,
 		icon: formData.get('icon') as string,
 		sortOrder: Infinity,

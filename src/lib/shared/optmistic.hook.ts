@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, SetStateAction } from 'react';
 
-export function useOptimisticList<I extends { id: number | string }>(
+export function useOptimisticList<I extends { id: number }>(
 	initialItems: I[],
 	sortFunc: (items: I[]) => I[],
 ) {
@@ -18,11 +18,29 @@ export function useOptimisticList<I extends { id: number | string }>(
 		setItemsState(updater);
 	};
 
-	const addOrUpdateOptimistic = (newItem: I) => {
-		setItems((prev) => {
-			const filtered = prev.filter((b) => b.id !== newItem.id);
-			return [...filtered, newItem]; // no sorting here
-		});
+	function upsertById<I extends { id: number }>(items: I[], newItem: I): [I[], number] {
+		// Generate ID if needed (simple timestamp fallback)
+		const finalItem = {
+			...newItem,
+			id: newItem.id ?? -Date.now(),
+		};
+
+		const existingIndex = items.findIndex((item) => item.id === finalItem.id);
+		const newItems = [...items]; // Clone array
+
+		if (existingIndex !== -1) {
+			newItems[existingIndex] = finalItem; // Replace in place
+		} else {
+			newItems.push(finalItem); // Add to end
+		}
+
+		return [newItems, finalItem.id];
+	}
+
+	const addOrUpdate = (newItem: I) => {
+		const [updatedItems, newId] = upsertById(items, newItem);
+		setItems(updatedItems);
+		return newId;
 	};
 
 	const confirmSave = (tempId: I['id'], savedItem: I) => {
@@ -41,7 +59,7 @@ export function useOptimisticList<I extends { id: number | string }>(
 
 	return {
 		items: sortedItems,
-		addOrUpdateOptimistic,
+		addOrUpdate,
 		confirmSave,
 		deleteOptimistic,
 		setItems,
