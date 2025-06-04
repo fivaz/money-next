@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { validateSchema } from '@/lib/shared/shared.model';
 import { BudgetSchema } from '@/lib/budget/budget.model';
 import { API, BACKEND_URL } from '@/lib/const';
+import { formatForInput } from '@/lib/shared/date.utils';
 
 export const TransactionSchema = z.object({
 	id: z.number().int(),
@@ -26,3 +27,15 @@ export const validateTransactions = (data: unknown) =>
 	validateSchema(data, TransactionSchema, 'transaction');
 
 export const TRANSACTIONS_URL = `${BACKEND_URL}/${API.TRANSACTIONS}`;
+
+export type TransactionIn = Omit<Transaction, 'amount'> & { amount: string };
+
+export const emptyTransaction = (): Transaction => ({
+	id: 0,
+	description: '',
+	isPaid: true,
+	date: formatForInput(),
+	amount: 0,
+	budget: null,
+	referenceDate: undefined,
+});

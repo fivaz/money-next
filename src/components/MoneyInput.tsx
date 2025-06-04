@@ -43,6 +43,7 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
 					target: {
 						...inputRef.current,
 						value: newValue,
+						name,
 					},
 				} as ChangeEvent<HTMLInputElement>;
 
