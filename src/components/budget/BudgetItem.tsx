@@ -10,7 +10,6 @@ import { API } from '@/lib/const';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { useTransactionsWithOptimistic } from '@/lib/transaction/transaction.hook';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { useSearchParams } from 'next/navigation';

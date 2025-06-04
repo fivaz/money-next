@@ -6,7 +6,7 @@ import {
 	TRANSACTIONS_URL,
 	validateTransactions,
 } from '@/lib/transaction/transaction.model';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
 export async function getCurrentMonthTransactions({

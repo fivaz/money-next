@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import TransactionListWithData from '@/components/transaction/TransactionListWithData';
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import { Heading } from '@/components/base/heading';
-import DateSwitcher from '@/components/DateSwitcher';
+import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

@@ -43,7 +43,7 @@ export default function TransactionForm({
 	);
 	const [amount, setAmount] = useState<string>(transaction?.amount.toString() || '');
 
-	const { data: budgets, error } = useSWR<Budget[]>('/api/budgets', fetcher);
+	const { data: budgets } = useSWR<Budget[]>('/api/budgets', fetcher);
 
 	const parseAmount = (amount: string, operation: 'expense' | 'income'): string => {
 		const positiveValue = Math.abs(Number(amount));
@@ -67,7 +67,7 @@ export default function TransactionForm({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
-		const newTransaction = buildTransaction(formData);
+		const newTransaction = buildTransaction(formData, budgets);
 
 		if (transaction?.id) editTransaction(newTransaction);
 		else addTransaction(newTransaction);

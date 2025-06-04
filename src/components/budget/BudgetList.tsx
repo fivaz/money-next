@@ -4,7 +4,7 @@ import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 import { reorderBudgets } from '@/lib/budget/budget.actions';
-import DateSwitcher from '@/components/DateSwitcher';
+import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { useBudgetList } from '@/lib/budget/BudgetListProvider';
 
 type BudgetProps = {};

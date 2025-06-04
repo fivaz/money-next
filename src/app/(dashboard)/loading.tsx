@@ -1,31 +1,19 @@
-import {
-	ArrowDownNarrowWideIcon,
-	ArrowDownWideNarrowIcon,
-	CalendarIcon,
-	ClockIcon,
-	CogIcon,
-	LoaderIcon,
-	PlusIcon,
-} from 'lucide-react';
+import { ArrowDownNarrowWideIcon, CalendarIcon, ClockIcon, CogIcon, PlusIcon } from 'lucide-react';
 import Button from '@/components/Button';
 import IconView from '@/components/icon-picker/IconView';
 import { Skeleton } from '@/components/Skeleton';
 import { Heading } from '@/components/base/heading';
-import DateSwitcher from '@/components/DateSwitcher';
-import { Suspense } from 'react';
-import TransactionListWithData from '@/components/transaction/TransactionListWithData';
-import { Strong, Text } from '@/components/base/text';
+import DateSwitcher from '@/components/date-switcher/DateSwitcher';
+import { Strong } from '@/components/base/text';
 import TotalIcon from '@/components/icons/TotalIcon';
-import MoneyText from '@/components/MoneyText';
-import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import TransactionItem from '@/components/transaction/TransactionItem';
+import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 
 export default function HomePageSkeleton() {
 	return (
 		<main className="flex flex-col gap-5">
 			<div className="flex flex-row items-center justify-between gap-3">
 				<Heading>Transactions</Heading>
-				<DateSwitcher />
+				<DateSwitcherSkeleton />
 			</div>
 			<TransactionListSkeleton />
 		</main>
