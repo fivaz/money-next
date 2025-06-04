@@ -28,7 +28,7 @@ export default function SourceList({ initialSources }: SourceProps) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex justify-end">
+			<div className="-mt-14 flex justify-end">
 				<SourceFormButton
 					onAddOptimisticAction={addOrUpdateOptimistic}
 					onConfirmSaveAction={confirmSave}
