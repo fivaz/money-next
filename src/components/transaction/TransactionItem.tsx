@@ -11,9 +11,10 @@ import IconView from '@/components/icon-picker/IconView';
 
 type TransactionItemProps = {
 	transaction: Transaction;
+	isEditable?: boolean;
 };
 
-export default function TransactionItem({ transaction }: TransactionItemProps) {
+export default function TransactionItem({ transaction, isEditable = true }: TransactionItemProps) {
 	const date = useMemo(() => {
 		const date = parse(transaction.date, DATE_FORMAT, new Date());
 		return {
@@ -53,9 +54,11 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
 					<MoneyText addColor={transaction.isPaid}>{transaction.amount}</MoneyText>
 				</Text>
 
-				<TransactionFormButton transaction={transaction} size="p-2">
-					<CogIcon className="size-4 shrink-0" />
-				</TransactionFormButton>
+				{isEditable && (
+					<TransactionFormButton transaction={transaction} size="p-2">
+						<CogIcon className="size-4 shrink-0" />
+					</TransactionFormButton>
+				)}
 			</div>
 		</li>
 	);

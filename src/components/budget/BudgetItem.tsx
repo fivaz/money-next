@@ -14,6 +14,10 @@ import { useTransactionsWithOptimistic } from '@/lib/transaction/transaction.hoo
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { useSearchParams } from 'next/navigation';
+import TransactionItem from '../transaction/TransactionItem';
+import useSWR from 'swr';
+import { Transaction } from '@/lib/transaction/transaction.model';
+import { fetcher } from '@/lib/shared/api-client.utils';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -30,8 +34,7 @@ export default function BudgetItem({ budget, index }: BudgetItemProps) {
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${currentYear}&month=${currentMonth}`;
 
-	const { transactions, error, isLoading, addOrUpdateTransaction, confirmSaveTransaction } =
-		useTransactionsWithOptimistic(url);
+	const { data: transactions } = useSWR<Transaction[]>(url, fetcher);
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -67,16 +70,15 @@ export default function BudgetItem({ budget, index }: BudgetItemProps) {
 									exit={{ scale: 0.95, opacity: 0 }}
 									transition={{ duration: 0.1, ease: easeOut }}
 								>
-									{/*<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">*/}
-									{/*	{transactions.map((transaction) => (*/}
-									{/*		<TransactionItem*/}
-									{/*			key={transaction.id}*/}
-									{/*			transaction={transaction}*/}
-									{/*			onAddOrUpdateAction={addOrUpdateTransaction}*/}
-									{/*			onConfirmSaveAction={confirmSaveTransaction}*/}
-									{/*		/>*/}
-									{/*	))}*/}
-									{/*</ul>*/}
+									<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
+										{transactions?.map((transaction) => (
+											<TransactionItem
+												key={transaction.id}
+												transaction={transaction}
+												isEditable={false}
+											/>
+										))}
+									</ul>
 								</motion.div>
 							</DisclosurePanel>
 						)}
