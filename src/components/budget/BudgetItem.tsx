@@ -8,7 +8,6 @@ import IconView from '@/components/icon-picker/IconView';
 import ProgressBar from '@/components/budget/ProgressBar';
 import { API } from '@/lib/const';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import TransactionItem from '@/components/transaction/TransactionItem';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useTransactionsWithOptimistic } from '@/lib/transaction/transaction.hook';

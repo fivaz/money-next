@@ -69,7 +69,8 @@ export default function TransactionForm({
 		const formData = new FormData(e.currentTarget);
 		const newTransaction = buildTransaction(formData);
 
-		transaction?.id ? editTransaction(newTransaction) : addTransaction(newTransaction);
+		if (transaction?.id) editTransaction(newTransaction);
+		else addTransaction(newTransaction);
 
 		resetForm();
 		closeFormAction();

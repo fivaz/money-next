@@ -29,7 +29,8 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 		const formData = new FormData(e.currentTarget);
 		const newBudget = buildBudget(formData);
 
-		budget?.id ? editBudget(newBudget) : addBudget(newBudget);
+		if (budget?.id) editBudget(newBudget);
+		else addBudget(newBudget);
 
 		resetForm();
 		closeFormAction();

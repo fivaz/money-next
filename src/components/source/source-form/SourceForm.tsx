@@ -29,7 +29,8 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 		const formData = new FormData(e.currentTarget);
 		const newSource = buildSource(formData);
 
-		source?.id ? editSource(newSource) : addSource(newSource);
+		if (source?.id) editSource(newSource);
+		else addSource(newSource);
 
 		resetForm();
 		closeFormAction();
