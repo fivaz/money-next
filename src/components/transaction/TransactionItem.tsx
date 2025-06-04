@@ -25,16 +25,16 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
 
 	return (
 		<li className="flex items-center justify-between bg-white px-3 py-2 dark:bg-gray-700">
-			<div className="flex min-w-0 items-center gap-4">
-				<div className="flex min-w-0 items-center gap-2">
+			<div className="flex min-w-0 items-center gap-2 sm:gap-4">
+				<div className="flex min-w-0 items-center gap-1">
 					<Text className="flex shrink-0 items-center gap-2">
 						<CalendarIcon className="hidden size-4 shrink-0 md:block" />
-						<span className="block md:hidden">{date.short}</span>
-						<span className="hidden md:block">{date.long}</span>
+						<span className="block w-12 md:hidden">{date.short}</span>
+						<span className="hidden w-14 md:block">{date.long}</span>
 					</Text>
 					<Text className="hidden shrink-0 items-center gap-2 md:flex">
 						<ClockIcon className="size-4 shrink-0" />
-						<span className="">{date.time}</span>
+						<span className="w-10">{date.time}</span>
 					</Text>
 				</div>
 
