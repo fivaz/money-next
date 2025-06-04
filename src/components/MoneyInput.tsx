@@ -52,14 +52,7 @@ const MoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(
 
 		return (
 			<>
-				<Input
-					ref={inputRef}
-					value={displayValue}
-					onChange={handleChange}
-					inputMode="numeric"
-					pattern="[0-9]*"
-					{...props}
-				/>
+				<Input ref={inputRef} value={displayValue} onChange={handleChange} {...props} />
 				<input type="hidden" name={name} value={rawValue} />
 			</>
 		);
