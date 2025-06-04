@@ -9,6 +9,7 @@ import { Text } from '@/components/base/text';
 import Button from '@/components/Button';
 import TotalIcon from '@/components/icons/TotalIcon';
 import { ArrowDownNarrowWideIcon, ArrowDownWideNarrowIcon, PlusIcon } from 'lucide-react';
+import DateSwitcher from '@/components/DateSwitcher';
 
 type TransactionProps = {
 	transactions: Transaction[];
