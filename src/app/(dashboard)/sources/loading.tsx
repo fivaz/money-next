@@ -1,5 +1,5 @@
 import { Heading } from '@/components/base/heading';
-import { CogIcon, LandmarkIcon, LoaderIcon } from 'lucide-react';
+import { CogIcon, LandmarkIcon } from 'lucide-react';
 import Button from '@/components/Button';
 import { Skeleton } from '@/components/Skeleton';
 

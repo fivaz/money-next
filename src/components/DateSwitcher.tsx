@@ -1,9 +1,7 @@
 'use client';
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
-import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
-import Button from '@/components/Button';
-import { Text } from '@/components/base/text';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type DateSwitcherClientProps = {};
@@ -64,31 +62,37 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 	};
 
 	return (
-		<div className="flex items-center gap-5">
-			<Button onClick={handlePrevMonth}>
-				<ChevronLeft className="size-6" />
-			</Button>
-			<div className="flex flex-col items-center">
-				<div className="flex items-center justify-center gap-2">
-					<Text size="text-lg">{formattedDate}</Text>
-					<Button size="p-1" className="focus:outline-none" onClick={showDatePicker}>
-						<Calendar1Icon
-							className="size-4 text-yellow-500 dark:text-yellow-400"
-							aria-hidden="true"
-						/>
-					</Button>
-					<input
-						ref={dateInput}
-						type="date"
-						value={getISODate()}
-						onChange={(e) => handleDateChange(e)}
-						className="pointer-events-none absolute opacity-0"
-					/>
-				</div>
-			</div>
-			<Button onClick={handleNextMonth}>
-				<ChevronRight className="size-6" />
-			</Button>
+		<div className="relative flex items-center rounded-md bg-white shadow-xs md:items-stretch">
+			<button
+				onClick={handlePrevMonth}
+				type="button"
+				className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
+			>
+				<ChevronLeftIcon className="size-5" />
+			</button>
+			<button
+				onClick={showDatePicker}
+				type="button"
+				className="flex h-9 items-center gap-2 border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative"
+			>
+				<Calendar1Icon className="size-4" aria-hidden="true" />
+				{formattedDate}
+			</button>
+			<input
+				ref={dateInput}
+				type="date"
+				value={getISODate()}
+				onChange={(e) => handleDateChange(e)}
+				className="pointer-events-none absolute opacity-0"
+			/>
+			<button
+				onClick={handleNextMonth}
+				type="button"
+				className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
+			>
+				<span className="sr-only">Next month</span>
+				<ChevronRightIcon className="size-5" aria-hidden="true" />
+			</button>
 		</div>
 	);
 }

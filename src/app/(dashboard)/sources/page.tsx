@@ -7,9 +7,7 @@ export default async function SourcesPage() {
 
 	return (
 		<main className="flex flex-col gap-5">
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<Heading>Sources</Heading>
-			</div>
+			<Heading>Sources</Heading>
 			<SourceList initialSources={sources} />
 		</main>
 	);

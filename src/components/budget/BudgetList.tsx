@@ -7,6 +7,7 @@ import { move } from '@dnd-kit/helpers';
 import { reorderBudgets } from '@/lib/budget/budget.actions';
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 import { sortBudgets } from '@/lib/budget/budget.utils';
+import DateSwitcher from '@/components/DateSwitcher';
 
 type BudgetProps = {
 	initialBudgets: Budget[];
@@ -28,7 +29,8 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex justify-end">
+			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
+				<DateSwitcher />
 				<BudgetFormButton
 					onAddOptimisticAction={addOrUpdateOptimistic}
 					onConfirmSaveAction={confirmSave}
