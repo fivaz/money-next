@@ -15,7 +15,7 @@ export type BudgetFormProps = {
 	budget?: Budget;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOptimisticAction: (budget: Budget) => void;
+	onAddOrUpdateAction: (budget: Budget) => number;
 	onConfirmSaveAction: (tempId: number, realBudget: Budget) => void;
 	onDeleteAction?: (budget: Budget) => void;
 };
@@ -24,7 +24,7 @@ export default function BudgetForm({
 	budget,
 	isOpen,
 	closeFormAction,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: BudgetFormProps) {
@@ -37,19 +37,15 @@ export default function BudgetForm({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
+		const newBudget = buildBudget(formData);
 
-		const id = isEditing ? budget.id! : -Date.now();
-		const newBudgetWithoutId = buildBudget(formData);
-
-		const newBudget = { id, ...newBudgetWithoutId, transactions: [] };
-
-		onAddOptimisticAction(newBudget);
+		const tempId = onAddOrUpdateAction(newBudget);
 		resetForm();
 		closeFormAction();
 
 		try {
-			const saved = await saveBudget(newBudget, isEditing);
-			onConfirmSaveAction(id, saved);
+			const saved = await saveBudget(newBudget);
+			onConfirmSaveAction(tempId, saved);
 		} catch (err) {
 			console.error('Failed to save source:', err);
 		}

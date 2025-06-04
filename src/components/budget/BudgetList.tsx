@@ -16,7 +16,7 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 	const {
 		items: budgets,
 		confirmSave,
-		addOrUpdateOptimistic,
+		addOrUpdate,
 		deleteOptimistic,
 		setItems: setBudgets,
 	} = useOptimisticList(initialBudgets, sortBudgets);
@@ -31,10 +31,7 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
 				<DateSwitcher />
-				<BudgetFormButton
-					onAddOptimisticAction={addOrUpdateOptimistic}
-					onConfirmSaveAction={confirmSave}
-				/>
+				<BudgetFormButton onAddOrUpdateAction={addOrUpdate} onConfirmSaveAction={confirmSave} />
 			</div>
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
@@ -43,7 +40,7 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 							index={index}
 							key={budget.id}
 							budget={budget}
-							onAddOptimisticAction={addOrUpdateOptimistic}
+							onAddOrUpdateAction={addOrUpdate}
 							onConfirmSaveAction={confirmSave}
 							onDeleteAction={deleteOptimistic}
 						/>

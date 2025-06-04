@@ -20,11 +20,11 @@ import { useSearchParams } from 'next/navigation';
 type BudgetItemProps = {
 	budget: Budget;
 	index: number;
-} & Pick<BudgetFormProps, 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'>;
+} & Pick<BudgetFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
 
 export default function BudgetItem({
 	budget,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 	index,
@@ -38,7 +38,7 @@ export default function BudgetItem({
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${currentYear}&month=${currentMonth}`;
 
-	const { transactions, error, isLoading, addOrUpdateOptimistic, confirmSave } =
+	const { transactions, error, isLoading, addOrUpdateTransaction, confirmSaveTransaction } =
 		useTransactionsWithOptimistic(url);
 
 	return (
@@ -59,7 +59,7 @@ export default function BudgetItem({
 
 								<BudgetFormButton
 									budget={budget}
-									onAddOptimisticAction={onAddOptimisticAction}
+									onAddOrUpdateAction={onAddOrUpdateAction}
 									onConfirmSaveAction={onConfirmSaveAction}
 									onDeleteAction={onDeleteAction}
 								>
@@ -85,8 +85,8 @@ export default function BudgetItem({
 											<TransactionItem
 												key={transaction.id}
 												transaction={transaction}
-												onAddOptimisticAction={addOrUpdateOptimistic}
-												onConfirmSaveAction={confirmSave}
+												onAddOrUpdateAction={addOrUpdateTransaction}
+												onConfirmSaveAction={confirmSaveTransaction}
 											/>
 										))}
 									</ul>

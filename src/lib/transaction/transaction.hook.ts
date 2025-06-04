@@ -17,7 +17,7 @@ export function useTransactionsWithOptimistic(url: string | null) {
 	}, [swrTransactions]);
 
 	// Add or update a transaction optimistically
-	function addOrUpdateOptimistic(newTx: Transaction) {
+	function addOrUpdateTransaction(newTx: Transaction) {
 		setOptimisticTransactions((prev) => {
 			const filtered = prev.filter((tx) => tx.id !== newTx.id);
 			return [newTx, ...filtered];
@@ -31,7 +31,7 @@ export function useTransactionsWithOptimistic(url: string | null) {
 	}
 
 	// Confirm the saved transaction from server, replace temp with real ID, then revalidate SWR
-	async function confirmSave(tempId: number, savedTx: Transaction) {
+	async function confirmSaveTransaction(tempId: number, savedTx: Transaction) {
 		setOptimisticTransactions((prev) => {
 			const filtered = prev.filter((tx) => tx.id !== tempId);
 			return [savedTx, ...filtered];
@@ -44,7 +44,7 @@ export function useTransactionsWithOptimistic(url: string | null) {
 		transactions: optimisticTransactions,
 		error,
 		isLoading: !error && !optimisticTransactions.length,
-		addOrUpdateOptimistic,
-		confirmSave,
+		addOrUpdateTransaction,
+		confirmSaveTransaction,
 	};
 }

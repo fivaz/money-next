@@ -10,9 +10,9 @@ export async function getBudgets(): Promise<Budget[]> {
 	return validateBudgets(data);
 }
 
-export async function saveBudget(budget: Budget, isEditing: boolean) {
-	const method = isEditing ? 'PUT' : 'POST';
-	const url = isEditing ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
+export async function saveBudget(budget: Budget) {
+	const method = budget.id ? 'PUT' : 'POST';
+	const url = budget.id ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
 
 	const saved = fetchWithAuth(url, {
 		method,

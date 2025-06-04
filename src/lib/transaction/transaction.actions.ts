@@ -20,9 +20,9 @@ export async function getCurrentMonthTransactions({
 	return validateTransactions(data);
 }
 
-export async function saveTransaction(transaction: Transaction, isEditing: boolean) {
-	const method = isEditing ? 'PUT' : 'POST';
-	const url = isEditing ? `${TRANSACTIONS_URL}/${transaction.id}` : TRANSACTIONS_URL;
+export async function saveTransaction(transaction: Transaction) {
+	const method = transaction.id ? 'PUT' : 'POST';
+	const url = transaction.id ? `${TRANSACTIONS_URL}/${transaction.id}` : TRANSACTIONS_URL;
 
 	const saved = fetchWithAuth(url, {
 		method,

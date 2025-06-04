@@ -18,7 +18,7 @@ export default function TransactionList({ transactions: initialTransactions }: T
 	const {
 		items: transactions,
 		confirmSave,
-		addOrUpdateOptimistic,
+		addOrUpdate,
 		deleteOptimistic,
 	} = useOptimisticList(initialTransactions, sortTransactions);
 
@@ -41,7 +41,7 @@ export default function TransactionList({ transactions: initialTransactions }: T
 					)}
 				</Button>
 				<TransactionFormButton
-					onAddOptimisticAction={addOrUpdateOptimistic}
+					onAddOrUpdateAction={addOrUpdate}
 					onConfirmSaveAction={confirmSave}
 					size="p-1.5 px-2.5"
 					className="flex items-center"
@@ -55,7 +55,7 @@ export default function TransactionList({ transactions: initialTransactions }: T
 					<TransactionItem
 						key={transaction.id}
 						transaction={transaction}
-						onAddOptimisticAction={addOrUpdateOptimistic}
+						onAddOrUpdateAction={addOrUpdate}
 						onConfirmSaveAction={confirmSave}
 						onDeleteAction={deleteOptimistic}
 					/>

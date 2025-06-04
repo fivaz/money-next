@@ -7,13 +7,13 @@ import BudgetForm, { type BudgetFormProps } from '@/components/budget/budget-for
 type BudgetFormButtonProps = PropsWithChildren &
 	Pick<
 		BudgetFormProps,
-		'budget' | 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'
+		'budget' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
 	>;
 
 export default function BudgetFormButton({
 	children,
 	budget,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: BudgetFormButtonProps) {
@@ -35,7 +35,7 @@ export default function BudgetFormButton({
 
 			<BudgetForm
 				budget={budget}
-				onAddOptimisticAction={onAddOptimisticAction}
+				onAddOrUpdateAction={onAddOrUpdateAction}
 				onConfirmSaveAction={onConfirmSaveAction}
 				isOpen={isOpen}
 				closeFormAction={closeDialog}

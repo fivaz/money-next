@@ -1,7 +1,8 @@
 import { Budget } from '@/lib/budget/budget.model';
 
-export const buildBudget = (formData: FormData): Omit<Budget, 'id'> => {
+export const buildBudget = (formData: FormData): Budget => {
 	return {
+		id: Number(formData.get('id')),
 		name: formData.get('name') as string,
 		icon: formData.get('icon') as string,
 		parent: null,

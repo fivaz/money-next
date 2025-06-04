@@ -12,11 +12,11 @@ import IconView from '@/components/icon-picker/IconView';
 
 type TransactionItemProps = {
 	transaction: Transaction;
-} & Pick<TransactionFormProps, 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'>;
+} & Pick<TransactionFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
 
 export default function TransactionItem({
 	transaction,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: TransactionItemProps) {
@@ -61,7 +61,7 @@ export default function TransactionItem({
 
 				<TransactionFormButton
 					transaction={transaction}
-					onAddOptimisticAction={onAddOptimisticAction}
+					onAddOrUpdateAction={onAddOrUpdateAction}
 					onConfirmSaveAction={onConfirmSaveAction}
 					onDeleteAction={onDeleteAction}
 					size="p-2"

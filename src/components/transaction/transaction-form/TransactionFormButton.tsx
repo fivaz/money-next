@@ -10,13 +10,13 @@ type TransactionFormButtonProps = PropsWithChildren &
 	ButtonProps &
 	Pick<
 		TransactionFormProps,
-		'transaction' | 'onConfirmSaveAction' | 'onAddOptimisticAction' | 'onDeleteAction'
+		'transaction' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
 	>;
 
 export default function TransactionFormButton({
 	children,
 	transaction,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 	...props
@@ -39,7 +39,7 @@ export default function TransactionFormButton({
 
 			<TransactionForm
 				transaction={transaction}
-				onAddOptimisticAction={onAddOptimisticAction}
+				onAddOrUpdateAction={onAddOrUpdateAction}
 				onConfirmSaveAction={onConfirmSaveAction}
 				isOpen={isOpen}
 				closeFormAction={closeDialog}

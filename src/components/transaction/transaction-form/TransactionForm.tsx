@@ -23,7 +23,7 @@ export type TransactionFormProps = {
 	transaction?: Transaction;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOptimisticAction: (transaction: Transaction) => void;
+	onAddOrUpdateAction: (transaction: Transaction) => number;
 	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
 	onDeleteAction?: (transaction: Transaction) => void;
 };
@@ -32,7 +32,7 @@ export default function TransactionForm({
 	transaction,
 	isOpen,
 	closeFormAction,
-	onAddOptimisticAction,
+	onAddOrUpdateAction,
 	onConfirmSaveAction,
 	onDeleteAction,
 }: TransactionFormProps) {
@@ -68,19 +68,15 @@ export default function TransactionForm({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
+		const newTransaction = buildTransaction(formData, budgets);
 
-		const id = isEditing ? transaction.id! : -Date.now();
-		const newTransactionWithoutId = buildTransaction(formData, budgets);
-
-		const newTransaction = { id, ...newTransactionWithoutId };
-
-		onAddOptimisticAction(newTransaction);
+		const tempId = onAddOrUpdateAction(newTransaction);
 		resetForm();
 		closeFormAction();
 
 		try {
-			const saved = await saveTransaction(newTransaction, isEditing);
-			onConfirmSaveAction(id, saved);
+			const saved = await saveTransaction(newTransaction);
+			onConfirmSaveAction(tempId, saved);
 		} catch (err) {
 			console.error('Failed to save transaction:', err);
 		}
