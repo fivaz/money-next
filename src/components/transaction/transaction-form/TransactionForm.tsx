@@ -37,7 +37,6 @@ export default function TransactionForm({
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
-	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useTransactionList();
 
 	const [operation, setOperation] = useState<'expense' | 'income'>(

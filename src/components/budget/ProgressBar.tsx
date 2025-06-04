@@ -25,16 +25,19 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 	const totalSpent = sumTransactions(transactions);
 
 	// Calculate actual percentage (can exceed 100%)
-	const actualPercentage = Math.round((totalSpent / budget.amount) * 100);
+	const actualPercentage = Math.round((Math.abs(totalSpent) / budget.amount) * 100);
 
 	// Calculate progress percentage for bar width (capped at 100%)
 	const progressPercentage = Math.min(actualPercentage, 100);
 
 	// Determine progress bar color based on if budget is exceeded
-	const progressColor = totalSpent > budget.amount ? 'bg-red-500' : 'bg-yellow-500';
+	const progressColor = Math.abs(totalSpent) > budget.amount ? 'bg-red-500' : 'bg-yellow-500';
 
 	return (
-		<div className="flex items-center gap-2">
+		<div
+			className="flex items-center gap-2"
+			onClick={() => console.log('progressPercentage', progressPercentage)}
+		>
 			<div className="relative h-3 flex-1 rounded-full bg-gray-200">
 				<div
 					className={clsx(
