@@ -7,8 +7,8 @@ import { Textarea } from '@/components/base/textarea';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
 import { Switch } from '@/components/base/switch';
-import { Dialog, DialogActions, DialogBody, DialogTitle } from '@/components/base/dialog';
-import { Button } from '@/components/base/button';
+import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
+import Button from '@/components/Button';
 import { deleteTransaction, saveTransaction } from '@/lib/transaction/transaction.actions';
 import { LoaderCircleIcon, XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
@@ -97,7 +97,7 @@ export default function TransactionForm({
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
 				<span>{isEditing ? 'Edit Transaction' : 'Add Transaction'}</span>
-				<Button onClick={closeFormAction} outline size="p-1">
+				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>

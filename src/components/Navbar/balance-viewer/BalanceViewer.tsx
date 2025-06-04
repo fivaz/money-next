@@ -1,6 +1,5 @@
 import { getActualBalance } from '@/app/actions/get-balance';
 import { getExpectedBalance } from '@/lib/source/source.actions';
-import { Subheading } from '@/components/base/heading';
 import MoneyText from '@/components/MoneyText';
 import clsx from 'clsx';
 import { Text } from '@/components/base/text';

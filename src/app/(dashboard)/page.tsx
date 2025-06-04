@@ -3,7 +3,6 @@ import TransactionListWithData from '@/components/transaction/TransactionListWit
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import { Heading } from '@/components/base/heading';
 import DateSwitcher from '@/components/DateSwitcher';
-import { Divider } from '@/components/base/divider';
 
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

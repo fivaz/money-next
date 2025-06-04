@@ -1,4 +1,3 @@
-import { Disclosure, DisclosurePanel } from '@headlessui/react';
 import Tooltip from '@/components/Navbar/Tooltip';
 import NavbarDisclosure from '@/components/Navbar/NavbarDisclosure';
 import Logo from '@/components/Logo';
@@ -6,7 +5,6 @@ import BalanceViewer from '@/components/Navbar/balance-viewer/BalanceViewer';
 import BalanceViewerSkeleton from '@/components/Navbar/balance-viewer/BalanceViewerSkeleton';
 import { Suspense } from 'react';
 import NavLinks from '@/components/Navbar/NavLinks';
-import MobileUserInfo from '@/components/Navbar/MobileUserInfo';
 import DarkMode from '@/components/Navbar/DarkMode';
 import ProfileDropdown from '@/components/Navbar/ProfileDropdown/ProfileDropdown';
 export default function Navbar() {

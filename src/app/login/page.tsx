@@ -74,7 +74,7 @@ export default function LoginPage() {
 
 					<div>
 						<Button
-							padding="px-3 py-2"
+							size="px-3 py-2"
 							type="submit"
 							color="primary"
 							className="flex w-full justify-center"

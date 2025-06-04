@@ -1,7 +1,5 @@
 import { ReactNode } from 'react';
-import DateSwitcher from '@/components/DateSwitcher';
 import Navbar from '@/components/Navbar/Navbar';
-import { Heading } from '@/components/base/heading';
 
 export default function Layout({
 	children,

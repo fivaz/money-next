@@ -171,7 +171,7 @@ export type ButtonProps = (
 		| Omit<React.ComponentPropsWithoutRef<typeof Link>, 'className'>
 	);
 
-export const Button = forwardRef(function Button(
+export const Button2 = forwardRef(function Button(
 	{ color, outline, plain, className, children, size, ...props }: ButtonProps,
 	ref: React.ForwardedRef<HTMLElement>,
 ) {

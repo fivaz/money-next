@@ -6,8 +6,6 @@ import { type SourceFormProps } from '@/components/source/source-form/SourceForm
 import SourceFormButton from '@/components/source/source-form/SourceFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
-import { API } from '@/lib/const';
-import { useSortable } from '@dnd-kit/react/sortable';
 import { useSearchParams } from 'next/navigation';
 
 type SourceItemProps = {
@@ -26,10 +24,6 @@ export default function SourceItem({
 
 	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
 	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
-
-	const { ref } = useSortable({ id: source.id, index });
-
-	const url = `/api/${API.SOURCES}/${source.id}/${API.TRANSACTIONS}?year=${currentYear}&month=${currentMonth}`;
 
 	return (
 		<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">

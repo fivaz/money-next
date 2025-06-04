@@ -6,7 +6,6 @@ import Link from 'next/link';
 import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import { profileLinks } from '@/lib/const';
-import { User } from '@/lib/user/user.model';
 import { useUser } from '@/lib/user/user.hook';
 
 type MobileUserInfoProps = {};

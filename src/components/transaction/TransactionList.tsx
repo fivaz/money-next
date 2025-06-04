@@ -6,9 +6,7 @@ import { sortTransactions, sumTransactions } from '@/lib/transaction/transaction
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
-import { Button } from '@/components/base/button';
-import DateSwitcher from '@/components/DateSwitcher';
-import { Divider } from '@/components/base/divider';
+import Button from '@/components/Button';
 import TotalIcon from '@/components/icons/TotalIcon';
 import { ArrowDownNarrowWideIcon, ArrowDownWideNarrowIcon, PlusIcon } from 'lucide-react';
 
@@ -35,7 +33,7 @@ export default function TransactionList({ transactions: initialTransactions }: T
 					<TotalIcon className="size-4" />
 					<MoneyText>{balance}</MoneyText>
 				</Text>
-				<Button color="light/dark" size="px-2 py-1.5">
+				<Button size="px-2 py-1.5">
 					{isAscending ? (
 						<ArrowDownNarrowWideIcon className="size-5" />
 					) : (
@@ -46,7 +44,6 @@ export default function TransactionList({ transactions: initialTransactions }: T
 					onAddOptimisticAction={addOrUpdateOptimistic}
 					onConfirmSaveAction={confirmSave}
 					size="p-1.5 px-2.5"
-					color="light/dark"
 					className="flex items-center"
 				>
 					<PlusIcon className="size-5" />

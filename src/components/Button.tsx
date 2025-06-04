@@ -1,21 +1,21 @@
 import { LoaderCircle } from 'lucide-react';
 import { ButtonHTMLAttributes } from 'react';
 
-type ButtonColor = 'default' | 'primary' | 'secondary' | 'error';
+type ButtonColor = 'default' | 'primary' | 'secondary' | 'red';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	color?: ButtonColor;
 	loading?: boolean;
-	padding?: string;
+	size?: string;
 }
 
 const getButtonClasses = (
 	color: ButtonColor | undefined,
 	disabled: boolean | undefined,
 	loading: boolean | undefined,
-	padding: string | undefined,
+	size: string | undefined,
 ): string => {
-	const paddingClasses = padding || 'px-2.5 py-1.5';
+	const paddingClasses = size || 'px-2.5 py-1.5';
 	const baseClasses = 'cursor-pointer rounded-md text-sm font-semibold shadow-xs transition-colors';
 	const disabledClasses = 'opacity-50 cursor-not-allowed';
 
@@ -26,8 +26,7 @@ const getButtonClasses = (
 			'border border-gray-200 dark:border-gray-400 bg-yellow-500 text-white hover:bg-yellow-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500',
 		secondary:
 			'border border-gray-200 dark:border-gray-400 bg-yellow-50 text-yellow-600 hover:bg-yellow-100',
-		error:
-			'bg-red-500 text-white hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500',
+		red: 'bg-red-500 text-white hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500',
 	};
 
 	const isDisabled = disabled || loading;
@@ -40,7 +39,7 @@ export default function Button({
 	color,
 	disabled,
 	loading,
-	padding,
+	size,
 	className = '',
 	type = 'button',
 	children,
@@ -50,7 +49,7 @@ export default function Button({
 		<button
 			type={type}
 			disabled={disabled || loading}
-			className={`${getButtonClasses(color, disabled, loading, padding)} ${className}`}
+			className={`${getButtonClasses(color, disabled, loading, size)} ${className}`}
 			{...rest}
 		>
 			<span className="flex items-center gap-2">

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import type React from 'react';
-import { Button } from './button';
+import { Button2 } from './button';
 
 export function Pagination({
 	'aria-label': ariaLabel = 'Page navigation',
@@ -17,7 +17,11 @@ export function PaginationPrevious({
 }: React.PropsWithChildren<{ href?: string | null; className?: string }>) {
 	return (
 		<span className={clsx(className, 'grow basis-0')}>
-			<Button {...(href === null ? { disabled: true } : { href })} plain aria-label="Previous page">
+			<Button2
+				{...(href === null ? { disabled: true } : { href })}
+				plain
+				aria-label="Previous page"
+			>
 				<svg
 					className="stroke-current"
 					data-slot="icon"
@@ -33,7 +37,7 @@ export function PaginationPrevious({
 					/>
 				</svg>
 				{children}
-			</Button>
+			</Button2>
 		</span>
 	);
 }
@@ -45,7 +49,7 @@ export function PaginationNext({
 }: React.PropsWithChildren<{ href?: string | null; className?: string }>) {
 	return (
 		<span className={clsx(className, 'flex grow basis-0 justify-end')}>
-			<Button {...(href === null ? { disabled: true } : { href })} plain aria-label="Next page">
+			<Button2 {...(href === null ? { disabled: true } : { href })} plain aria-label="Next page">
 				{children}
 				<svg
 					className="stroke-current"
@@ -61,7 +65,7 @@ export function PaginationNext({
 						strokeLinejoin="round"
 					/>
 				</svg>
-			</Button>
+			</Button2>
 		</span>
 	);
 }
@@ -77,7 +81,7 @@ export function PaginationPage({
 	children,
 }: React.PropsWithChildren<{ href: string; className?: string; current?: boolean }>) {
 	return (
-		<Button
+		<Button2
 			href={href}
 			plain
 			aria-label={`Page ${children}`}
@@ -89,7 +93,7 @@ export function PaginationPage({
 			)}
 		>
 			<span className="-mx-0.5">{children}</span>
-		</Button>
+		</Button2>
 	);
 }
 

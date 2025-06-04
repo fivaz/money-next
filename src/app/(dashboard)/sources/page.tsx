@@ -1,8 +1,6 @@
 import { getSources } from '@/lib/source/source.actions';
 import SourceList from '@/components/source/SourceList';
 import { Heading } from '@/components/base/heading';
-import DateSwitcher from '@/components/DateSwitcher';
-import BudgetList from '@/components/budget/BudgetList';
 
 export default async function SourcesPage() {
 	const sources = await getSources();

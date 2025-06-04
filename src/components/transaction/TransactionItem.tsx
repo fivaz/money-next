@@ -65,7 +65,6 @@ export default function TransactionItem({
 					onConfirmSaveAction={onConfirmSaveAction}
 					onDeleteAction={onDeleteAction}
 					size="p-2"
-					color="light/dark"
 				>
 					<CogIcon className="size-4 shrink-0" />
 				</TransactionFormButton>

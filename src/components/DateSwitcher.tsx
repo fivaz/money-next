@@ -2,7 +2,7 @@
 import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
-import { Button } from '@/components/base/button';
+import Button from '@/components/Button';
 import { Text } from '@/components/base/text';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -65,13 +65,13 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 
 	return (
 		<div className="flex items-center gap-5">
-			<Button color="light/dark" onClick={handlePrevMonth}>
+			<Button onClick={handlePrevMonth}>
 				<ChevronLeft className="size-6" />
 			</Button>
 			<div className="flex flex-col items-center">
 				<div className="flex items-center justify-center gap-2">
 					<Text size="text-lg">{formattedDate}</Text>
-					<Button outline size="p-1" className="focus:outline-none" onClick={showDatePicker}>
+					<Button size="p-1" className="focus:outline-none" onClick={showDatePicker}>
 						<Calendar1Icon
 							className="size-4 text-yellow-500 dark:text-yellow-400"
 							aria-hidden="true"
@@ -86,7 +86,7 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 					/>
 				</div>
 			</div>
-			<Button color="light/dark" onClick={handleNextMonth}>
+			<Button onClick={handleNextMonth}>
 				<ChevronRight className="size-6" />
 			</Button>
 		</div>

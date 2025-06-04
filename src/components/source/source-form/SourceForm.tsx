@@ -1,10 +1,10 @@
 'use client';
-import { FormEvent, useRef, useState, useTransition } from 'react';
+import { FormEvent, useRef } from 'react';
 import { type Source } from '@/lib/source/source.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
-import { Button } from '@/components/base/button';
+import Button from '@/components/Button';
 import { deleteSource, saveSource } from '@/lib/source/source.actions';
 import { XIcon } from 'lucide-react';
 import { buildSource } from '@/lib/source/source.utils';
@@ -66,7 +66,7 @@ export default function SourceForm({
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
 				<span>{isEditing ? 'Edit Source' : 'Add Source'}</span>
-				<Button onClick={closeFormAction} outline size="p-1">
+				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>

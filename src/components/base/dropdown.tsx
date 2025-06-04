@@ -3,15 +3,15 @@
 import * as Headless from '@headlessui/react';
 import clsx from 'clsx';
 import type React from 'react';
-import { Button } from './button';
+import { Button2 } from './button';
 import { Link } from './link';
 
 export function Dropdown(props: Headless.MenuProps) {
 	return <Headless.Menu {...props} />;
 }
 
-export function DropdownButton<T extends React.ElementType = typeof Button>({
-	as = Button,
+export function DropdownButton<T extends React.ElementType = typeof Button2>({
+	as = Button2,
 	...props
 }: { className?: string } & Omit<Headless.MenuButtonProps<T>, 'className'>) {
 	return <Headless.MenuButton as={as} {...props} />;

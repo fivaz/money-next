@@ -1,25 +1,16 @@
 'use client';
-import BudgetItem from '@/components/budget/BudgetItem';
-import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
-import { type Budget } from '@/lib/budget/budget.model';
-import { DragDropProvider } from '@dnd-kit/react';
-import { move } from '@dnd-kit/helpers';
-import { reorderBudgets } from '@/lib/budget/budget.actions';
-import { useOptimisticList } from '@/lib/shared/optmistic.hook';
-import { sortBudgets } from '@/lib/budget/budget.utils';
-import { Button } from '@/components/base/button';
+import Button from '@/components/Button';
 import { Text } from '@/components/base/text';
 import { ChevronDownIcon, CogIcon, LoaderIcon } from 'lucide-react';
 import { Skeleton } from '@/components/Skeleton';
 import clsx from 'clsx';
-import MoneyText from '@/components/MoneyText';
 import { getDate, getDaysInMonth, startOfDay } from 'date-fns';
 
 export default function BudgetListSkeleton() {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-end">
-				<Button disabled color="light/dark" className="flex items-center">
+				<Button disabled className="flex items-center">
 					<LoaderIcon className="anime-spin size-4" />
 					Add Budget
 				</Button>
@@ -45,7 +36,7 @@ function BudgetItemSkeleton() {
 						<div className="flex shrink-0 items-center gap-2">
 							<Skeleton />
 
-							<Button disabled color="light/dark">
+							<Button disabled>
 								<CogIcon className="size-4 shrink-0" />
 							</Button>
 						</div>
@@ -54,7 +45,7 @@ function BudgetItemSkeleton() {
 					<ProgressBarSkeleton />
 				</div>
 
-				<Button outline className="flex w-full justify-center p-2">
+				<Button className="flex w-full justify-center p-2">
 					<Text>
 						<ChevronDownIcon className="rotate-180 transform" />
 					</Text>
