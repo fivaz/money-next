@@ -30,12 +30,21 @@ export const TRANSACTIONS_URL = `${BACKEND_URL}/${API.TRANSACTIONS}`;
 
 export type TransactionIn = Omit<Transaction, 'amount'> & { amount: string };
 
-export const emptyTransaction = (): Transaction => ({
-	id: 0,
-	description: '',
-	isPaid: true,
-	date: formatForInput(),
-	amount: 0,
-	budget: null,
-	referenceDate: undefined,
-});
+export const getTransactionIn = (defaultDate: Date, transaction?: Transaction): TransactionIn => {
+	if (transaction) {
+		return {
+			...transaction,
+			amount: transaction.amount.toString(),
+		};
+	}
+
+	return {
+		id: 0,
+		description: '',
+		isPaid: true,
+		date: formatForInput(defaultDate),
+		amount: '',
+		budget: null,
+		referenceDate: undefined,
+	};
+};

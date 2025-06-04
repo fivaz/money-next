@@ -3,17 +3,16 @@ import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { getParamsDate } from '@/lib/shared/date.utils';
 
 type DateSwitcherClientProps = {};
 export default function DateSwitcher({}: DateSwitcherClientProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const [year, month] = getParamsDate(searchParams);
 
-	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
-	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
-
-	const date = useMemo(() => new Date(currentYear, currentMonth - 1), [currentYear, currentMonth]);
+	const date = useMemo(() => new Date(year, month - 1), [year, month]);
 
 	const dateInput = useRef<HTMLInputElement>(null);
 

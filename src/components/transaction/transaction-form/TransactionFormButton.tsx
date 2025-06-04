@@ -3,7 +3,10 @@ import { type PropsWithChildren, useState } from 'react';
 import Button, { type ButtonProps } from '@/components/Button';
 import { ReceiptTextIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
-import { emptyTransaction, Transaction } from '@/lib/transaction/transaction.model';
+import { getTransactionIn, Transaction, TransactionIn } from '@/lib/transaction/transaction.model';
+import { useSearchParams } from 'next/navigation';
+import { buildDate, getParamsDate } from '@/lib/shared/date.utils';
+import { set } from 'date-fns';
 
 type TransactionFormButtonProps = PropsWithChildren<{ transaction?: Transaction }> & ButtonProps;
 
@@ -13,13 +16,16 @@ export default function TransactionFormButton({
 	...props
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [transactionIn, setTransactionIn] = useState<Transaction>(
-		transaction || emptyTransaction(),
+	const searchParams = useSearchParams();
+	const [year, month] = getParamsDate(searchParams);
+	const date = buildDate(year, month);
+	const [transactionIn, setTransactionIn] = useState<TransactionIn>(
+		getTransactionIn(date, transaction),
 	);
 
 	const closeDialog = () => setIsOpen(false);
 	const openDialog = () => {
-		setTransactionIn(transaction || emptyTransaction());
+		setTransactionIn(getTransactionIn(date, transaction));
 		setIsOpen(true);
 	};
 
