@@ -11,5 +11,4 @@ export const buildBudget = (formData: FormData): Budget => {
 	};
 };
 
-export const sortBudgets = (budgets: Budget[]): Budget[] =>
-	budgets.toSorted((a, b) => a.sortOrder - b.sortOrder);
+export const sortBudgets = (a: Budget, b: Budget) => a.sortOrder - b.sortOrder;

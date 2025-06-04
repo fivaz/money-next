@@ -3,20 +3,11 @@ import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
 import { PiggyBankIcon } from 'lucide-react';
 import BudgetForm, { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
+import { Budget } from '@/lib/budget/budget.model';
 
-type BudgetFormButtonProps = PropsWithChildren &
-	Pick<
-		BudgetFormProps,
-		'budget' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
-	>;
+type BudgetFormButtonProps = PropsWithChildren<{ budget?: Budget }>;
 
-export default function BudgetFormButton({
-	children,
-	budget,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-}: BudgetFormButtonProps) {
+export default function BudgetFormButton({ children, budget }: BudgetFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const closeDialog = () => setIsOpen(false);
@@ -33,14 +24,7 @@ export default function BudgetFormButton({
 				)}
 			</Button>
 
-			<BudgetForm
-				budget={budget}
-				onAddOrUpdateAction={onAddOrUpdateAction}
-				onConfirmSaveAction={onConfirmSaveAction}
-				isOpen={isOpen}
-				closeFormAction={closeDialog}
-				onDeleteAction={onDeleteAction}
-			/>
+			<BudgetForm budget={budget} isOpen={isOpen} closeFormAction={closeDialog} />
 		</>
 	);
 }

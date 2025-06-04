@@ -8,22 +8,15 @@ import { reorderBudgets } from '@/lib/budget/budget.actions';
 import { useOptimisticList } from '@/lib/shared/optmistic.hook';
 import { sortBudgets } from '@/lib/budget/budget.utils';
 import DateSwitcher from '@/components/DateSwitcher';
+import { useBudgetList } from '@/lib/budget/BudgetListProvider';
 
-type BudgetProps = {
-	initialBudgets: Budget[];
-};
-export default function BudgetList({ initialBudgets }: BudgetProps) {
-	const {
-		items: budgets,
-		confirmSave,
-		addOrUpdate,
-		deleteOptimistic,
-		setItems: setBudgets,
-	} = useOptimisticList(initialBudgets, sortBudgets);
+type BudgetProps = {};
+export default function BudgetList({}: BudgetProps) {
+	const { updateList, items: budgets } = useBudgetList();
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
-		setBudgets(newBudgets);
+		updateList(newBudgets);
 		void reorderBudgets(newBudgets);
 	};
 
@@ -31,19 +24,12 @@ export default function BudgetList({ initialBudgets }: BudgetProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
 				<DateSwitcher />
-				<BudgetFormButton onAddOrUpdateAction={addOrUpdate} onConfirmSaveAction={confirmSave} />
+				<BudgetFormButton />
 			</div>
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem
-							index={index}
-							key={budget.id}
-							budget={budget}
-							onAddOrUpdateAction={addOrUpdate}
-							onConfirmSaveAction={confirmSave}
-							onDeleteAction={deleteOptimistic}
-						/>
+						<BudgetItem index={index} key={budget.id} budget={budget} />
 					))}
 				</DragDropProvider>
 			</ul>

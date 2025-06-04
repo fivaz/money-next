@@ -1,36 +1,26 @@
 'use client';
 import { FormEvent, useRef } from 'react';
-import { type Budget } from '@/lib/budget/budget.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import Button from '@/components/Button';
-import { deleteBudget, saveBudget } from '@/lib/budget/budget.actions';
 import { XIcon } from 'lucide-react';
-import { buildBudget } from '@/lib/budget/budget.utils';
 import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
+import { useBudgetList } from '@/lib/budget/BudgetListProvider';
+import { buildBudget } from '@/lib/budget/budget.utils';
+import type { Budget } from '@/lib/budget/budget.model';
+import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.actions';
 
 export type BudgetFormProps = {
 	budget?: Budget;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOrUpdateAction: (budget: Budget) => number;
-	onConfirmSaveAction: (tempId: number, realBudget: Budget) => void;
-	onDeleteAction?: (budget: Budget) => void;
 };
 
-export default function BudgetForm({
-	budget,
-	isOpen,
-	closeFormAction,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-}: BudgetFormProps) {
+export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFormProps) {
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
-
-	const isEditing = !!budget?.id;
+	const { addItem, editItem, deleteItem } = useBudgetList();
 
 	const resetForm = () => formRef.current?.reset();
 
@@ -39,29 +29,37 @@ export default function BudgetForm({
 		const formData = new FormData(e.currentTarget);
 		const newBudget = buildBudget(formData);
 
-		const tempId = onAddOrUpdateAction(newBudget);
+		budget?.id ? editBudget(newBudget) : addBudget(newBudget);
+
 		resetForm();
 		closeFormAction();
+	};
 
-		try {
-			const saved = await saveBudget(newBudget);
-			onConfirmSaveAction(tempId, saved);
-		} catch (err) {
-			console.error('Failed to save source:', err);
-		}
+	const addBudget = (budgetWithoutId: Omit<Budget, 'id'>) => {
+		const budget = { ...budgetWithoutId, id: -Date.now() };
+		addItem(budget);
+
+		void addBudgetDB(budgetWithoutId);
+	};
+
+	const editBudget = (budget: Budget) => {
+		editItem(budget);
+
+		void editBudgetDB(budget);
 	};
 
 	async function handleDelete() {
-		if (budget && onDeleteAction) {
-			onDeleteAction(budget);
-			await deleteBudget(budget.id);
+		if (budget?.id) {
+			deleteItem(budget.id);
+
+			void deleteBudgetDB(budget.id);
 		}
 	}
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{isEditing ? 'Edit Budget' : 'Add Budget'}</span>
+				<span>{budget?.id ? 'Edit Budget' : 'Add Budget'}</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
@@ -84,7 +82,7 @@ export default function BudgetForm({
 
 				<DialogActions>
 					<div>
-						{isEditing && onDeleteAction && (
+						{budget?.id && (
 							<Button type="button" color="red" onClick={handleDelete}>
 								Delete
 							</Button>

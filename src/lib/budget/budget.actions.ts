@@ -4,18 +4,16 @@ import { ROUTES } from '@/lib/const';
 import { type Budget, BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';
+import { Source, SOURCES_URL } from '@/lib/source/source.model';
 
 export async function getBudgets(): Promise<Budget[]> {
 	const data = await fetchWithAuth(BUDGETS_URL);
 	return validateBudgets(data);
 }
 
-export async function saveBudget(budget: Budget) {
-	const method = budget.id ? 'PUT' : 'POST';
-	const url = budget.id ? `${BUDGETS_URL}/${budget.id}` : BUDGETS_URL;
-
-	const saved = fetchWithAuth(url, {
-		method,
+export async function addBudgetDB(budget: Omit<Budget, 'id'>) {
+	const saved = fetchWithAuth(BUDGETS_URL, {
+		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(budget),
 	});
@@ -25,7 +23,19 @@ export async function saveBudget(budget: Budget) {
 	return saved;
 }
 
-export async function deleteBudget(id: number): Promise<void> {
+export async function editBudgetDB(budget: Budget) {
+	const saved = fetchWithAuth(`${BUDGETS_URL}/${budget.id}`, {
+		method: 'PUT',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(budget),
+	});
+
+	revalidatePath(ROUTES.BUDGETS.path);
+
+	return saved;
+}
+
+export async function deleteBudgetDB(id: number): Promise<void> {
 	await fetchWithAuth(
 		`${BUDGETS_URL}/${id}`,
 		{

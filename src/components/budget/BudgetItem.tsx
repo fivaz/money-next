@@ -20,15 +20,9 @@ import { useSearchParams } from 'next/navigation';
 type BudgetItemProps = {
 	budget: Budget;
 	index: number;
-} & Pick<BudgetFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
+};
 
-export default function BudgetItem({
-	budget,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-	index,
-}: BudgetItemProps) {
+export default function BudgetItem({ budget, index }: BudgetItemProps) {
 	const searchParams = useSearchParams();
 
 	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
@@ -57,12 +51,7 @@ export default function BudgetItem({
 							<div className="flex shrink-0 items-center gap-2">
 								<MoneyText>{budget.amount}</MoneyText>
 
-								<BudgetFormButton
-									budget={budget}
-									onAddOrUpdateAction={onAddOrUpdateAction}
-									onConfirmSaveAction={onConfirmSaveAction}
-									onDeleteAction={onDeleteAction}
-								>
+								<BudgetFormButton budget={budget}>
 									<CogIcon className="size-4 shrink-0" />
 								</BudgetFormButton>
 							</div>
