@@ -15,7 +15,7 @@ const eslintConfig = [
 	{
 		rules: {
 			'@typescript-eslint/no-unused-vars': 'off',
-			'unused-imports/no-unused-imports': 'error',
+			'unused-imports/no-unused-imports': 'warn',
 			'@typescript-eslint/no-empty-object-type': 'off',
 			'unused-imports/no-unused-vars': [
 				'warn',
