@@ -8,9 +8,14 @@ import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { useBudgetList } from '@/lib/budget/BudgetListProvider';
 import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
+import TotalIcon from '@/components/icons/TotalIcon';
+import MoneyText from '@/components/MoneyText';
+import { Text } from '@/components/base/text';
 
-type BudgetProps = {};
-export default function BudgetList({}: BudgetProps) {
+type BudgetProps = {
+	budgetedSpent: number;
+};
+export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
 	const searchParams = useSearchParams();
@@ -25,6 +30,10 @@ export default function BudgetList({}: BudgetProps) {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
+				<Text className="flex items-center gap-2">
+					<TotalIcon className="size-4" />
+					<MoneyText>{budgetedSpent}</MoneyText>
+				</Text>
 				<DateSwitcher />
 				<BudgetFormButton />
 			</div>
