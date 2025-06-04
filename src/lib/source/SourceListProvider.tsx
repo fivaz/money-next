@@ -7,4 +7,4 @@ import { sortSources } from '@/lib/source/source.utils';
 export const {
 	OptimisticListProvider: SourceListProvider,
 	useOptimisticListContext: useSourceList,
-} = createOptimisticListProvider<Source>(sortSources);
+} = createOptimisticListProvider<Source>();

@@ -7,4 +7,4 @@ import { sortBudgets } from '@/lib/budget/budget.utils';
 export const {
 	OptimisticListProvider: BudgetListProvider,
 	useOptimisticListContext: useBudgetList,
-} = createOptimisticListProvider<Budget>(sortBudgets);
+} = createOptimisticListProvider<Budget>();

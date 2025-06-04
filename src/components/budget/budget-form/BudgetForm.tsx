@@ -68,6 +68,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 
 			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={budget?.id} />
+				<input type="hidden" name="sortOrder" defaultValue={budget?.sortOrder} />
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Name</Label>

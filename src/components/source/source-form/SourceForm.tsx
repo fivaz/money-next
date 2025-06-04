@@ -68,6 +68,7 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 
 			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={source?.id} />
+				<input type="hidden" name="sortOrder" defaultValue={source?.sortOrder} />
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Name</Label>

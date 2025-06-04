@@ -6,7 +6,7 @@ export const buildBudget = (formData: FormData): Budget => {
 		name: formData.get('name') as string,
 		icon: formData.get('icon') as string,
 		parent: null,
-		sortOrder: Infinity,
+		sortOrder: Number(formData.get('sortOrder')) ?? 10000,
 		amount: parseInt(formData.get('amount') as string),
 	};
 };

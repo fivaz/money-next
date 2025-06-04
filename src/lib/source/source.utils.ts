@@ -5,7 +5,7 @@ export const buildSource = (formData: FormData): Source => {
 		id: Number(formData.get('id')),
 		name: formData.get('name') as string,
 		icon: formData.get('icon') as string,
-		sortOrder: Infinity,
+		sortOrder: Number(formData.get('sortOrder')) ?? 10000,
 		balance: parseInt(formData.get('balance') as string),
 	};
 };
