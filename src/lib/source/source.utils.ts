@@ -10,5 +10,4 @@ export const buildSource = (formData: FormData): Source => {
 	};
 };
 
-export const sortSources = (sources: Source[]): Source[] =>
-	sources.toSorted((a, b) => a.sortOrder - b.sortOrder);
+export const sortSources = (a: Source, b: Source) => a.sortOrder - b.sortOrder;

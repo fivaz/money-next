@@ -7,26 +7,21 @@ import SourceFormButton from '@/components/source/source-form/SourceFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
 import { useSearchParams } from 'next/navigation';
+import { useSortable } from '@dnd-kit/react/sortable';
 
 type SourceItemProps = {
 	source: Source;
 	index: number;
-} & Pick<SourceFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
+};
 
-export default function SourceItem({
-	source,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-	index,
-}: SourceItemProps) {
-	const searchParams = useSearchParams();
-
-	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
-	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
+export default function SourceItem({ source, index }: SourceItemProps) {
+	const { ref } = useSortable({ id: source.id, index });
 
 	return (
-		<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
+		<li
+			ref={ref}
+			className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
+		>
 			<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-gray-300 p-3 dark:border-gray-600">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
@@ -42,12 +37,7 @@ export default function SourceItem({
 								{source.balance}
 							</MoneyText>
 						</Text>
-						<SourceFormButton
-							source={source}
-							onAddOrUpdateAction={onAddOrUpdateAction}
-							onConfirmSaveAction={onConfirmSaveAction}
-							onDeleteAction={onDeleteAction}
-						>
+						<SourceFormButton source={source}>
 							<CogIcon className="size-4 shrink-0" />
 						</SourceFormButton>
 					</div>

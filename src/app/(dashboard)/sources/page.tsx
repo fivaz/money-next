@@ -1,6 +1,7 @@
 import { getSources } from '@/lib/source/source.actions';
 import SourceList from '@/components/source/SourceList';
 import { Heading } from '@/components/base/heading';
+import { SourceListProvider } from '@/lib/source/SourceListProvider';
 
 export default async function SourcesPage() {
 	const sources = await getSources();
@@ -8,7 +9,10 @@ export default async function SourcesPage() {
 	return (
 		<main className="flex flex-col gap-5">
 			<Heading>Sources</Heading>
-			<SourceList initialSources={sources} />
+
+			<SourceListProvider initialItems={sources}>
+				<SourceList />
+			</SourceListProvider>
 		</main>
 	);
 }

@@ -1,67 +1,84 @@
-import { useState, useEffect, useMemo, SetStateAction } from 'react';
+'use client';
+
+import { useOptimistic, useCallback, startTransition } from 'react';
+
+type Action<I> =
+	| { type: 'add'; item: I }
+	| { type: 'delete'; id: number }
+	| { type: 'edit'; item: I }
+	| { type: 'replace'; newList: I[] };
 
 export function useOptimisticList<I extends { id: number }>(
 	initialItems: I[],
-	sortFunc: (items: I[]) => I[],
+	sortFn?: (a: I, b: I) => number,
 ) {
-	const [items, setItemsState] = useState<I[]>(initialItems);
-	const [hasOptimisticUpdates, setHasOptimisticUpdates] = useState(false);
+	const [optimisticItems, applyOptimistic] = useOptimistic<I[], Action<I>>(
+		initialItems,
+		(state, action) => {
+			let updated: I[];
 
-	useEffect(() => {
-		if (!hasOptimisticUpdates) {
-			setItemsState(initialItems);
-		}
-	}, [initialItems, hasOptimisticUpdates]);
+			switch (action.type) {
+				case 'add':
+					updated = [action.item, ...state];
+					break;
+				case 'delete':
+					updated = state.filter((item) => item.id !== action.id);
+					break;
+				case 'edit':
+					updated = state.map((item) => (item.id === action.item.id ? action.item : item));
+					break;
+				case 'replace':
+					updated = action.newList;
+					break;
+				default:
+					updated = state;
+			}
 
-	const setItems = (updater: SetStateAction<I[]>) => {
-		setHasOptimisticUpdates(true);
-		setItemsState(updater);
-	};
+			return sortFn ? updated.toSorted(sortFn) : updated;
+		},
+	);
 
-	function upsertById<I extends { id: number }>(items: I[], newItem: I): [I[], number] {
-		// Generate ID if needed (simple timestamp fallback)
-		const finalItem = {
-			...newItem,
-			id: newItem.id ?? -Date.now(),
-		};
+	const addItem = useCallback(
+		(item: I) => {
+			startTransition(() => {
+				applyOptimistic({ type: 'add', item });
+			});
+		},
+		[applyOptimistic],
+	);
 
-		const existingIndex = items.findIndex((item) => item.id === finalItem.id);
-		const newItems = [...items]; // Clone array
+	const deleteItem = useCallback(
+		(id: number) => {
+			startTransition(() => {
+				applyOptimistic({ type: 'delete', id });
+			});
+		},
+		[applyOptimistic],
+	);
 
-		if (existingIndex !== -1) {
-			newItems[existingIndex] = finalItem; // Replace in place
-		} else {
-			newItems.push(finalItem); // Add to end
-		}
+	const editItem = useCallback(
+		(item: I) => {
+			startTransition(() => {
+				applyOptimistic({ type: 'edit', item });
+			});
+		},
+		[applyOptimistic],
+	);
 
-		return [newItems, finalItem.id];
-	}
-
-	const addOrUpdate = (newItem: I) => {
-		const [updatedItems, newId] = upsertById(items, newItem);
-		setItems(updatedItems);
-		return newId;
-	};
-
-	const confirmSave = (tempId: I['id'], savedItem: I) => {
-		setItems((prev) => {
-			const filtered = prev.filter((b) => b.id !== tempId);
-			return [...filtered, savedItem]; // no sorting here
-		});
-	};
-
-	const deleteOptimistic = (itemToDelete: I) => {
-		setItems((prev) => prev.filter((b) => b.id !== itemToDelete.id));
-	};
-
-	// Only sort when exposing the items
-	const sortedItems = useMemo(() => sortFunc(items), [items, sortFunc]);
+	const updateList = useCallback(
+		(newList: I[]) => {
+			startTransition(() => {
+				applyOptimistic({ type: 'replace', newList });
+			});
+		},
+		[applyOptimistic],
+	);
 
 	return {
-		items: sortedItems,
-		addOrUpdate,
-		confirmSave,
-		deleteOptimistic,
-		setItems,
+		items: optimisticItems,
+		addItem,
+		deleteItem,
+		editItem,
+		updateList,
 	};
 }

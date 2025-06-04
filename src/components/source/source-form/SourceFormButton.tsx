@@ -3,20 +3,13 @@ import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
 import { LandmarkIcon } from 'lucide-react';
 import SourceForm, { type SourceFormProps } from '@/components/source/source-form/SourceForm';
+import { Source } from '@/lib/source/source.model';
 
-type SourceFormButtonProps = PropsWithChildren &
-	Pick<
-		SourceFormProps,
-		'source' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
-	>;
+type SourceFormButtonProps = PropsWithChildren<{
+	source?: Source;
+}>;
 
-export default function SourceFormButton({
-	children,
-	source,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-}: SourceFormButtonProps) {
+export default function SourceFormButton({ children, source }: SourceFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const closeDialog = () => setIsOpen(false);
@@ -33,14 +26,7 @@ export default function SourceFormButton({
 				)}
 			</Button>
 
-			<SourceForm
-				source={source}
-				onAddOrUpdateAction={onAddOrUpdateAction}
-				onConfirmSaveAction={onConfirmSaveAction}
-				isOpen={isOpen}
-				closeFormAction={closeDialog}
-				onDeleteAction={onDeleteAction}
-			/>
+			<SourceForm source={source} isOpen={isOpen} closeFormAction={closeDialog} />
 		</>
 	);
 }

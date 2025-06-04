@@ -1,36 +1,27 @@
 'use client';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useRef, useTransition } from 'react';
 import { type Source } from '@/lib/source/source.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import Button from '@/components/Button';
-import { deleteSource, saveSource } from '@/lib/source/source.actions';
+import { addSourceDB, deleteSourceDB, editSourceDB } from '@/lib/source/source.actions';
 import { XIcon } from 'lucide-react';
 import { buildSource } from '@/lib/source/source.utils';
 import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
+import { useSourceList } from '@/lib/source/SourceListProvider';
 
 export type SourceFormProps = {
 	source?: Source;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOrUpdateAction: (source: Source) => number;
-	onConfirmSaveAction: (tempId: number, realSource: Source) => void;
-	onDeleteAction?: (source: Source) => void;
 };
 
-export default function SourceForm({
-	source,
-	isOpen,
-	closeFormAction,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-}: SourceFormProps) {
+export default function SourceForm({ source, isOpen, closeFormAction }: SourceFormProps) {
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
-
-	const isEditing = !!source?.id;
+	const [isPending, startTransition] = useTransition();
+	const { addItem, editItem, deleteItem } = useSourceList();
 
 	const resetForm = () => formRef.current?.reset();
 
@@ -39,29 +30,43 @@ export default function SourceForm({
 		const formData = new FormData(e.currentTarget);
 		const newSource = buildSource(formData);
 
-		const tempId = onAddOrUpdateAction(newSource);
+		source?.id ? editSource(newSource) : addSource(newSource);
+
 		resetForm();
 		closeFormAction();
+	};
 
-		try {
-			const saved = await saveSource(newSource);
-			onConfirmSaveAction(tempId, saved);
-		} catch (err) {
-			console.error('Failed to save source:', err);
-		}
+	const addSource = (sourceWithoutId: Omit<Source, 'id'>) => {
+		const source = { ...sourceWithoutId, id: -Date.now() };
+		addItem(source);
+
+		startTransition(async () => {
+			await addSourceDB(sourceWithoutId);
+		});
+	};
+
+	const editSource = (source: Source) => {
+		editItem(source);
+
+		startTransition(async () => {
+			await editSourceDB(source);
+		});
 	};
 
 	async function handleDelete() {
-		if (source && onDeleteAction) {
-			onDeleteAction(source);
-			await deleteSource(source.id);
+		if (source?.id) {
+			deleteItem(source.id);
+
+			startTransition(async () => {
+				await deleteSourceDB(source.id);
+			});
 		}
 	}
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{isEditing ? 'Edit Source' : 'Add Source'}</span>
+				<span>{source?.id ? 'Edit Source' : 'Add Source'}</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
@@ -84,7 +89,7 @@ export default function SourceForm({
 
 				<DialogActions>
 					<div>
-						{isEditing && onDeleteAction && (
+						{source?.id && (
 							<Button type="button" color="red" onClick={handleDelete}>
 								Delete
 							</Button>

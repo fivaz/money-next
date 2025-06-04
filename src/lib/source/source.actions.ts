@@ -14,12 +14,9 @@ export async function getSources(): Promise<Source[]> {
 	return validateSources(data);
 }
 
-export async function saveSource(source: Source) {
-	const method = source.id ? 'PUT' : 'POST';
-	const url = source.id ? `${SOURCES_URL}/${source.id}` : SOURCES_URL;
-
-	const saved = fetchWithAuth(url, {
-		method,
+export async function addSourceDB(source: Omit<Source, 'id'>) {
+	const saved = fetchWithAuth(SOURCES_URL, {
+		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(source),
 	});
@@ -29,7 +26,19 @@ export async function saveSource(source: Source) {
 	return saved;
 }
 
-export async function deleteSource(id: number): Promise<void> {
+export async function editSourceDB(source: Source) {
+	const saved = fetchWithAuth(`${SOURCES_URL}/${source.id}`, {
+		method: 'PUT',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(source),
+	});
+
+	revalidatePath(ROUTES.SOURCES.path);
+
+	return saved;
+}
+
+export async function deleteSourceDB(id: number): Promise<void> {
 	await fetchWithAuth(
 		`${SOURCES_URL}/${id}`,
 		{
