@@ -21,17 +21,14 @@ import { fetcher } from '@/lib/shared/api-client.utils';
 type BudgetItemProps = {
 	budget: Budget;
 	index: number;
+	year: number;
+	month: number;
 };
 
-export default function BudgetItem({ budget, index }: BudgetItemProps) {
-	const searchParams = useSearchParams();
-
-	const currentYear = Number(searchParams.get('year')) || new Date().getFullYear();
-	const currentMonth = Number(searchParams.get('month')) || new Date().getMonth() + 1;
-
+export default function BudgetItem({ budget, index, year, month }: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${currentYear}&month=${currentMonth}`;
+	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
 	const { data: transactions } = useSWR<Transaction[]>(url, fetcher);
 

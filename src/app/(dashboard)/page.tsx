@@ -3,6 +3,7 @@ import TransactionListWithData from '@/components/transaction/TransactionListWit
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import { Heading } from '@/components/base/heading';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
+import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -20,7 +21,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 		<main className="flex flex-col gap-5">
 			<div className="flex flex-row items-center justify-between gap-3">
 				<Heading>Transactions</Heading>
-				<DateSwitcher />
+				<Suspense fallback={<DateSwitcherSkeleton />}>
+					<DateSwitcher />
+				</Suspense>
 			</div>
 			<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
 				<TransactionListWithData year={year} month={month} />

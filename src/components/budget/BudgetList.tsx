@@ -6,10 +6,16 @@ import { move } from '@dnd-kit/helpers';
 import { reorderBudgets } from '@/lib/budget/budget.actions';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { useBudgetList } from '@/lib/budget/BudgetListProvider';
+import { useSearchParams } from 'next/navigation';
 
 type BudgetProps = {};
 export default function BudgetList({}: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
+
+	const searchParams = useSearchParams();
+
+	const year = Number(searchParams.get('year')) || new Date().getFullYear();
+	const month = Number(searchParams.get('month')) || new Date().getMonth() + 1;
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
@@ -26,7 +32,7 @@ export default function BudgetList({}: BudgetProps) {
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem index={index} key={budget.id} budget={budget} />
+						<BudgetItem index={index} key={budget.id} budget={budget} year={year} month={month} />
 					))}
 				</DragDropProvider>
 			</ul>
