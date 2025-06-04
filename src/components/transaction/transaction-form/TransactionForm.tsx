@@ -9,7 +9,11 @@ import { Input } from '@/components/base/input';
 import { Switch } from '@/components/base/switch';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import Button from '@/components/Button';
-import { deleteTransaction, saveTransaction } from '@/lib/transaction/transaction.actions';
+import {
+	addTransactionDB,
+	deleteTransactionDB,
+	editTransactionDB,
+} from '@/lib/transaction/transaction.actions';
 import { LoaderCircleIcon, XIcon } from 'lucide-react';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import MoneyInput from '@/components/MoneyInput';
@@ -18,33 +22,28 @@ import { Budget } from '@/lib/budget/budget.model';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import IconView from '@/components/icon-picker/IconView';
+import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
 	isOpen: boolean;
 	closeFormAction: () => void;
-	onAddOrUpdateAction: (transaction: Transaction) => number;
-	onConfirmSaveAction: (tempId: number, realTransaction: Transaction) => void;
-	onDeleteAction?: (transaction: Transaction) => void;
 };
 
 export default function TransactionForm({
 	transaction,
 	isOpen,
 	closeFormAction,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
 }: TransactionFormProps) {
+	const formRef = useRef<HTMLFormElement>(null);
+	const { addItem, editItem, deleteItem } = useTransactionList();
+
 	const [operation, setOperation] = useState<'expense' | 'income'>(
 		transaction?.amount && transaction.amount > 0 ? 'income' : 'expense',
 	);
 	const [amount, setAmount] = useState<string>(transaction?.amount.toString() || '');
-	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
 
 	const { data: budgets, error } = useSWR<Budget[]>('/api/budgets', fetcher);
-
-	const isEditing = !!transaction?.id;
 
 	const parseAmount = (amount: string, operation: 'expense' | 'income'): string => {
 		const positiveValue = Math.abs(Number(amount));
@@ -68,31 +67,39 @@ export default function TransactionForm({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
-		const newTransaction = buildTransaction(formData, budgets);
+		const newTransaction = buildTransaction(formData);
 
-		const tempId = onAddOrUpdateAction(newTransaction);
+		transaction?.id ? editTransaction(newTransaction) : addTransaction(newTransaction);
+
 		resetForm();
 		closeFormAction();
-
-		try {
-			const saved = await saveTransaction(newTransaction);
-			onConfirmSaveAction(tempId, saved);
-		} catch (err) {
-			console.error('Failed to save transaction:', err);
-		}
 	};
 
-	const handleDelete = async () => {
-		if (transaction && onDeleteAction) {
-			onDeleteAction(transaction);
-			await deleteTransaction(transaction.id);
-		}
+	const addTransaction = (transactionWithoutId: Omit<Transaction, 'id'>) => {
+		const transaction = { ...transactionWithoutId, id: -Date.now() };
+		addItem(transaction);
+
+		void addTransactionDB(transactionWithoutId);
 	};
+
+	const editTransaction = (transaction: Transaction) => {
+		editItem(transaction);
+
+		void editTransactionDB(transaction);
+	};
+
+	async function handleDelete() {
+		if (transaction?.id) {
+			deleteItem(transaction.id);
+
+			void deleteTransactionDB(transaction.id);
+		}
+	}
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{isEditing ? 'Edit Transaction' : 'Add Transaction'}</span>
+				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
@@ -168,7 +175,7 @@ export default function TransactionForm({
 
 				<DialogActions>
 					<div>
-						{isEditing && onDeleteAction && (
+						{transaction?.id && (
 							<Button type="button" color="red" onClick={handleDelete}>
 								Delete
 							</Button>

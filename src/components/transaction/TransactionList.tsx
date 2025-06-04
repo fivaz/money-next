@@ -1,27 +1,18 @@
 'use client';
 import TransactionItem from '@/components/transaction/TransactionItem';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import { Transaction } from '@/lib/transaction/transaction.model';
-import { sortTransactions, sumTransactions } from '@/lib/transaction/transaction.utils';
-import { useOptimisticList } from '@/lib/shared/optmistic.hook';
+import { sumTransactions } from '@/lib/transaction/transaction.utils';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
 import Button from '@/components/Button';
 import TotalIcon from '@/components/icons/TotalIcon';
 import { ArrowDownNarrowWideIcon, ArrowDownWideNarrowIcon, PlusIcon } from 'lucide-react';
+import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 
-type TransactionProps = {
-	transactions: Transaction[];
-};
+type TransactionProps = {};
 
-export default function TransactionList({ transactions: initialTransactions }: TransactionProps) {
-	const {
-		items: transactions,
-		confirmSave,
-		addOrUpdate,
-		deleteOptimistic,
-	} = useOptimisticList(initialTransactions, sortTransactions);
-
+export default function TransactionList({}: TransactionProps) {
+	const { items: transactions } = useTransactionList();
 	const balance = sumTransactions(transactions);
 
 	const isAscending = true;
@@ -40,25 +31,14 @@ export default function TransactionList({ transactions: initialTransactions }: T
 						<ArrowDownWideNarrowIcon className="size-5" />
 					)}
 				</Button>
-				<TransactionFormButton
-					onAddOrUpdateAction={addOrUpdate}
-					onConfirmSaveAction={confirmSave}
-					size="p-1.5 px-2.5"
-					className="flex items-center"
-				>
+				<TransactionFormButton size="p-1.5 px-2.5" className="flex items-center">
 					<PlusIcon className="size-5" />
 					<span className="hidden sm:block">Transaction</span>
 				</TransactionFormButton>
 			</div>
 			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
 				{transactions.map((transaction) => (
-					<TransactionItem
-						key={transaction.id}
-						transaction={transaction}
-						onAddOrUpdateAction={addOrUpdate}
-						onConfirmSaveAction={confirmSave}
-						onDeleteAction={deleteOptimistic}
-					/>
+					<TransactionItem key={transaction.id} transaction={transaction} />
 				))}
 			</ul>
 		</div>

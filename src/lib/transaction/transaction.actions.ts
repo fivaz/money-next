@@ -20,12 +20,9 @@ export async function getCurrentMonthTransactions({
 	return validateTransactions(data);
 }
 
-export async function saveTransaction(transaction: Transaction) {
-	const method = transaction.id ? 'PUT' : 'POST';
-	const url = transaction.id ? `${TRANSACTIONS_URL}/${transaction.id}` : TRANSACTIONS_URL;
-
-	const saved = fetchWithAuth(url, {
-		method,
+export async function addTransactionDB(transaction: Omit<Transaction, 'id'>) {
+	const saved = fetchWithAuth(TRANSACTIONS_URL, {
+		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
@@ -35,7 +32,19 @@ export async function saveTransaction(transaction: Transaction) {
 	return saved;
 }
 
-export async function deleteTransaction(id: number): Promise<void> {
+export async function editTransactionDB(transaction: Transaction) {
+	const saved = fetchWithAuth(`${TRANSACTIONS_URL}/${transaction.id}`, {
+		method: 'PUT',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(transaction),
+	});
+
+	revalidatePath(ROUTES.ROOT.path);
+
+	return saved;
+}
+
+export async function deleteTransactionDB(id: number): Promise<void> {
 	await fetchWithAuth(
 		`${TRANSACTIONS_URL}/${id}`,
 		{

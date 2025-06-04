@@ -2,7 +2,6 @@
 import { Strong, Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
 import { ChevronDownIcon, CogIcon } from 'lucide-react';
-import { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
@@ -69,16 +68,16 @@ export default function BudgetItem({ budget, index }: BudgetItemProps) {
 									exit={{ scale: 0.95, opacity: 0 }}
 									transition={{ duration: 0.1, ease: easeOut }}
 								>
-									<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-										{transactions.map((transaction) => (
-											<TransactionItem
-												key={transaction.id}
-												transaction={transaction}
-												onAddOrUpdateAction={addOrUpdateTransaction}
-												onConfirmSaveAction={confirmSaveTransaction}
-											/>
-										))}
-									</ul>
+									{/*<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">*/}
+									{/*	{transactions.map((transaction) => (*/}
+									{/*		<TransactionItem*/}
+									{/*			key={transaction.id}*/}
+									{/*			transaction={transaction}*/}
+									{/*			onAddOrUpdateAction={addOrUpdateTransaction}*/}
+									{/*			onConfirmSaveAction={confirmSaveTransaction}*/}
+									{/*		/>*/}
+									{/*	))}*/}
+									{/*</ul>*/}
 								</motion.div>
 							</DisclosurePanel>
 						)}

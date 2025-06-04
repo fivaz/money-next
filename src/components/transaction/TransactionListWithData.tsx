@@ -1,5 +1,7 @@
 import { getCurrentMonthTransactions } from '@/lib/transaction/transaction.actions';
 import TransactionList from '@/components/transaction/TransactionList';
+import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
+import { sortTransactions } from '@/lib/transaction/transaction.utils';
 
 type TransactionListWithDataProps = {
 	year: number;
@@ -12,5 +14,9 @@ export default async function TransactionListWithData({
 }: TransactionListWithDataProps) {
 	const transactions = await getCurrentMonthTransactions({ year, month });
 
-	return <TransactionList transactions={transactions} />;
+	return (
+		<TransactionListProvider initialItems={transactions}>
+			<TransactionList />
+		</TransactionListProvider>
+	);
 }

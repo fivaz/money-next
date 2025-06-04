@@ -11,7 +11,7 @@ export default async function SourcesPage() {
 		<main className="flex flex-col gap-5">
 			<Heading>Sources</Heading>
 
-			<SourceListProvider initialItems={sources} sortFn={sortSources}>
+			<SourceListProvider initialItems={sources}>
 				<SourceList />
 			</SourceListProvider>
 		</main>

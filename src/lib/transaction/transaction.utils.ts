@@ -15,8 +15,8 @@ export const buildTransaction = (formData: FormData, budgets: Budget[] = []): Tr
 	};
 };
 
-export const sortTransactions = (transactions: Transaction[]): Transaction[] =>
-	transactions.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+export const sortTransactions = (a: Transaction, b: Transaction) =>
+	new Date(b.date).getTime() - new Date(a.date).getTime();
 
 export const sumTransactions = (transactions: Transaction[]): number =>
 	transactions.filter((t) => t.isPaid).reduce((sum, t) => sum + t.amount, 0);

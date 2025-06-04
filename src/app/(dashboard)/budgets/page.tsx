@@ -10,7 +10,7 @@ export default async function BudgetsPage() {
 	return (
 		<main className="flex flex-col gap-5">
 			<Heading>Budgets</Heading>
-			<BudgetListProvider initialItems={budgets} sortFn={sortBudgets}>
+			<BudgetListProvider initialItems={budgets}>
 				<BudgetList />
 			</BudgetListProvider>
 		</main>

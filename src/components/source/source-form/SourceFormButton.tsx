@@ -2,7 +2,7 @@
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
 import { LandmarkIcon } from 'lucide-react';
-import SourceForm, { type SourceFormProps } from '@/components/source/source-form/SourceForm';
+import SourceForm from '@/components/source/source-form/SourceForm';
 import { Source } from '@/lib/source/source.model';
 
 type SourceFormButtonProps = PropsWithChildren<{

@@ -19,7 +19,7 @@ export type BudgetFormProps = {
 };
 
 export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFormProps) {
-	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
+	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useBudgetList();
 
 	const resetForm = () => formRef.current?.reset();

@@ -2,11 +2,9 @@
 import { Strong, Text } from '@/components/base/text';
 import { type Source } from '@/lib/source/source.model';
 import { CogIcon } from 'lucide-react';
-import { type SourceFormProps } from '@/components/source/source-form/SourceForm';
 import SourceFormButton from '@/components/source/source-form/SourceFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
-import { useSearchParams } from 'next/navigation';
 import { useSortable } from '@dnd-kit/react/sortable';
 
 type SourceItemProps = {

@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent, startTransition, useRef, useTransition } from 'react';
+import { FormEvent, useRef } from 'react';
 import { type Source } from '@/lib/source/source.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
@@ -19,7 +19,7 @@ export type SourceFormProps = {
 };
 
 export default function SourceForm({ source, isOpen, closeFormAction }: SourceFormProps) {
-	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
+	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useSourceList();
 
 	const resetForm = () => formRef.current?.reset();

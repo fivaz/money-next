@@ -11,12 +11,13 @@ const OptimisticListContext = createContext<OptimisticListContextType<any>>(unde
 
 type OptimisticListProviderProps<T extends { id: number }> = {
 	initialItems: T[];
-	sortFn?: (a: T, b: T) => number;
 	children: ReactNode;
 };
 
-export function createOptimisticListProvider<T extends { id: number }>() {
-	const Provider = ({ initialItems, sortFn, children }: OptimisticListProviderProps<T>) => {
+export function createOptimisticListProvider<T extends { id: number }>(
+	sortFn?: (a: T, b: T) => number,
+) {
+	const Provider = ({ initialItems, children }: OptimisticListProviderProps<T>) => {
 		const value = useOptimisticList<T>(initialItems, sortFn);
 
 		// Prevent unnecessary re-renders

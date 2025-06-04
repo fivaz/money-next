@@ -2,7 +2,6 @@
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
-import { type TransactionFormProps } from '@/components/transaction/transaction-form/TransactionForm';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
@@ -12,14 +11,9 @@ import IconView from '@/components/icon-picker/IconView';
 
 type TransactionItemProps = {
 	transaction: Transaction;
-} & Pick<TransactionFormProps, 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'>;
+};
 
-export default function TransactionItem({
-	transaction,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
-}: TransactionItemProps) {
+export default function TransactionItem({ transaction }: TransactionItemProps) {
 	const date = useMemo(() => {
 		const date = parse(transaction.date, DATE_FORMAT, new Date());
 		return {
@@ -59,13 +53,7 @@ export default function TransactionItem({
 					<MoneyText addColor={transaction.isPaid}>{transaction.amount}</MoneyText>
 				</Text>
 
-				<TransactionFormButton
-					transaction={transaction}
-					onAddOrUpdateAction={onAddOrUpdateAction}
-					onConfirmSaveAction={onConfirmSaveAction}
-					onDeleteAction={onDeleteAction}
-					size="p-2"
-				>
+				<TransactionFormButton transaction={transaction} size="p-2">
 					<CogIcon className="size-4 shrink-0" />
 				</TransactionFormButton>
 			</div>

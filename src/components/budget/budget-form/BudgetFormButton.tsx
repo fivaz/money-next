@@ -2,7 +2,7 @@
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
 import { PiggyBankIcon } from 'lucide-react';
-import BudgetForm, { type BudgetFormProps } from '@/components/budget/budget-form/BudgetForm';
+import BudgetForm from '@/components/budget/budget-form/BudgetForm';
 import { Budget } from '@/lib/budget/budget.model';
 
 type BudgetFormButtonProps = PropsWithChildren<{ budget?: Budget }>;

@@ -1,13 +1,10 @@
 'use client';
 import SourceItem from '@/components/source/SourceItem';
 import SourceFormButton from '@/components/source/source-form/SourceFormButton';
-import { type Source } from '@/lib/source/source.model';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 import { reorderSources } from '@/lib/source/source.actions';
-import { useOptimisticList } from '@/lib/shared/optmistic.hook';
-import { sortSources } from '@/lib/source/source.utils';
-import { SourceListProvider, useSourceList } from '@/lib/source/SourceListProvider';
+import { useSourceList } from '@/lib/source/SourceListProvider';
 
 type SourceProps = {};
 export default function SourceList({}: SourceProps) {

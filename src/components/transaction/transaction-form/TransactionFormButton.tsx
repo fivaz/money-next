@@ -2,23 +2,14 @@
 import { type PropsWithChildren, useState } from 'react';
 import Button, { type ButtonProps } from '@/components/Button';
 import { ReceiptTextIcon } from 'lucide-react';
-import TransactionForm, {
-	type TransactionFormProps,
-} from '@/components/transaction/transaction-form/TransactionForm';
+import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
+import { Transaction } from '@/lib/transaction/transaction.model';
 
-type TransactionFormButtonProps = PropsWithChildren &
-	ButtonProps &
-	Pick<
-		TransactionFormProps,
-		'transaction' | 'onConfirmSaveAction' | 'onAddOrUpdateAction' | 'onDeleteAction'
-	>;
+type TransactionFormButtonProps = PropsWithChildren<{ transaction?: Transaction }> & ButtonProps;
 
 export default function TransactionFormButton({
 	children,
 	transaction,
-	onAddOrUpdateAction,
-	onConfirmSaveAction,
-	onDeleteAction,
 	...props
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -37,14 +28,7 @@ export default function TransactionFormButton({
 				)}
 			</Button>
 
-			<TransactionForm
-				transaction={transaction}
-				onAddOrUpdateAction={onAddOrUpdateAction}
-				onConfirmSaveAction={onConfirmSaveAction}
-				isOpen={isOpen}
-				closeFormAction={closeDialog}
-				onDeleteAction={onDeleteAction}
-			/>
+			<TransactionForm transaction={transaction} isOpen={isOpen} closeFormAction={closeDialog} />
 		</>
 	);
 }
