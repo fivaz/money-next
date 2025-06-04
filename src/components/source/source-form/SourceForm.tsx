@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent, useRef, useTransition } from 'react';
+import { FormEvent, startTransition, useRef, useTransition } from 'react';
 import { type Source } from '@/lib/source/source.model';
 import { Field, Label } from '@/components/base/fieldset';
 import { Input } from '@/components/base/input';
@@ -20,7 +20,6 @@ export type SourceFormProps = {
 
 export default function SourceForm({ source, isOpen, closeFormAction }: SourceFormProps) {
 	const formRef = useRef<HTMLFormElement>(null); // Add ref to access form element
-	const [isPending, startTransition] = useTransition();
 	const { addItem, editItem, deleteItem } = useSourceList();
 
 	const resetForm = () => formRef.current?.reset();
@@ -40,26 +39,20 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 		const source = { ...sourceWithoutId, id: -Date.now() };
 		addItem(source);
 
-		startTransition(async () => {
-			await addSourceDB(sourceWithoutId);
-		});
+		void addSourceDB(sourceWithoutId);
 	};
 
 	const editSource = (source: Source) => {
 		editItem(source);
 
-		startTransition(async () => {
-			await editSourceDB(source);
-		});
+		void editSourceDB(source);
 	};
 
 	async function handleDelete() {
 		if (source?.id) {
 			deleteItem(source.id);
 
-			startTransition(async () => {
-				await deleteSourceDB(source.id);
-			});
+			void deleteSourceDB(source.id);
 		}
 	}
 
