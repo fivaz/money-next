@@ -8,19 +8,13 @@ export default async function BalanceViewer() {
 	const actualBalance = await getActualBalance();
 	const expectedBalance = await getExpectedBalance();
 
-	const balanceDifference = expectedBalance - actualBalance;
+	const balanceDifference = actualBalance - expectedBalance;
 
 	return (
 		<div className="flex shrink-0 items-center gap-2 text-sm">
 			<div className="flex items-center gap-2">
 				<Text className="hidden md:block">balance:</Text>
-				<MoneyText
-					addColor={false}
-					className={clsx(
-						'font-semibold',
-						balanceDifference >= 0 ? 'text-gray-800 dark:text-white' : 'text-red-500',
-					)}
-				>
+				<MoneyText addColor={false} className={clsx('font-semibold text-gray-800 dark:text-white')}>
 					{actualBalance}
 				</MoneyText>
 			</div>
