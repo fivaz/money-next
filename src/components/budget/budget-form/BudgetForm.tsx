@@ -22,8 +22,6 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useBudgetList();
 
-	const resetForm = () => formRef.current?.reset();
-
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -32,7 +30,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 		if (budget?.id) editBudget(newBudget);
 		else addBudget(newBudget);
 
-		resetForm();
+		formRef.current?.reset();
 		closeFormAction();
 	};
 

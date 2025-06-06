@@ -1,5 +1,5 @@
-import { useState, useRef, FormEvent, ChangeEvent, SetStateAction, Dispatch } from 'react';
-import { Transaction, TransactionIn } from '@/lib/transaction/transaction.model';
+import { FormEvent, useRef } from 'react';
+import { Transaction } from '@/lib/transaction/transaction.model';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
 import { Textarea } from '@/components/base/textarea';
@@ -14,72 +14,58 @@ import {
 	editTransactionDB,
 } from '@/lib/transaction/transaction.actions';
 import { LoaderCircleIcon, XIcon } from 'lucide-react';
-import { buildTransaction } from '@/lib/transaction/transaction.utils';
-import MoneyInput from '@/components/MoneyInput';
 import { Listbox, ListboxOption } from '@/components/base/listbox';
 import { Budget } from '@/lib/budget/budget.model';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import IconView from '@/components/icon-picker/IconView';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
-import { formatForInput } from '@/lib/shared/date.utils';
+import { buildTransaction } from '@/lib/transaction/transaction.utils';
+import { useSearchParams } from 'next/navigation';
+import { buildDate, formatForInput, getParamsDate } from '@/lib/shared/date.utils';
+import MoneyInput from '@/components/MoneyInput';
+import { API } from '@/lib/const';
 
 export type TransactionFormProps = {
-	transaction: TransactionIn;
-	setTransaction: Dispatch<SetStateAction<TransactionIn>>;
+	transaction?: Transaction;
 	isOpen: boolean;
 	closeFormAction: () => void;
 };
 
 export default function TransactionForm({
 	transaction,
-	setTransaction,
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
 	const { addItem, editItem, deleteItem } = useTransactionList();
 
-	const [operation, setOperation] = useState<'expense' | 'income'>(
-		Number(transaction.amount) > 0 ? 'income' : 'expense',
-	);
+	const searchParams = useSearchParams();
+	const [year, month] = getParamsDate(searchParams);
+	const date = buildDate(year, month);
 
-	const { data: budgets } = useSWR<Budget[]>('/api/budgets', fetcher);
+	const { data: budgets, isLoading } = useSWR<Budget[]>(`/api/${API.BUDGETS}`, fetcher);
 
-	function applySign(value: string | number, operation: 'income' | 'expense') {
-		const num = Math.abs(Number(value));
-		const signedValue = operation === 'expense' ? -num : num;
-		return signedValue === 0 ? '' : signedValue.toString();
-	}
-
-	const handleOperationChange = (newOperation: 'income' | 'expense') => {
-		setOperation(newOperation);
-		setTransaction((prev) => ({ ...prev, amount: applySign(prev.amount, newOperation) }));
-	};
-
-	const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setTransaction((prev) => ({ ...prev, amount: applySign(e.target.value, operation) }));
-	};
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-		setTransaction((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-	const handleIsPaid = (isPaid: boolean) => setTransaction((prev) => ({ ...prev, isPaid }));
-
-	const handleBudget = (budget: Budget | null) => setTransaction((prev) => ({ ...prev, budget }));
+	const formRef = useRef<HTMLFormElement | null>(null);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const finalTransaction = { ...transaction, amount: Number(transaction.amount) };
+		const formData = new FormData(e.currentTarget);
+		const finalTransaction = buildTransaction(formData, budgets);
 
-		if (transaction.id) editTransaction(finalTransaction);
+		console.log(formData.get('amount'));
+
+		console.log(finalTransaction);
+
+		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);
 
+		formRef.current?.reset();
 		closeFormAction();
 	};
 
 	const addTransaction = (transactionWithoutId: Omit<Transaction, 'id'>) => {
-		const transaction = { ...transactionWithoutId, id: -Date.now() };
-		addItem(transaction);
+		const transactionWithId = { ...transactionWithoutId, id: -Date.now() };
+		addItem(transactionWithId);
 
 		void addTransactionDB(transactionWithoutId);
 	};
@@ -91,32 +77,30 @@ export default function TransactionForm({
 	};
 
 	async function handleDelete() {
-		if (transaction.id) {
-			deleteItem(transaction.id);
+		if (transaction?.id) {
+			deleteItem(transaction?.id);
 
-			void deleteTransactionDB(transaction.id);
+			void deleteTransactionDB(transaction?.id);
 		}
 	}
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{transaction.id ? 'Edit Transaction' : 'Add Transaction'}</span>
+				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
 
-			<form className="mt-4 space-y-4" onSubmit={handleSubmit}>
-				<OperationSelector value={operation} onChangeAction={handleOperationChange} />
+			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
+				<input type="hidden" name="id" defaultValue={transaction?.id} />
+				<OperationSelector
+					defaultValue={transaction && transaction?.amount > 0 ? 'income' : 'expense'}
+				/>
 				<Field>
 					<Label>Description</Label>
-					<Textarea
-						name="description"
-						value={transaction.description}
-						onChange={handleChange}
-						autoFocus
-					/>
+					<Textarea name="description" defaultValue={transaction?.description} autoFocus />
 				</Field>
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
@@ -125,37 +109,35 @@ export default function TransactionForm({
 							name="date"
 							required
 							type="datetime-local"
-							onChange={handleChange}
-							value={transaction.date}
+							defaultValue={transaction?.date || formatForInput(date)}
 							autoFocus
 						/>
 					</Field>
 
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<MoneyInput name="amount" onChange={handleAmountChange} value={transaction.amount} />
+						<MoneyInput required name="amount" defaultValue={transaction?.amount.toString()} />
 					</Field>
 				</div>
 
 				<div className="flex items-center gap-4">
 					<Field className="flex-1">
 						<Label>Budget</Label>
-						{!budgets ? (
+						{isLoading ? (
 							<Text>
 								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
 							</Text>
 						) : (
 							<Listbox
 								name="budget"
-								value={transaction.budget}
-								onChange={handleBudget}
+								defaultValue={transaction?.budget}
 								placeholder="Select budget&hellip;"
 							>
 								<ListboxOption value={null} className="flex gap-2">
 									<IconView name={''} className="size-4" />
 									No budget
 								</ListboxOption>
-								{budgets.map((budget) => (
+								{budgets?.map((budget) => (
 									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
 										<IconView name={budget.icon} className="size-4" />
 										{budget.name}
@@ -168,28 +150,22 @@ export default function TransactionForm({
 					<Field className="flex h-[73px] flex-col items-center justify-between">
 						<Label>Is paid</Label>
 						<Switch
-							onChange={handleIsPaid}
 							className="mb-2"
 							name="isPaid"
 							color="amber"
-							defaultChecked={transaction.isPaid}
+							defaultChecked={transaction?.isPaid}
 						/>
 					</Field>
 				</div>
 
 				<Field className="col-span-2">
 					<Label>Reference date</Label>
-					<Input
-						onChange={handleChange}
-						name="referenceDate"
-						type="date"
-						value={transaction.referenceDate}
-					/>
+					<Input name="referenceDate" type="date" defaultValue={transaction?.referenceDate} />
 				</Field>
 
 				<DialogActions>
 					<div>
-						{transaction.id && (
+						{transaction?.id && (
 							<Button type="button" color="red" onClick={handleDelete}>
 								Delete
 							</Button>

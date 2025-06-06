@@ -1,5 +1,3 @@
-'use client';
-
 import { RadioGroup, Radio } from '@headlessui/react';
 import { ReactNode } from 'react';
 import ExpenseIcon from '@/components/icons/ExpenseIcon';
@@ -7,16 +5,19 @@ import IncomeIcon from '@/components/icons/IncomeIcon';
 import clsx from 'clsx';
 
 interface RadioGroupProps {
-	value: string;
-	onChangeAction: (value: 'income' | 'expense') => void;
+	value?: string;
+	defaultValue?: string;
+	onChange?: (value: 'income' | 'expense') => void;
 }
 
-export default function OperationSelector({ value, onChangeAction }: RadioGroupProps) {
+export default function OperationSelector({ value, defaultValue, onChange }: RadioGroupProps) {
 	return (
 		<RadioGroup
 			className="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
 			value={value}
-			onChange={onChangeAction}
+			defaultValue={defaultValue}
+			name="operation"
+			onChange={onChange}
 		>
 			<Radio
 				key="expense"
