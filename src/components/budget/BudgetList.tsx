@@ -12,6 +12,8 @@ import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
 import { useMemo } from 'react';
+import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
+import Tooltip from '../Tooltip';
 
 type BudgetProps = {
 	budgetedSpent: number;
@@ -33,23 +35,39 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		[budgets],
 	);
 
-	const difference = totalBudget - budgetedSpent;
+	const difference = totalBudget + budgetedSpent;
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
+			<div className="flex flex-wrap justify-between gap-5 sm:-mt-14 sm:ml-32 sm:flex-row sm:justify-end">
 				<div className="flex items-center gap-2">
-					<MoneyText addColor={false} addSign={false}>
-						{totalBudget}
-					</MoneyText>
-					<MoneyText addColor={false} addSign={false}>
-						{budgetedSpent}
-					</MoneyText>
-					(<MoneyText>{difference}</MoneyText>)
+					<Tooltip message={`total budget`}>
+						<div className="flex items-center gap-2">
+							<TotalIcon className="text-yellow-500">
+								<PiggyBankIcon className="size-5" />
+							</TotalIcon>
+							<MoneyText addColor={false} addSign={false}>
+								{totalBudget}
+							</MoneyText>
+						</div>
+					</Tooltip>
+					-
+					<Tooltip message={`total spent`}>
+						<div className="flex items-center gap-2">
+							<TotalIcon className="text-yellow-500">
+								<HandCoinsIcon className="size-5" />
+							</TotalIcon>
+							<MoneyText addColor={false} addSign={false}>
+								{budgetedSpent}
+							</MoneyText>
+						</div>
+					</Tooltip>
+					=<MoneyText>{difference}</MoneyText>
 				</div>
 				<DateSwitcher />
 				<BudgetFormButton />
 			</div>
+
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
