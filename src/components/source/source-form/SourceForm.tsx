@@ -12,7 +12,7 @@ import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
 import { useSourceList } from '@/lib/source/SourceListProvider';
 
-export type SourceFormProps = {
+type SourceFormProps = {
 	source?: Source;
 	isOpen: boolean;
 	closeFormAction: () => void;

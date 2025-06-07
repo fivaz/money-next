@@ -15,8 +15,8 @@ type SpreadFormProps = {
 };
 
 export function SpreadForm({ transaction, amount }: SpreadFormProps) {
-	const [spreadStart, setSpreadStart] = useState<string>(transaction?.spreadStart || '2025-06-12');
-	const [spreadEnd, setSpreadEnd] = useState<string>(transaction?.spreadEnd || '2025-05-14');
+	const [spreadStart, setSpreadStart] = useState<string>(transaction?.spreadStart || '');
+	const [spreadEnd, setSpreadEnd] = useState<string>(transaction?.spreadEnd || '');
 
 	const getMessage = () => {
 		if (!spreadEnd || !spreadStart) {
@@ -50,7 +50,7 @@ export function SpreadForm({ transaction, amount }: SpreadFormProps) {
 					<InfoIcon className="size-5" />
 				</Tooltip>
 			</div>
-			<DisclosurePanel>
+			<DisclosurePanel unmount={false}>
 				<Text size="text-sm" color="text-yellow-500">
 					{getMessage()}
 				</Text>

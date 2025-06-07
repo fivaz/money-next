@@ -16,6 +16,8 @@ export const buildTransaction = (formData: FormData, budgets: Budget[] = []): Tr
 		budget,
 		isPaid: formData.get('isPaid') === 'on',
 		referenceDate: formData.get('referenceDate') as string,
+		spreadStart: formData.get('spreadStart') as string,
+		spreadEnd: formData.get('spreadEnd') as string,
 	};
 };
 

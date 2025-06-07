@@ -31,7 +31,7 @@ import { differenceInMonths, format, parse } from 'date-fns';
 import MoneyText from '@/components/MoneyText';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 
-export type TransactionFormProps = {
+type TransactionFormProps = {
 	transaction?: Transaction;
 	isOpen: boolean;
 	closeFormAction: () => void;
@@ -58,6 +58,8 @@ export default function TransactionForm({
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const finalTransaction = buildTransaction(formData, budgets);
+
+		console.log(finalTransaction);
 
 		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);

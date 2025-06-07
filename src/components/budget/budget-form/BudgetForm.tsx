@@ -12,7 +12,7 @@ import { buildBudget } from '@/lib/budget/budget.utils';
 import type { Budget } from '@/lib/budget/budget.model';
 import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.actions';
 
-export type BudgetFormProps = {
+type BudgetFormProps = {
 	budget?: Budget;
 	isOpen: boolean;
 	closeFormAction: () => void;
