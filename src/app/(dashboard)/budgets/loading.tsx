@@ -1,5 +1,4 @@
 import { Heading } from '@/components/base/heading';
-import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import BudgetListSkeleton from '@/components/budget/BudgetListSkeleton';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 

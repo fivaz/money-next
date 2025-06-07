@@ -3,7 +3,7 @@ import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import { differenceInMonths, format, parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
 import { DATE_FORMAT } from '@/lib/shared/date.utils';

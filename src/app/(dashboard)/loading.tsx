@@ -3,7 +3,6 @@ import Button from '@/components/Button';
 import IconView from '@/components/icon-picker/IconView';
 import { Skeleton } from '@/components/Skeleton';
 import { Heading } from '@/components/base/heading';
-import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { Strong } from '@/components/base/text';
 import TotalIcon from '@/components/icons/TotalIcon';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';

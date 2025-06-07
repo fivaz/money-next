@@ -1,5 +1,4 @@
 import { RadioGroup, Radio } from '@headlessui/react';
-import { ReactNode } from 'react';
 import ExpenseIcon from '@/components/icons/ExpenseIcon';
 import IncomeIcon from '@/components/icons/IncomeIcon';
 import clsx from 'clsx';

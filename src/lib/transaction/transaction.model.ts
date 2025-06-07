@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { validateSchema } from '@/lib/shared/shared.model';
 import { BudgetSchema } from '@/lib/budget/budget.model';
 import { API, BACKEND_URL } from '@/lib/const';
-import { formatForInput } from '@/lib/shared/date.utils';
 
 export const TransactionSchema = z.object({
 	id: z.number().int(),

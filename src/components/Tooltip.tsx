@@ -6,7 +6,6 @@ import {
 	offset,
 	flip,
 	shift,
-	useHover,
 	useFocus,
 	useDismiss,
 	useRole,

@@ -11,6 +11,7 @@ import { getParamsDate } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
+import { useMemo } from 'react';
 
 type BudgetProps = {
 	budgetedSpent: number;
@@ -27,13 +28,25 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		void reorderBudgets(newBudgets);
 	};
 
+	const totalBudget = useMemo(
+		() => budgets.reduce((total, budget) => budget.amount + total, 0),
+		[budgets],
+	);
+
+	const difference = totalBudget - budgetedSpent;
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex justify-between gap-5 sm:-mt-14 sm:justify-end">
-				<Text className="flex items-center gap-2">
-					<TotalIcon className="size-4" />
-					<MoneyText>{budgetedSpent}</MoneyText>
-				</Text>
+				<div className="flex items-center gap-2">
+					<MoneyText addColor={false} addSign={false}>
+						{totalBudget}
+					</MoneyText>
+					<MoneyText addColor={false} addSign={false}>
+						{budgetedSpent}
+					</MoneyText>
+					(<MoneyText>{difference}</MoneyText>)
+				</div>
 				<DateSwitcher />
 				<BudgetFormButton />
 			</div>
