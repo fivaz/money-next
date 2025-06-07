@@ -59,8 +59,10 @@ export default function TransactionForm({
 		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);
 
-		formRef.current?.reset();
 		closeFormAction();
+		setTimeout(() => {
+			formRef.current?.reset();
+		}, 200);
 	};
 
 	const addTransaction = (transactionWithoutId: Omit<Transaction, 'id'>) => {
@@ -96,7 +98,7 @@ export default function TransactionForm({
 			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
 				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector
-					defaultValue={transaction && transaction?.amount > 0 ? 'income' : 'expense'}
+					defaultValue={transaction && Number(transaction?.amount) > 0 ? 'income' : 'expense'}
 				/>
 				<Field>
 					<Label>Description</Label>

@@ -4,10 +4,10 @@ import { differenceInMonths } from 'date-fns';
 
 export const buildTransaction = (formData: FormData, budgets: Budget[] = []): Transaction => {
 	const operation = formData.get('operation') as string;
-	const amountValue = parseInt(formData.get('amount') as string);
-	const amount = operation === 'income' ? amountValue : amountValue * -1;
 
-	console.log(budgets.length);
+	const amountValue = parseInt(formData.get('amount') as string);
+
+	const amount = Math.abs(amountValue) * (operation === 'income' ? 1 : -1);
 
 	const budget = budgets.find((budget) => budget.id === Number(formData.get('budget'))) || null;
 

@@ -15,7 +15,7 @@ export default function Error({ error, reset }: ErrorProps) {
 	}, [error]);
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
+		<div className="flex items-center justify-center bg-gray-100 sm:mt-[100px] dark:bg-gray-900">
 			<div className="mx-auto max-w-md p-8 text-center">
 				<h1 className="mb-4 text-6xl font-bold text-red-600 dark:text-red-500">Oops!</h1>
 				<h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-100">

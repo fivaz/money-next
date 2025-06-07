@@ -16,6 +16,10 @@ import TransactionItem from '../transaction/TransactionItem';
 import useSWR from 'swr';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
+import {
+	TransactionListProvider,
+	useTransactionList,
+} from '@/lib/transaction/TransactionListProvider';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -29,7 +33,9 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-	const { data: transactions } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactions } = useSWR<Transaction[]>(url, fetcher);
+
+	const { items: transactions } = useTransactionList();
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -55,31 +61,29 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 							</div>
 						</div>
 
-						<ProgressBar budget={budget} transactions={transactions ?? []} />
+						<ProgressBar budget={budget} transactions={transactions} />
 					</div>
 
-					<AnimatePresence>
-						{open && (
-							<DisclosurePanel static as={Fragment}>
-								<motion.div
-									initial={{ scale: 0.95, opacity: 0 }}
-									animate={{ scale: 1, opacity: 1 }}
-									exit={{ scale: 0.95, opacity: 0 }}
-									transition={{ duration: 0.1, ease: easeOut }}
-								>
-									<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-										{transactions?.map((transaction) => (
-											<TransactionItem
-												key={transaction.id}
-												transaction={transaction}
-												isEditable={false}
-											/>
-										))}
-									</ul>
-								</motion.div>
-							</DisclosurePanel>
-						)}
-					</AnimatePresence>
+					<TransactionListProvider initialItems={initialTransactions || []}>
+						<AnimatePresence>
+							{open && (
+								<DisclosurePanel static as={Fragment}>
+									<motion.div
+										initial={{ scale: 0.95, opacity: 0 }}
+										animate={{ scale: 1, opacity: 1 }}
+										exit={{ scale: 0.95, opacity: 0 }}
+										transition={{ duration: 0.1, ease: easeOut }}
+									>
+										<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
+											{transactions.map((transaction) => (
+												<TransactionItem key={transaction.id} transaction={transaction} />
+											))}
+										</ul>
+									</motion.div>
+								</DisclosurePanel>
+							)}
+						</AnimatePresence>
+					</TransactionListProvider>
 
 					<DisclosureButton className="flex w-full justify-center p-2">
 						<Text>
