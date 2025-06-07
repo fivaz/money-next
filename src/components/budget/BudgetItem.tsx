@@ -45,7 +45,9 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
 							</div>
 							<div className="flex shrink-0 items-center gap-2">
-								<MoneyText>{budget.amount}</MoneyText>
+								<MoneyText addColor={false} addSign={false}>
+									{budget.amount}
+								</MoneyText>
 
 								<BudgetFormButton budget={budget}>
 									<CogIcon className="size-4 shrink-0" />

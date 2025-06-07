@@ -63,7 +63,11 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 				)}
 			</div>
 			<Text className="text-gray-600">
-				(<MoneyText>{totalSpent}</MoneyText> / <MoneyText>{budget.amount}</MoneyText>)
+				(<MoneyText>{totalSpent}</MoneyText> /{' '}
+				<MoneyText addSign={false} addColor={false}>
+					{budget.amount}
+				</MoneyText>
+				)
 			</Text>
 		</div>
 	);
