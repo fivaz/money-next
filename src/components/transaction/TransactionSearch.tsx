@@ -1,12 +1,7 @@
 'use client';
 
 import TransactionItem from '@/components/transaction/TransactionItem';
-import { Transaction } from '@/lib/transaction/transaction.model';
-import { searchTransactions } from '@/lib/transaction/transaction.actions';
-import {
-	TransactionListProvider,
-	useTransactionList,
-} from '@/lib/transaction/TransactionListProvider';
+import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 
 type TransactionProps = {};
 

@@ -3,6 +3,8 @@ import BudgetList from '@/components/budget/BudgetList';
 import { Heading } from '@/components/base/heading';
 import { BudgetListProvider } from '@/lib/budget/BudgetListProvider';
 import { getBudgetedSpent } from '@/app/actions/get-balance';
+import BudgetListSkeleton from '@/components/budget/BudgetListSkeleton';
+import { Suspense } from 'react';
 
 type BudgetsPageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -14,14 +16,18 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
 	const year = Number(yearParam) || new Date().getFullYear();
 	const month = Number(monthParam) || new Date().getMonth() + 1;
 
-	const budgets = await getBudgets();
-	const budgetedSpent = await getBudgetedSpent({ year, month });
+	const [budgets, budgetedSpent] = await Promise.all([
+		getBudgets(),
+		getBudgetedSpent({ year, month }),
+	]);
 
 	return (
 		<main className="flex flex-col gap-5">
 			<Heading>Budgets</Heading>
 			<BudgetListProvider initialItems={budgets}>
-				<BudgetList budgetedSpent={budgetedSpent} />
+				<Suspense fallback={<BudgetListSkeleton />}>
+					<BudgetList budgetedSpent={budgetedSpent} />
+				</Suspense>
 			</BudgetListProvider>
 		</main>
 	);
