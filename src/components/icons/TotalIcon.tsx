@@ -10,16 +10,16 @@ export default function TotalIcon({ children, className, ...props }: TotalIconPr
 		return (
 			<div className="relative">
 				<InnerTotalIcon
-					{...props}
 					style={{ transform: 'translate(40%, 40%)' }}
 					className={clsx('absolute right-0 bottom-0 z-10 size-3', className)}
+					{...props}
 				/>
 				{children}
 			</div>
 		);
 	}
 
-	return <InnerTotalIcon />;
+	return <InnerTotalIcon className={className} {...props} />;
 }
 
 function InnerTotalIcon(props: SVGProps<SVGSVGElement>) {

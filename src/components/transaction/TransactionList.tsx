@@ -22,7 +22,7 @@ export default function TransactionList({}: TransactionProps) {
 			<div className="sticky top-0 z-10 flex items-center justify-end gap-4 rounded-t-lg border-b border-l border-gray-300 bg-gray-100 p-3 dark:border-gray-600 dark:bg-gray-800">
 				<Text className="flex items-center gap-2">
 					<TotalIcon className="size-4" />
-					<MoneyText>{balance}</MoneyText>
+					<MoneyText className="shrink-0">{balance}</MoneyText>
 				</Text>
 				<Button size="px-2 py-1.5">
 					{isAscending ? (

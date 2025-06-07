@@ -72,7 +72,7 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 			<button
 				onClick={showDatePicker}
 				type="button"
-				className="flex h-9 items-center gap-2 border-y border-gray-300 bg-white px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-gray-500 focus:relative dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-400"
+				className="flex h-9 items-center gap-2 border-y border-gray-300 bg-white text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-gray-500 focus:relative dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-400"
 			>
 				<Calendar1Icon className="size-4" aria-hidden="true" />
 				{formattedDate}
