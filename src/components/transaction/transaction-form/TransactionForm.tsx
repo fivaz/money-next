@@ -56,6 +56,8 @@ export default function TransactionForm({
 		const formData = new FormData(e.currentTarget);
 		const finalTransaction = buildTransaction(formData, budgets);
 
+		console.log(finalTransaction);
+
 		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);
 
@@ -135,7 +137,7 @@ export default function TransactionForm({
 						) : (
 							<Listbox
 								name="budget"
-								defaultValue={transaction?.budget}
+								defaultValue={transaction?.budget?.id}
 								placeholder="Select budget&hellip;"
 							>
 								<ListboxOption value={null} className="flex gap-2">
@@ -143,7 +145,7 @@ export default function TransactionForm({
 									No budget
 								</ListboxOption>
 								{budgets?.map((budget) => (
-									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
+									<ListboxOption key={budget.id} value={budget.id} className="flex gap-2">
 										<IconView name={budget.icon} className="size-4" />
 										{budget.name}
 									</ListboxOption>

@@ -7,6 +7,8 @@ export const buildTransaction = (formData: FormData, budgets: Budget[] = []): Tr
 	const amountValue = parseInt(formData.get('amount') as string);
 	const amount = operation === 'income' ? amountValue : amountValue * -1;
 
+	console.log(budgets.length);
+
 	const budget = budgets.find((budget) => budget.id === Number(formData.get('budget'))) || null;
 
 	return {
