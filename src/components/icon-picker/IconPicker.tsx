@@ -47,7 +47,7 @@ export default function IconPicker({
 			<div className="flex flex-col gap-2">
 				<SearchInput
 					value={searchQuery}
-					onChange={setSearchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
 					{...props}
 					placeholder="Search icons..."
 				/>

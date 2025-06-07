@@ -2,7 +2,7 @@
 
 import { DisclosureButton } from '@headlessui/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { navLinks } from '@/lib/const';
 
 interface NavLinksProps {
@@ -11,6 +11,8 @@ interface NavLinksProps {
 
 export default function NavLinks({ mobile = false }: NavLinksProps) {
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const params = new URLSearchParams(searchParams.toString());
 
 	function isCurrent(itemHref: string): boolean {
 		return pathname === itemHref || (itemHref === '/' && pathname === '');
@@ -24,7 +26,7 @@ export default function NavLinks({ mobile = false }: NavLinksProps) {
 				<DisclosureButton
 					key={navLink.name}
 					as={Link}
-					href={navLink.path}
+					href={`${navLink.path}?${params.toString()}`}
 					aria-current={isCurrent(navLink.path) ? 'page' : undefined}
 					className={[
 						isCurrent(navLink.path)

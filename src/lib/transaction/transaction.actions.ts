@@ -9,6 +9,11 @@ import {
 import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
+export async function searchTransactions(query: string): Promise<Transaction[]> {
+	const data = await fetchWithAuth(`${TRANSACTIONS_URL}/search?query=${query}`);
+	return validateTransactions(data);
+}
+
 export async function getCurrentMonthTransactions({
 	year,
 	month,
