@@ -34,7 +34,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-	const { data: initialTransactions } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactions, mutate } = useSWR<Transaction[]>(url, fetcher);
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -63,7 +63,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 						<ProgressBar budget={budget} transactions={initialTransactions || []} />
 					</div>
 
-					<TransactionListProvider initialItems={initialTransactions || []}>
+					<TransactionListProvider initialItems={initialTransactions || []} mutate={mutate}>
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>

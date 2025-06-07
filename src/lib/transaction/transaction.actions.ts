@@ -25,31 +25,38 @@ export async function getCurrentMonthTransactions({
 	return validateTransactions(data);
 }
 
-export async function addTransactionDB(transaction: Omit<Transaction, 'id'>) {
+export async function addTransactionDB(
+	transaction: Omit<Transaction, 'id'>,
+	hasMutateFn: boolean = false,
+) {
 	const saved = fetchWithAuth(TRANSACTIONS_URL, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
 
-	revalidatePath(ROUTES.ROOT.path);
+	if (!hasMutateFn) {
+		revalidatePath(ROUTES.ROOT.path);
+	}
 
 	return saved;
 }
 
-export async function editTransactionDB(transaction: Transaction) {
+export async function editTransactionDB(transaction: Transaction, hasMutateFn: boolean = false) {
 	const saved = fetchWithAuth(`${TRANSACTIONS_URL}/${transaction.id}`, {
 		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
 
-	revalidatePath(ROUTES.ROOT.path);
+	if (!hasMutateFn) {
+		revalidatePath(ROUTES.ROOT.path);
+	}
 
 	return saved;
 }
 
-export async function deleteTransactionDB(id: number): Promise<void> {
+export async function deleteTransactionDB(id: number, hasMutateFn: boolean = false): Promise<void> {
 	await fetchWithAuth(
 		`${TRANSACTIONS_URL}/${id}`,
 		{
@@ -58,5 +65,7 @@ export async function deleteTransactionDB(id: number): Promise<void> {
 		false,
 	); // false = we don't expect JSON response
 
-	revalidatePath(ROUTES.ROOT.path);
+	if (!hasMutateFn) {
+		revalidatePath(ROUTES.ROOT.path);
+	}
 }

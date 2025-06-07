@@ -8,10 +8,15 @@ type Action<I> =
 	| { type: 'edit'; item: I }
 	| { type: 'replace'; newList: I[] };
 
-export function useOptimisticList<I extends { id: number }>(
-	initialItems: I[],
-	sortFn?: (a: I, b: I) => number,
-) {
+export function useOptimisticList<I extends { id: number }>({
+	initialItems,
+	sortFn,
+	mutate,
+}: {
+	initialItems: I[];
+	sortFn?: (a: I, b: I) => number;
+	mutate?: () => void;
+}) {
 	const [optimisticItems, applyOptimistic] = useOptimistic<I[], Action<I>>(
 		initialItems,
 		(state, action) => {
@@ -80,5 +85,6 @@ export function useOptimisticList<I extends { id: number }>(
 		deleteItem,
 		editItem,
 		updateList,
+		mutate,
 	};
 }

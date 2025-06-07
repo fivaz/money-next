@@ -39,7 +39,7 @@ export default function TransactionForm({
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
-	const { addItem, editItem, deleteItem } = useTransactionList();
+	const { addItem, editItem, deleteItem, mutate } = useTransactionList();
 
 	const searchParams = useSearchParams();
 	const [year, month] = getParamsDate(searchParams);
@@ -65,24 +65,27 @@ export default function TransactionForm({
 		}, 200);
 	};
 
-	const addTransaction = (transactionWithoutId: Omit<Transaction, 'id'>) => {
+	const addTransaction = async (transactionWithoutId: Omit<Transaction, 'id'>) => {
 		const transactionWithId = { ...transactionWithoutId, id: -Date.now() };
 		addItem(transactionWithId);
 
-		void addTransactionDB(transactionWithoutId);
+		await addTransactionDB(transactionWithoutId, !!mutate);
+		mutate?.();
 	};
 
-	const editTransaction = (transaction: Transaction) => {
+	const editTransaction = async (transaction: Transaction) => {
 		editItem(transaction);
 
-		void editTransactionDB(transaction);
+		await editTransactionDB(transaction, !!mutate);
+		mutate?.();
 	};
 
-	const handleDelete = () => {
+	const handleDelete = async () => {
 		if (transaction?.id) {
 			deleteItem(transaction?.id);
 
-			void deleteTransactionDB(transaction?.id);
+			await deleteTransactionDB(transaction?.id, !!mutate);
+			mutate?.();
 		}
 	};
 
