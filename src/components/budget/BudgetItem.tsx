@@ -9,7 +9,7 @@ import ProgressBar from '@/components/budget/ProgressBar';
 import { API } from '@/lib/const';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import TransactionItem from '../transaction/TransactionItem';
@@ -20,6 +20,7 @@ import {
 	TransactionListProvider,
 	useTransactionList,
 } from '@/lib/transaction/TransactionListProvider';
+import BudgetTransactions from '@/components/budget/BudgetTransactions';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -34,8 +35,6 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
 	const { data: initialTransactions } = useSWR<Transaction[]>(url, fetcher);
-
-	const { items: transactions } = useTransactionList();
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -61,7 +60,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 							</div>
 						</div>
 
-						<ProgressBar budget={budget} transactions={transactions} />
+						<ProgressBar budget={budget} transactions={initialTransactions || []} />
 					</div>
 
 					<TransactionListProvider initialItems={initialTransactions || []}>
@@ -74,11 +73,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 										exit={{ scale: 0.95, opacity: 0 }}
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
-										<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-											{transactions.map((transaction) => (
-												<TransactionItem key={transaction.id} transaction={transaction} />
-											))}
-										</ul>
+										<BudgetTransactions />
 									</motion.div>
 								</DisclosurePanel>
 							)}

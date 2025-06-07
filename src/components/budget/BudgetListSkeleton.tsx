@@ -77,7 +77,7 @@ function ProgressBarSkeleton() {
 				/>
 
 				<span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-600">
-					<Skeleton />
+					...
 				</span>
 			</div>
 			<div className="flex items-center gap-1 text-gray-600">
