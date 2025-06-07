@@ -3,11 +3,14 @@ import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import { format, parse } from 'date-fns';
+import { differenceInMonths, format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
 import { DATE_FORMAT } from '@/lib/shared/date.utils';
 import IconView from '@/components/icon-picker/IconView';
+import PieChartIcon from '@/components/icons/PieChartIcon';
+import Tooltip from '../Tooltip';
+import { getAmount } from '@/lib/transaction/transaction.utils';
 
 type TransactionItemProps = {
 	transaction: Transaction;
@@ -50,8 +53,14 @@ export default function TransactionItem({ transaction, isEditable = true }: Tran
 			</div>
 
 			<div className="flex shrink-0 items-center gap-2">
+				{transaction.spreadStart && transaction.spreadEnd && (
+					<Tooltip message={`transaction spreads`}>
+						<PieChartIcon className="size-5 text-yellow-500" />
+					</Tooltip>
+				)}
+
 				<Text>
-					<MoneyText addColor={transaction.isPaid}>{transaction.amount}</MoneyText>
+					<MoneyText addColor={transaction.isPaid}>{getAmount(transaction)}</MoneyText>
 				</Text>
 
 				{isEditable && (

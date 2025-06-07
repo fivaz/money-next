@@ -22,7 +22,8 @@ export default function MoneyText({
 	return (
 		<span className={clsx({ [colorClass]: addColor && moneyInCents !== 0 }, className)}>
 			<>
-				{addSign && moneyInCents !== 0 && sign} {formattedMoney} $
+				${addSign && moneyInCents !== 0 && ` ${sign}`}
+				{formattedMoney}
 			</>
 		</span>
 	);

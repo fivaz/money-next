@@ -1,5 +1,6 @@
-import { Transaction } from '@/lib/transaction/transaction.model';
-import { Budget } from '@/lib/budget/budget.model';
+import { type Transaction } from '@/lib/transaction/transaction.model';
+import { type Budget } from '@/lib/budget/budget.model';
+import { differenceInMonths } from 'date-fns';
 
 export const buildTransaction = (formData: FormData, budgets: Budget[] = []): Transaction => {
 	const operation = formData.get('operation') as string;
@@ -25,4 +26,18 @@ export const sortTransactions = (a: Transaction, b: Transaction) =>
 	new Date(b.date).getTime() - new Date(a.date).getTime();
 
 export const sumTransactions = (transactions: Transaction[]): number =>
-	transactions.filter((t) => t.isPaid).reduce((sum, t) => sum + t.amount, 0);
+	transactions.filter((t) => t.isPaid).reduce((sum, t) => sum + getAmount(t), 0);
+
+export const getAmount = (transaction: Transaction): number => {
+	if (!transaction.spreadStart || !transaction.spreadEnd) {
+		return transaction.amount;
+	}
+	try {
+		const spreadMonths =
+			differenceInMonths(new Date(transaction.spreadEnd), new Date(transaction.spreadStart)) + 1;
+		return transaction.amount / spreadMonths;
+	} catch (error) {
+		console.error(error);
+		return transaction.amount;
+	}
+};

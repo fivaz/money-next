@@ -1,6 +1,8 @@
-export default function ExpenseIcon({ className }: { className?: string }) {
+import { SVGProps } from 'react';
+
+export default function ExpenseIcon(props: SVGProps<SVGSVGElement>) {
 	return (
-		<svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+		<svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 			<g
 				fill="none"
 				stroke="currentColor"

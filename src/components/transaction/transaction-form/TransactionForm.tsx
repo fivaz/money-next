@@ -1,7 +1,7 @@
-import { FormEvent, useMemo, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
-import { Field, Fieldset, Label, Legend } from '@/components/base/fieldset';
+import { Field, Label } from '@/components/base/fieldset';
 import { Textarea } from '@/components/base/textarea';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
@@ -22,13 +22,10 @@ import IconView from '@/components/icon-picker/IconView';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import { useSearchParams } from 'next/navigation';
-import { buildDate, DATE_FORMAT, formatForInput, getParamsDate } from '@/lib/shared/date.utils';
+import { buildDate, formatForInput, getParamsDate } from '@/lib/shared/date.utils';
 import MoneyInput from '@/components/MoneyInput';
 import { API } from '@/lib/const';
-import Tooltip from '@/components/Navbar/Tooltip';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import { differenceInMonths, format, parse } from 'date-fns';
-import MoneyText from '@/components/MoneyText';
+import Tooltip from '@/components/Tooltip';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 
 type TransactionFormProps = {
@@ -58,8 +55,6 @@ export default function TransactionForm({
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const finalTransaction = buildTransaction(formData, budgets);
-
-		console.log(finalTransaction);
 
 		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);

@@ -1,4 +1,4 @@
-import Tooltip from '@/components/Navbar/Tooltip';
+import Tooltip from '@/components/Tooltip';
 import NavbarDisclosure from '@/components/Navbar/NavbarDisclosure';
 import Logo from '@/components/Logo';
 import BalanceViewer from '@/components/Navbar/balance-viewer/BalanceViewer';
