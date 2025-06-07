@@ -18,6 +18,8 @@ export const TransactionSchema = z.object({
 	budget: BudgetSchema.nullable(),
 	referenceDate: z.string().date().optional(),
 	isPaid: z.boolean().optional(),
+	spreadStart: z.string().date().optional(),
+	spreadEnd: z.string().date().optional(),
 });
 
 export type Transaction = z.infer<typeof TransactionSchema>;

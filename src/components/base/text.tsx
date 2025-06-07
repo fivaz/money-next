@@ -4,15 +4,10 @@ import { Link } from './link';
 export function Text({
 	className,
 	size = 'text-base/6 sm:text-sm/6',
+	color = 'text-gray-700 dark:text-gray-300',
 	...props
-}: React.ComponentPropsWithoutRef<'p'> & { size?: string }) {
-	return (
-		<p
-			data-slot="text"
-			{...props}
-			className={clsx(className, size, 'text-gray-700 dark:text-gray-300')}
-		/>
-	);
+}: React.ComponentPropsWithoutRef<'p'> & { size?: string; color?: string }) {
+	return <p data-slot="text" {...props} className={clsx(className, size, color)} />;
 }
 
 export function TextLink({ className, ...props }: React.ComponentPropsWithoutRef<typeof Link>) {

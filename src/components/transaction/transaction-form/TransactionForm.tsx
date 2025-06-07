@@ -1,7 +1,7 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useMemo, useRef, useState } from 'react';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
-import { Field, Label } from '@/components/base/fieldset';
+import { Field, Fieldset, Label, Legend } from '@/components/base/fieldset';
 import { Textarea } from '@/components/base/textarea';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
@@ -13,7 +13,7 @@ import {
 	deleteTransactionDB,
 	editTransactionDB,
 } from '@/lib/transaction/transaction.actions';
-import { LoaderCircleIcon, XIcon } from 'lucide-react';
+import { InfoIcon, LoaderCircleIcon, XIcon } from 'lucide-react';
 import { Listbox, ListboxOption } from '@/components/base/listbox';
 import { Budget } from '@/lib/budget/budget.model';
 import useSWR from 'swr';
@@ -22,9 +22,14 @@ import IconView from '@/components/icon-picker/IconView';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 import { buildTransaction } from '@/lib/transaction/transaction.utils';
 import { useSearchParams } from 'next/navigation';
-import { buildDate, formatForInput, getParamsDate } from '@/lib/shared/date.utils';
+import { buildDate, DATE_FORMAT, formatForInput, getParamsDate } from '@/lib/shared/date.utils';
 import MoneyInput from '@/components/MoneyInput';
 import { API } from '@/lib/const';
+import Tooltip from '@/components/Navbar/Tooltip';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { differenceInMonths, format, parse } from 'date-fns';
+import MoneyText from '@/components/MoneyText';
+import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 
 export type TransactionFormProps = {
 	transaction?: Transaction;
@@ -47,14 +52,12 @@ export default function TransactionForm({
 
 	const formRef = useRef<HTMLFormElement | null>(null);
 
+	const [amount, setAmount] = useState<string>(transaction?.amount?.toString() || '10000');
+
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const finalTransaction = buildTransaction(formData, budgets);
-
-		console.log(formData.get('amount'));
-
-		console.log(finalTransaction);
 
 		if (transaction?.id) editTransaction(finalTransaction);
 		else addTransaction(finalTransaction);
@@ -76,13 +79,13 @@ export default function TransactionForm({
 		void editTransactionDB(transaction);
 	};
 
-	async function handleDelete() {
+	const handleDelete = () => {
 		if (transaction?.id) {
 			deleteItem(transaction?.id);
 
 			void deleteTransactionDB(transaction?.id);
 		}
-	}
+	};
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
@@ -116,7 +119,12 @@ export default function TransactionForm({
 
 					<Field className="col-span-1">
 						<Label>Amount</Label>
-						<MoneyInput required name="amount" defaultValue={transaction?.amount.toString()} />
+						<MoneyInput
+							required
+							name="amount"
+							value={amount}
+							onChange={(e) => setAmount(e.target.value)}
+						/>
 					</Field>
 				</div>
 
@@ -158,10 +166,22 @@ export default function TransactionForm({
 					</Field>
 				</div>
 
-				<Field className="col-span-2">
-					<Label>Reference date</Label>
-					<Input name="referenceDate" type="date" defaultValue={transaction?.referenceDate} />
+				<Field>
+					<div className="flex items-center gap-2">
+						<Label className="grow text-left">Reference date</Label>
+						<Tooltip message="Moves the transaction to another date’s budget">
+							<InfoIcon className="mr-2 size-5" />
+						</Tooltip>
+					</div>
+					<Input
+						className="mt-3"
+						name="referenceDate"
+						type="date"
+						defaultValue={transaction?.referenceDate}
+					/>
 				</Field>
+
+				<SpreadForm transaction={transaction} amount={amount} />
 
 				<DialogActions>
 					<div>
@@ -171,7 +191,9 @@ export default function TransactionForm({
 							</Button>
 						)}
 					</div>
-					<Button type="submit">Save</Button>
+					<Button type="submit" className="items-center" size="p-3">
+						Save
+					</Button>
 				</DialogActions>
 			</form>
 		</Dialog>

@@ -12,6 +12,7 @@ import {
 	useRole,
 	useInteractions,
 	FloatingPortal,
+	useClick,
 } from '@floating-ui/react';
 import clsx from 'clsx';
 import { FloatingArrow, arrow } from '@floating-ui/react';
@@ -63,7 +64,7 @@ export default function Tooltip({ children, message }: ToolTipProps) {
 	} as const;
 
 	// Event listeners to change the open state
-	const hover = useHover(context, { move: false });
+	const hover = useClick(context);
 	const focus = useFocus(context);
 	const dismiss = useDismiss(context);
 	// Role props for screen readers
@@ -74,14 +75,14 @@ export default function Tooltip({ children, message }: ToolTipProps) {
 
 	return (
 		<>
-			<button ref={refs.setReference} {...getReferenceProps()}>
+			<button type="button" ref={refs.setReference} {...getReferenceProps()}>
 				{children}
 			</button>
 			<FloatingPortal>
 				{isOpen && (
 					<div
 						className={clsx(
-							'box-border w-max max-w-[calc(100vw-10px)] rounded bg-gray-800 p-1 px-2 text-sm text-white',
+							'z-30 box-border w-max max-w-[calc(100vw-10px)] rounded bg-gray-800 p-1 px-2 text-sm text-white',
 							tailwindColor['yellow'].floating,
 						)}
 						ref={refs.setFloating}
