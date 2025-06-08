@@ -1,5 +1,5 @@
 'use client';
-import { type PropsWithChildren, useState } from 'react';
+import { type PropsWithChildren, Suspense, useState } from 'react';
 import Button, { type ButtonProps } from '@/components/Button';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
@@ -31,7 +31,9 @@ export default function TransactionFormButton({
 				)}
 			</Button>
 
-			<TransactionForm transaction={transaction} isOpen={isOpen} closeFormAction={closeDialog} />
+			<Suspense>
+				<TransactionForm transaction={transaction} isOpen={isOpen} closeFormAction={closeDialog} />
+			</Suspense>
 		</>
 	);
 }

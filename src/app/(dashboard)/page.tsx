@@ -6,6 +6,7 @@ import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 import SearchTransactions from '@/components/transaction/SearchTransactions';
 import TransactionSearchWithData from '@/components/transaction/TransactionSearchWithData';
+import { Skeleton } from '@/components/Skeleton';
 
 type HomePageProps = {
 	searchParams: Promise<{ year?: string; month?: string; query?: string }>;
@@ -27,7 +28,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 					<Suspense fallback={<DateSwitcherSkeleton />}>
 						<DateSwitcher />
 					</Suspense>
-					<SearchTransactions />
+					<Suspense fallback={<Skeleton />}>
+						<SearchTransactions />
+					</Suspense>
 				</div>
 			</div>
 			{query ? (
