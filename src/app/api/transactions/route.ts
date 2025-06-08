@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { BACKEND_URL } from '@/lib/const';
-import { getAuthToken } from '@/lib/user/auth.util';
+import { getTokenForAPI } from '@/lib/user/auth.util';
+import { fetchInAPI } from '@/lib/shared/api-server.utils';
 
 export async function GET(request: NextRequest) {
-	const tokens = await getAuthToken();
-
-	if (!tokens) throw new Error('User not authenticated');
-
 	// Extract query params from incoming request URL
 	const { searchParams } = new URL(request.url);
 
@@ -19,20 +16,7 @@ export async function GET(request: NextRequest) {
 		backendUrl.searchParams.append(key, value);
 	});
 
-	const res = await fetch(backendUrl.toString(), {
-		headers: {
-			Authorization: `Bearer ${tokens.token}`,
-		},
-		cache: 'no-store',
-	});
-
-	if (!res.ok) {
-		const message = await res.text();
-		throw new Error(`Failed to fetch transactions: ${message}`);
-	}
-
-	const data = await res.json();
-	console.log(data);
+	const data = await fetchInAPI(request.cookies, backendUrl.toString(), {}, true);
 
 	const transactions = validateTransactions(data);
 

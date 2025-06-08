@@ -3,45 +3,30 @@
 import { getTokens, Tokens } from 'next-firebase-auth-edge';
 import { cookies } from 'next/headers';
 import { firebaseConfig } from '@/lib/firebase';
-import { serverConfig } from '@/config';
-import { User } from '@/lib/user/AuthContext';
+import { serverConfig, tokenConfig } from '@/config';
 import { filterStandardClaims } from 'next-firebase-auth-edge/auth/claims';
+import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
+import { User } from '@/lib/user/user.model';
 
-const toUser = ({ decodedToken }: Tokens): User => {
-	const {
-		uid,
-		email,
-		picture: photoURL,
-		email_verified: emailVerified,
-		phone_number: phoneNumber,
-		name: displayName,
-		source_sign_in_provider: signInProvider,
-	} = decodedToken;
+export const getUser = async (): Promise<User | null> => {
+	const tokens = await getTokens(await cookies(), tokenConfig);
 
-	const customClaims = filterStandardClaims(decodedToken);
-
-	return {
-		uid,
-		email: email ?? null,
-		displayName: displayName ?? null,
-		photoURL: photoURL ?? null,
-		phoneNumber: phoneNumber ?? null,
-		emailVerified: emailVerified ?? false,
-		providerId: signInProvider,
-		customClaims,
-	};
+	return tokens
+		? {
+				uid: tokens.decodedToken.uid,
+				email: tokens.decodedToken.email as string,
+				photoURL: tokens.decodedToken.photoURL as string,
+				displayName: tokens.decodedToken.displayName as string,
+			}
+		: null;
 };
 
-export const getUser = async () => {
-	const tokens = await getAuthToken();
-
-	return tokens ? toUser(tokens) : null;
+export const getTokenForServerAction = async () => {
+	const tokens = await getTokens(await cookies(), tokenConfig);
+	return tokens ? tokens.token : null;
 };
 
-export const getAuthToken = async () =>
-	getTokens(await cookies(), {
-		apiKey: firebaseConfig.apiKey,
-		cookieName: serverConfig.cookieName,
-		cookieSignatureKeys: serverConfig.cookieSignatureKeys,
-		serviceAccount: serverConfig.serviceAccount,
-	});
+export const getTokenForAPI = async (requestCookies: RequestCookies) => {
+	const tokens = await getTokens(requestCookies, tokenConfig);
+	return tokens ? tokens.token : null;
+};

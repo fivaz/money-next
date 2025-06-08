@@ -1,3 +1,5 @@
+import { firebaseConfig } from '@/lib/firebase';
+
 export const serverConfig = {
 	cookieName: process.env.AUTH_COOKIE_NAME!,
 	cookieSignatureKeys: [
@@ -16,4 +18,11 @@ export const serverConfig = {
 		clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL!,
 		privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
 	},
+};
+
+export const tokenConfig = {
+	apiKey: firebaseConfig.apiKey,
+	cookieName: serverConfig.cookieName,
+	cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+	serviceAccount: serverConfig.serviceAccount,
 };

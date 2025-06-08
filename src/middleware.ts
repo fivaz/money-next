@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
 	return authMiddleware(request, {
 		loginPath: '/api/login',
 		logoutPath: '/api/logout',
+		refreshTokenPath: '/api/refresh-token',
 		apiKey: firebaseConfig.apiKey,
 		cookieName: serverConfig.cookieName,
 		cookieSignatureKeys: serverConfig.cookieSignatureKeys,
@@ -45,5 +46,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/', '/((?!_next|api|.*\\.).*)', '/api/login', '/api/logout'],
+	matcher: ['/', '/((?!_next|api|.*\\.).*)', '/api/login', '/api/logout', '/api/refresh-token'],
 };

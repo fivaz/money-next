@@ -9,13 +9,13 @@ import {
 	validateTransactions,
 } from '@/lib/transaction/transaction.model';
 import { revalidatePath } from 'next/cache';
-import { fetchWithAuth } from '@/lib/shared/api-server.utils';
+import { fetchInAction } from '@/lib/shared/api-server.utils';
 
 export async function searchTransactions(
 	query: string,
 	page: number,
 ): Promise<PaginatedTransactions> {
-	const data = await fetchWithAuth(`${TRANSACTIONS_URL}/search?query=${query}&page=${page}`);
+	const data = await fetchInAction(`${TRANSACTIONS_URL}/search?query=${query}&page=${page}`);
 	return validatePaginatedTransactions(data);
 }
 
@@ -26,7 +26,7 @@ export async function getCurrentMonthTransactions({
 	year: number;
 	month: number;
 }): Promise<Transaction[]> {
-	const data = await fetchWithAuth(`${TRANSACTIONS_URL}/by-date?year=${year}&month=${month}`);
+	const data = await fetchInAction(`${TRANSACTIONS_URL}/by-date?year=${year}&month=${month}`);
 	return validateTransactions(data);
 }
 
@@ -34,7 +34,7 @@ export async function addTransactionDB(
 	transaction: Omit<Transaction, 'id'>,
 	hasMutateFn: boolean = false,
 ) {
-	const saved = fetchWithAuth(TRANSACTIONS_URL, {
+	const saved = fetchInAction(TRANSACTIONS_URL, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
@@ -48,7 +48,7 @@ export async function addTransactionDB(
 }
 
 export async function editTransactionDB(transaction: Transaction, hasMutateFn: boolean = false) {
-	const saved = fetchWithAuth(`${TRANSACTIONS_URL}/${transaction.id}`, {
+	const saved = fetchInAction(`${TRANSACTIONS_URL}/${transaction.id}`, {
 		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
@@ -62,7 +62,7 @@ export async function editTransactionDB(transaction: Transaction, hasMutateFn: b
 }
 
 export async function deleteTransactionDB(id: number, hasMutateFn: boolean = false): Promise<void> {
-	await fetchWithAuth(
+	await fetchInAction(
 		`${TRANSACTIONS_URL}/${id}`,
 		{
 			method: 'DELETE',
