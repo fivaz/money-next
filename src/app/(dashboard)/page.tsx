@@ -9,14 +9,20 @@ import TransactionSearchWithData from '@/components/transaction/TransactionSearc
 import { Skeleton } from '@/components/Skeleton';
 
 type HomePageProps = {
-	searchParams: Promise<{ year?: string; month?: string; query?: string }>;
+	searchParams: Promise<{
+		year?: string;
+		month?: string;
+		query?: string;
+		page?: string;
+	}>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-	const { year: yearParam, month: monthParam, query } = await searchParams;
+	const { year: yearParam, month: monthParam, query, page } = await searchParams;
 
 	const year = Number(yearParam) || new Date().getFullYear();
 	const month = Number(monthParam) || new Date().getMonth() + 1;
+	const currentPage = Number(page) || 1;
 
 	const suspenseKey = `${year}-${month}-${query}`;
 
@@ -35,7 +41,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 			</div>
 			{query ? (
 				<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
-					<TransactionSearchWithData query={query} />
+					<TransactionSearchWithData query={query} page={currentPage} />
 				</Suspense>
 			) : (
 				<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>

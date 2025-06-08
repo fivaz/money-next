@@ -2,16 +2,21 @@
 
 import { ROUTES } from '@/lib/const';
 import {
+	PaginatedTransactions,
 	Transaction,
 	TRANSACTIONS_URL,
+	validatePaginatedTransactions,
 	validateTransactions,
 } from '@/lib/transaction/transaction.model';
 import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
-export async function searchTransactions(query: string): Promise<Transaction[]> {
-	const data = await fetchWithAuth(`${TRANSACTIONS_URL}/search?query=${query}`);
-	return validateTransactions(data);
+export async function searchTransactions(
+	query: string,
+	page: number,
+): Promise<PaginatedTransactions> {
+	const data = await fetchWithAuth(`${TRANSACTIONS_URL}/search?query=${query}&page=${page}`);
+	return validatePaginatedTransactions(data);
 }
 
 export async function getCurrentMonthTransactions({
