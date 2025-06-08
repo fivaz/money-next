@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { BACKEND_URL } from '@/lib/const';
+import { getAuthToken } from '@/lib/user/auth.util';
 
 export async function GET(request: NextRequest) {
-	const token = (await cookies()).get('firebase_token')?.value;
+	const tokens = await getAuthToken();
 
-	if (!token) throw new Error('User not authenticated');
+	if (!tokens) throw new Error('User not authenticated');
 
 	// Extract query params from incoming request URL
 	const { searchParams } = new URL(request.url);
@@ -18,11 +19,9 @@ export async function GET(request: NextRequest) {
 		backendUrl.searchParams.append(key, value);
 	});
 
-	console.log(backendUrl.toString());
-
 	const res = await fetch(backendUrl.toString(), {
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${tokens.token}`,
 		},
 		cache: 'no-store',
 	});

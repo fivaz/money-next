@@ -6,12 +6,12 @@ import Link from 'next/link';
 import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import { profileLinks } from '@/lib/const';
-import { useUser } from '@/lib/user/user.hook';
+import { useAuth } from '@/lib/user/AuthContext';
 
 type MobileUserInfoProps = {};
 
 export default function MobileUserInfo({}: MobileUserInfoProps) {
-	const { user } = useUser();
+	const { user } = useAuth();
 
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">

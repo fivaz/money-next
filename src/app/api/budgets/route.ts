@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
+import { getAuthToken } from '@/lib/user/auth.util';
 
 export async function GET(request: NextRequest) {
-	const token = (await cookies()).get('firebase_token')?.value;
+	const tokens = await getAuthToken();
 
-	if (!token) throw new Error('User not authenticated');
+	if (!tokens) throw new Error('User not authenticated');
 
 	const res = await fetch(BUDGETS_URL, {
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${tokens.token}`,
 		},
 		cache: 'no-store',
 	});

@@ -14,18 +14,13 @@ export default function GoogleAuthButton() {
 			const result = await signInWithPopup(auth, provider);
 			const idToken = await result.user.getIdToken();
 
-			// send this token to your Spring Boot API
-			const response = await fetch('/api/session', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ idToken }),
+			await fetch('/api/login', {
+				headers: {
+					Authorization: `Bearer ${idToken}`,
+				},
 			});
 
-			if (response.ok) {
-				router.push(ROUTES.ROOT.path);
-			} else {
-				console.error('Authentication failed');
-			}
+			router.push(ROUTES.ROOT.path);
 		} catch (error) {
 			console.error('Error signing in:', error);
 		}

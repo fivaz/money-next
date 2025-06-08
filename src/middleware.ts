@@ -1,36 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ROUTES } from '@/lib/const';
+import { authMiddleware, redirectToHome, redirectToLogin } from 'next-firebase-auth-edge';
+import { serverConfig } from './config';
+import { firebaseConfig } from '@/lib/firebase';
 
-const PUBLIC_ROUTES = [
-	ROUTES.LOGIN.path,
-	ROUTES.REGISTER.path,
-	'/api',
-	'/_next',
-	'/favicon.ico',
-	'/public',
-];
+const PUBLIC_PATHS = ['/register', '/login'];
 
-export function middleware(request: NextRequest) {
-	const { pathname } = request.nextUrl;
+export async function middleware(request: NextRequest) {
+	return authMiddleware(request, {
+		loginPath: '/api/login',
+		logoutPath: '/api/logout',
+		apiKey: firebaseConfig.apiKey,
+		cookieName: serverConfig.cookieName,
+		cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+		cookieSerializeOptions: serverConfig.cookieSerializeOptions,
+		serviceAccount: serverConfig.serviceAccount,
+		handleValidToken: async ({ token, decodedToken }, headers) => {
+			if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
+				return redirectToHome(request);
+			}
 
-	const token = request.cookies.get('firebase_token')?.value;
+			return NextResponse.next({
+				request: {
+					headers,
+				},
+			});
+		},
+		handleInvalidToken: async (reason) => {
+			console.info('Missing or malformed credentials', { reason });
 
-	const isPublic = PUBLIC_ROUTES.some((path) => pathname.startsWith(path));
-	const isAuthPage = pathname === ROUTES.LOGIN.path || pathname === ROUTES.REGISTER.path;
+			return redirectToLogin(request, {
+				path: '/login',
+				publicPaths: PUBLIC_PATHS,
+			});
+		},
+		handleError: async (error) => {
+			console.error('Unhandled authentication error', { error });
 
-	if (!token && !isPublic) {
-		const loginUrl = new URL(ROUTES.LOGIN.path, request.url);
-		return NextResponse.redirect(loginUrl);
-	}
-
-	if (token && isAuthPage) {
-		const homeUrl = new URL(ROUTES.ROOT.path, request.url);
-		return NextResponse.redirect(homeUrl);
-	}
-
-	return NextResponse.next();
+			return redirectToLogin(request, {
+				path: '/login',
+				publicPaths: PUBLIC_PATHS,
+			});
+		},
+	});
 }
 
 export const config = {
-	matcher: ['/((?!_next|static|favicon.ico).*)'],
+	matcher: ['/', '/((?!_next|api|.*\\.).*)', '/api/login', '/api/logout'],
 };

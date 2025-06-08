@@ -3,16 +3,17 @@
 import { ROUTES } from '@/lib/const';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 export default function SignOutButton() {
+	const router = useRouter();
+
 	const handleSignOut = async () => {
 		await signOut(auth);
 
-		await fetch('/api/logout', {
-			method: 'POST',
-		}); // ✅ clear backend session
+		await fetch('/api/logout');
 
-		window.location.href = ROUTES.LOGIN.path;
+		router.push('/login');
 	};
 
 	return (

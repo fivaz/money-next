@@ -4,12 +4,12 @@ import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
 import SignOutButton from './SignOutButton';
 import { profileLinks } from '@/lib/const';
-import { useUser } from '@/lib/user/user.hook';
+import { useAuth } from '@/lib/user/AuthContext';
 
 interface ProfileDropdownProps {}
 
 export default function ProfileDropdown({}: ProfileDropdownProps) {
-	const { user } = useUser();
+	const { user } = useAuth();
 
 	return (
 		<Menu as="div" className="relative ml-3">

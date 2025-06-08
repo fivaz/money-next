@@ -1,12 +1,14 @@
 import { cookies } from 'next/headers';
+import { getAuthToken } from '@/lib/user/auth.util';
 
 export async function fetchWithAuth(input: RequestInfo, init: RequestInit = {}, expectJson = true) {
-	const token = (await cookies()).get('firebase_token')?.value;
-	if (!token) throw new Error('User not authenticated');
+	const tokens = await getAuthToken();
+
+	if (!tokens) throw new Error('User not authenticated');
 
 	const headers = {
 		...(init.headers || {}),
-		Authorization: `Bearer ${token}`,
+		Authorization: `Bearer ${tokens.token}`,
 		cache: init.cache ?? 'no-store',
 	};
 
