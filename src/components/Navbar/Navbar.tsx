@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import NavLinks from '@/components/Navbar/NavLinks';
 import DarkMode from '@/components/Navbar/DarkMode';
 import ProfileDropdown from '@/components/Navbar/ProfileDropdown/ProfileDropdown';
+import { Skeleton } from '@/components/Skeleton';
 export default function Navbar() {
 	const commitHash = `current commit: ${process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'}`;
 
@@ -19,7 +20,9 @@ export default function Navbar() {
 							<Tooltip message={commitHash}>
 								<Logo className="size-10 self-center" />
 							</Tooltip>
-							<NavLinks />
+							<Suspense fallback={<Skeleton />}>
+								<NavLinks />
+							</Suspense>
 						</div>
 						<div className="flex">
 							<Suspense fallback={<BalanceViewerSkeleton />}>

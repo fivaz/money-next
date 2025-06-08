@@ -1,9 +1,10 @@
 'use client';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { MenuIcon, XIcon } from 'lucide-react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import NavLinks from '@/components/Navbar/NavLinks';
 import MobileUserInfo from '@/components/Navbar/MobileUserInfo';
+import { Skeleton } from '@/components/Skeleton';
 
 export default function NavbarDisclosure({ children }: PropsWithChildren) {
 	return (
@@ -17,7 +18,9 @@ export default function NavbarDisclosure({ children }: PropsWithChildren) {
 						</div>
 					</div>
 					<DisclosurePanel className="sm:hidden">
-						<NavLinks mobile />
+						<Suspense fallback={<Skeleton />}>
+							<NavLinks mobile />
+						</Suspense>
 						<MobileUserInfo />
 					</DisclosurePanel>
 				</>
