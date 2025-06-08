@@ -83,12 +83,24 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 				<DialogActions>
 					<div>
 						{budget?.id && (
-							<Button type="button" color="red" onClick={handleDelete}>
+							<Button
+								className="w-full justify-center sm:w-auto sm:justify-start"
+								size="p-2.5"
+								type="button"
+								color="red"
+								onClick={handleDelete}
+							>
 								Delete
 							</Button>
 						)}
 					</div>
-					<Button type="submit">Save</Button>
+					<Button
+						className="w-full justify-center sm:w-auto sm:justify-start"
+						size="p-2.5"
+						type="submit"
+					>
+						Save
+					</Button>
 				</DialogActions>
 			</form>
 		</Dialog>
