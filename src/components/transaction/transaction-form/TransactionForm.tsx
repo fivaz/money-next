@@ -49,7 +49,14 @@ export default function TransactionForm({
 
 	const formRef = useRef<HTMLFormElement | null>(null);
 
-	const [amount, setAmount] = useState<string>(transaction?.amount?.toString() || '10000');
+	const [amount, setAmount] = useState<string>(transaction?.amount?.toString() || '');
+
+	const resetForm = () => {
+		setTimeout(() => {
+			formRef.current?.reset();
+			setAmount(transaction?.amount?.toString() || '');
+		}, 200);
+	};
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -60,9 +67,7 @@ export default function TransactionForm({
 		else void addTransaction(finalTransaction);
 
 		closeFormAction();
-		setTimeout(() => {
-			formRef.current?.reset();
-		}, 200);
+		resetForm();
 	};
 
 	const addTransaction = async (transactionWithoutId: Omit<Transaction, 'id'>) => {

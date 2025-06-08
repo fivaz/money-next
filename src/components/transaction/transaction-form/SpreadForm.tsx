@@ -4,7 +4,7 @@ import Tooltip from '@/components/Tooltip';
 import { InfoIcon } from 'lucide-react';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { differenceInMonths } from 'date-fns';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
@@ -16,6 +16,11 @@ type SpreadFormProps = {
 export function SpreadForm({ transaction, amount }: SpreadFormProps) {
 	const [spreadStart, setSpreadStart] = useState<string>(transaction?.spreadStart || '');
 	const [spreadEnd, setSpreadEnd] = useState<string>(transaction?.spreadEnd || '');
+
+	useEffect(() => {
+		setSpreadStart(transaction?.spreadStart || '');
+		setSpreadEnd(transaction?.spreadEnd || '');
+	}, [transaction]);
 
 	const getMessage = () => {
 		if (!spreadEnd || !spreadStart) {
@@ -33,7 +38,7 @@ export function SpreadForm({ transaction, amount }: SpreadFormProps) {
 
 		const parsedAmount = Number(amount) / 100;
 
-		const monthlyAmount = (parsedAmount / numberOfMonths).toFixed(2);
+		const monthlyAmount = Math.abs(parsedAmount / numberOfMonths).toFixed(2);
 
 		return `Divides into $ ${monthlyAmount} monthly for ${numberOfMonths} months`;
 	};
