@@ -1,3 +1,4 @@
+'use client';
 import TransactionItem from '@/components/transaction/TransactionItem';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
 
