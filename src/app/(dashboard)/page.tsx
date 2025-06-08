@@ -28,7 +28,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
 	return (
 		<main className="flex flex-col gap-5">
-			<div className="flex flex-row items-center justify-between gap-3">
+			<div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
 				<Heading>Transactions</Heading>
 				<div className="flex gap-3">
 					<Suspense fallback={<DateSwitcherSkeleton />}>

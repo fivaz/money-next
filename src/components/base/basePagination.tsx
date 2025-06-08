@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import type React from 'react';
 import { Button2 } from './button';
 
-export function Pagination({
+export function BasePagination({
 	'aria-label': ariaLabel = 'Page navigation',
 	className,
 	...props
