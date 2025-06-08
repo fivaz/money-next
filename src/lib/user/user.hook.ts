@@ -14,9 +14,6 @@ export const useUser = () => {
 		const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
 			setUser(firebaseUser);
 			setLoading(false);
-			if (firebaseUser) {
-				router.push(ROUTES.ROOT.path);
-			}
 		});
 		return () => unsubscribe();
 	}, [router]);

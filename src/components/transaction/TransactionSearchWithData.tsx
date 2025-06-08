@@ -2,6 +2,7 @@ import { searchTransactions } from '@/lib/transaction/transaction.actions';
 import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 import TransactionSearch from '@/components/transaction/TransactionSearch';
 import Pagination from '@/components/transaction/Pagination';
+import { Suspense } from 'react';
 
 type TransactionProps = {
 	query: string;
@@ -15,7 +16,9 @@ export default async function TransactionSearchWithData({ query, page }: Transac
 			<TransactionListProvider initialItems={transactions}>
 				<TransactionSearch />
 			</TransactionListProvider>
-			<Pagination totalPages={totalPages} currentPage={pageable.pageNumber} />
+			<Suspense>
+				<Pagination totalPages={totalPages} currentPage={pageable.pageNumber} />
+			</Suspense>
 		</>
 	);
 }
