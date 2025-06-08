@@ -3,36 +3,29 @@ import { SearchIcon, XIcon } from 'lucide-react';
 import { Input } from '@/components/base/input';
 
 type SearchInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> & {
-	value?: string;
-	defaultValue?: string;
+	value: string;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	onClear?: () => void;
 };
 
-export default function SearchInput({ defaultValue, value, onChange, ...props }: SearchInputProps) {
-	// Ref for input element
+export default function SearchInput({ value, onChange, onClear, ...props }: SearchInputProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
+	const hasText = value.length > 0;
 
-	// Check if input has text
-	const hasText = !!defaultValue?.length || !!value?.length;
-
-	// Clear input and focus
 	const clearInput = () => {
+		onClear?.();
 		inputRef.current?.focus();
 	};
 
 	return (
 		<div className="relative flex items-center">
-			<Input
-				ref={inputRef}
-				value={value}
-				defaultValue={defaultValue}
-				onChange={onChange}
-				{...props}
-			/>
+			<Input ref={inputRef} value={value} onChange={onChange} {...props} />
 			<button
 				type="button"
-				className={`absolute right-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 ${hasText ? 'cursor-pointer' : ''}`}
-				onClick={hasText ? clearInput : undefined}
+				className={`absolute right-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 ${
+					hasText ? 'cursor-pointer' : 'pointer-events-none'
+				}`}
+				onClick={clearInput}
 			>
 				{hasText ? <XIcon className="size-5" /> : <SearchIcon className="size-5" />}
 			</button>
