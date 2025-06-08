@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { getTokenForAPI, getTokenForServerAction } from '@/lib/user/auth.util';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { BACKEND_URL } from '@/lib/const';
-import { getTokenForAPI } from '@/lib/user/auth.util';
 import { fetchInAPI } from '@/lib/shared/api-server.utils';
 
 export async function GET(request: NextRequest) {

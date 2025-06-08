@@ -15,9 +15,7 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import useSWR from 'swr';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
-import {
-	TransactionListProvider,
-} from '@/lib/transaction/TransactionListProvider';
+import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 import BudgetTransactions from '@/components/budget/BudgetTransactions';
 
 type BudgetItemProps = {

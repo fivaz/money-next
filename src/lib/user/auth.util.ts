@@ -1,10 +1,8 @@
 'use server';
 
-import { getTokens, Tokens } from 'next-firebase-auth-edge';
+import { getTokens } from 'next-firebase-auth-edge';
 import { cookies } from 'next/headers';
-import { firebaseConfig } from '@/lib/firebase';
-import { serverConfig, tokenConfig } from '@/config';
-import { filterStandardClaims } from 'next-firebase-auth-edge/auth/claims';
+import { tokenConfig } from '@/config';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/user/user.model';
 

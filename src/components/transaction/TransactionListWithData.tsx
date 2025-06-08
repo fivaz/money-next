@@ -1,6 +1,4 @@
-import {
-	getCurrentMonthTransactions,
-} from '@/lib/transaction/transaction.actions';
+import { getCurrentMonthTransactions } from '@/lib/transaction/transaction.actions';
 import TransactionList from '@/components/transaction/TransactionList';
 import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 

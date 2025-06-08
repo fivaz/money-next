@@ -3,7 +3,7 @@
 import { useDebouncedCallback } from 'use-debounce';
 import SearchInput from '@/components/SearchInput';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function SearchTransactions() {
 	const searchParams = useSearchParams();
