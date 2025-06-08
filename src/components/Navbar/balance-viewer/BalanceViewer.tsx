@@ -8,7 +8,7 @@ export default async function BalanceViewer() {
 	const actualBalance = await getActualBalance();
 	const expectedBalance = await getExpectedBalance();
 
-	const balanceDifference = actualBalance - expectedBalance;
+	const balanceDifference = expectedBalance - actualBalance;
 
 	return (
 		<div className="flex shrink-0 items-center gap-2 text-sm">
