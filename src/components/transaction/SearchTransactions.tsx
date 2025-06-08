@@ -13,10 +13,6 @@ export default function SearchTransactions() {
 	const initialQuery = searchParams.get('query')?.toString() || '';
 	const [query, setQuery] = useState(initialQuery);
 
-	useEffect(() => {
-		setQuery(initialQuery);
-	}, [initialQuery]);
-
 	const handleSearch = useDebouncedCallback((term: string) => {
 		const params = new URLSearchParams(searchParams);
 		if (term) {

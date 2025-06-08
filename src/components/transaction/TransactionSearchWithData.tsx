@@ -16,9 +16,7 @@ type TransactionProps = {
 };
 
 export default async function TransactionSearchWithData({ query, page }: TransactionProps) {
-	const result = await searchTransactions(query, page);
-	console.log(result);
-	const { content: transactions, totalPages, pageable } = result;
+	const { content: transactions, totalPages, pageable } = await searchTransactions(query, page);
 
 	const getHref = (page: number) => `/?query=${query}&page=${page}`;
 
