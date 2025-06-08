@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, InputHTMLAttributes, ChangeEvent } from 'react';
+import React, { useRef, InputHTMLAttributes, ChangeEvent } from 'react';
 import { SearchIcon, XIcon } from 'lucide-react';
 import { Input } from '@/components/base/input';
 

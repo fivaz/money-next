@@ -9,16 +9,14 @@ import ProgressBar from '@/components/budget/ProgressBar';
 import { API } from '@/lib/const';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
-import TransactionItem from '../transaction/TransactionItem';
 import useSWR from 'swr';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import {
 	TransactionListProvider,
-	useTransactionList,
 } from '@/lib/transaction/TransactionListProvider';
 import BudgetTransactions from '@/components/budget/BudgetTransactions';
 

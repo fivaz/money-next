@@ -1,10 +1,8 @@
 import {
 	getCurrentMonthTransactions,
-	searchTransactions,
 } from '@/lib/transaction/transaction.actions';
 import TransactionList from '@/components/transaction/TransactionList';
 import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
-import { Transaction } from '@/lib/transaction/transaction.model';
 
 type TransactionListWithDataProps = {
 	year: number;

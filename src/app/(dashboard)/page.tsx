@@ -4,8 +4,6 @@ import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import { Heading } from '@/components/base/heading';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
-import { Input } from '@/components/base/input';
-import SearchInput from '@/components/SearchInput';
 import SearchTransactions from '@/components/transaction/SearchTransactions';
 import TransactionSearchWithData from '@/components/transaction/TransactionSearchWithData';
 

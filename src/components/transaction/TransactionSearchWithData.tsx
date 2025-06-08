@@ -1,5 +1,3 @@
-import TransactionItem from '@/components/transaction/TransactionItem';
-import { Transaction } from '@/lib/transaction/transaction.model';
 import { searchTransactions } from '@/lib/transaction/transaction.actions';
 import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 import TransactionSearch from '@/components/transaction/TransactionSearch';

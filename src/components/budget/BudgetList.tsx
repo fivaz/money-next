@@ -10,10 +10,10 @@ import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
-import { Text } from '@/components/base/text';
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
+import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 
 type BudgetProps = {
 	budgetedSpent: number;
@@ -64,7 +64,9 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 					</Tooltip>
 					=<MoneyText>{difference}</MoneyText>
 				</div>
-				<DateSwitcher />
+				<Suspense fallback={<DateSwitcherSkeleton />}>
+					<DateSwitcher />
+				</Suspense>
 				<BudgetFormButton />
 			</div>
 
