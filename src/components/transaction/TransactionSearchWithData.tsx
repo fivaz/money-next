@@ -17,7 +17,7 @@ export default async function TransactionSearchWithData({ query, page }: Transac
 				<TransactionSearch />
 			</TransactionListProvider>
 			<Suspense>
-				<Pagination totalPages={totalPages} currentPage={pageable.pageNumber} />
+				<Pagination totalPages={totalPages} currentPage={pageable.pageNumber + 1} />
 			</Suspense>
 		</>
 	);

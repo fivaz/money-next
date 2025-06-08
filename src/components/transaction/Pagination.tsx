@@ -29,14 +29,14 @@ export default function Pagination({
 		<BasePagination>
 			<PaginationPrevious href={currentPage > 1 ? createPageURL(currentPage - 1) : undefined} />
 			<PaginationList>
-				{Array.from({ length: totalPages - 1 }, (_, i) => i + 1).map((page) => (
+				{Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
 					<PaginationPage key={page} href={createPageURL(page)} current={currentPage === page}>
 						{page}
 					</PaginationPage>
 				))}
 			</PaginationList>
 			<PaginationNext
-				href={currentPage < totalPages - 1 ? createPageURL(currentPage + 1) : undefined}
+				href={currentPage < totalPages ? createPageURL(currentPage + 1) : undefined}
 			/>
 		</BasePagination>
 	);

@@ -15,7 +15,12 @@ export async function searchTransactions(
 	query: string,
 	page: number,
 ): Promise<PaginatedTransactions> {
-	const data = await fetchInAction(`${TRANSACTIONS_URL}/search?query=${query}&page=${page}`);
+	//spring data's pagination is zero-based
+	const springDataPage = page - 1;
+	const data = await fetchInAction(
+		`${TRANSACTIONS_URL}/search?query=${query}&page=${springDataPage}`,
+	);
+
 	return validatePaginatedTransactions(data);
 }
 
