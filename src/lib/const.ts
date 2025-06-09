@@ -11,6 +11,10 @@ export const ROUTES = {
 		name: 'Sources',
 		path: '/sources',
 	},
+	RECAP: {
+		name: 'Recap',
+		path: '/recap',
+	},
 	PROFILE: {
 		name: 'Profile',
 		path: '/profile',
@@ -25,7 +29,7 @@ export const ROUTES = {
 	},
 };
 
-export const navLinks = [ROUTES.ROOT, ROUTES.BUDGETS, ROUTES.SOURCES];
+export const navLinks = [ROUTES.ROOT, ROUTES.BUDGETS, ROUTES.SOURCES, ROUTES.RECAP];
 
 export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
 

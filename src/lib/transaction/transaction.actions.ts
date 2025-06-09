@@ -79,3 +79,7 @@ export async function deleteTransactionDB(id: number, hasMutateFn: boolean = fal
 		revalidatePath(ROUTES.ROOT.path);
 	}
 }
+
+export async function getTransactionsByDateDataset() {
+	return fetchInAction(`${TRANSACTIONS_URL}/monthly-summary`);
+}
