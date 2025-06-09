@@ -38,7 +38,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 				<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 					<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
 						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-2">
+							<div className="flex items-center gap-2 truncate">
 								<Text>
 									<IconView className="size-5" name={budget.icon} />
 								</Text>
