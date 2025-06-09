@@ -31,15 +31,15 @@ export default function MobileUserInfo({}: MobileUserInfoProps) {
 				<DarkMode className="ml-auto shrink-0" />
 			</div>
 			<div className="mt-3 space-y-1">
-				<DisclosureButton
-					as={Link}
-					href={ROUTES.PROFILE.path}
-					className={clsx(
-						'block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200',
-					)}
-				>
-					{ROUTES.PROFILE.name}
-				</DisclosureButton>
+				{/*<DisclosureButton*/}
+				{/*	as={Link}*/}
+				{/*	href={ROUTES.PROFILE.path}*/}
+				{/*	className={clsx(*/}
+				{/*		'block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200',*/}
+				{/*	)}*/}
+				{/*>*/}
+				{/*	{ROUTES.PROFILE.name}*/}
+				{/*</DisclosureButton>*/}
 				<SignOutButton
 					className={clsx(
 						'block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200',
