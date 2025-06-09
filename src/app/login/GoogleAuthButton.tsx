@@ -5,11 +5,16 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/const';
-export default function GoogleAuthButton() {
+import { Dispatch, SetStateAction } from 'react';
+
+type GoogleAuthButtonProps = {
+	setErrorAction: Dispatch<SetStateAction<string>>;
+};
+export default function GoogleAuthButton({ setErrorAction }: GoogleAuthButtonProps) {
 	const provider = new GoogleAuthProvider();
 	const router = useRouter();
 
-	const signIn = async () => {
+	const handleGoogleSignIn = async () => {
 		try {
 			const result = await signInWithPopup(auth, provider);
 			const idToken = await result.user.getIdToken();
@@ -22,13 +27,13 @@ export default function GoogleAuthButton() {
 
 			router.push(ROUTES.ROOT.path);
 		} catch (error) {
-			console.error('Error signing in:', error);
+			setErrorAction(`Error signing in: ${(error as Error).message}`);
 		}
 	};
 
 	return (
 		<Button
-			onClick={signIn}
+			onClick={handleGoogleSignIn}
 			size="px-3 py-2"
 			className="flex w-full items-center justify-center gap-2"
 		>

@@ -1,4 +1,4 @@
-import { getTokenForAPI, getTokenForServerAction } from '@/lib/user/auth.util';
+import { getTokenForAPI, getTokenForServerAction } from '@/lib/user/auth.utils.server';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 
 export async function fetchInAPI(

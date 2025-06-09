@@ -5,7 +5,12 @@ import Button from '@/components/Button';
 import { ROUTES } from '@/lib/const';
 import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import {
+	createUserWithEmailAndPassword,
+	GoogleAuthProvider,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+} from 'firebase/auth';
 import { FormEvent, useState } from 'react';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -27,9 +32,16 @@ export default function LoginPage() {
 
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
+		const confirmPassword = formData.get('confirm-password') as string;
+
+		if (password !== confirmPassword) {
+			setError('Passwords do not match');
+			setIsLoading(false);
+			return;
+		}
 
 		try {
-			const credential = await signInWithEmailAndPassword(auth, email, password);
+			const credential = await createUserWithEmailAndPassword(auth, email, password);
 			const idToken = await credential.user.getIdToken();
 
 			await fetch('/api/login', {
@@ -51,7 +63,7 @@ export default function LoginPage() {
 			<div className="sm:mx-auto sm:w-full sm:max-w-sm">
 				<Logo className="mx-auto size-10 w-auto" />
 				<h2 className="text-brown-500 mt-10 text-center text-2xl/9 font-bold tracking-tight dark:text-white">
-					Sign in to your account
+					Create your account
 				</h2>
 			</div>
 
@@ -68,28 +80,17 @@ export default function LoginPage() {
 				<form className="space-y-6" onSubmit={handleSubmit}>
 					<Field>
 						<Label htmlFor="email">Email address</Label>
-						<Input type="email" name="email" id="email" autoComplete="email" required />
+						<Input type="email" name="email" id="email" required />
 					</Field>
 
 					<Field>
-						<div className="mb-2 flex items-center justify-between">
-							<Label htmlFor="password">Password</Label>
-							<div className="text-sm">
-								<a
-									href="#"
-									className="font-semibold text-yellow-600 hover:text-yellow-500 dark:text-yellow-400 dark:hover:text-yellow-300"
-								>
-									Forgot password?
-								</a>
-							</div>
-						</div>
-						<Input
-							type="password"
-							name="password"
-							id="password"
-							autoComplete="current-password"
-							required
-						/>
+						<Label htmlFor="password">Password</Label>
+						<Input type="password" name="password" id="password" required />
+					</Field>
+
+					<Field>
+						<Label htmlFor="confirm-password">Confirm password</Label>
+						<Input type="password" name="confirm-password" id="confirm-password" required />
 					</Field>
 
 					<div>
@@ -98,8 +99,9 @@ export default function LoginPage() {
 							type="submit"
 							color="primary"
 							className="flex w-full justify-center"
+							loading={isLoading}
 						>
-							Sign in
+							Register
 						</Button>
 					</div>
 
@@ -118,12 +120,12 @@ export default function LoginPage() {
 				</form>
 
 				<p className="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">
-					Not a member?{' '}
+					Already have an account?{' '}
 					<Link
-						href={ROUTES.REGISTER.path}
+						href={ROUTES.LOGIN.path}
 						className="font-semibold text-yellow-600 hover:text-yellow-500 dark:text-yellow-400 dark:hover:text-yellow-300"
 					>
-						Register
+						Sign in
 					</Link>
 				</p>
 			</div>

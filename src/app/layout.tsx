@@ -4,7 +4,7 @@ import './globals.css';
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '@/lib/user/AuthProvider';
-import { getUser } from '@/lib/user/auth.util';
+import { getUser } from '@/lib/user/auth.utils.server';
 
 export const metadata: Metadata = {
 	title: 'Money',
