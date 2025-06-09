@@ -12,7 +12,7 @@ type PromptProps = {
 	confirmText?: string;
 	cancelText?: string;
 	resolve?: (value: boolean | null) => void;
-	closePrompt: () => void;
+	closePromptAction: () => void;
 };
 
 export function Prompt({
@@ -22,28 +22,28 @@ export function Prompt({
 	confirmText = 'Confirm',
 	cancelText = 'Cancel',
 	resolve,
-	closePrompt,
+	closePromptAction,
 }: PromptProps) {
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (isOpen && e.key === 'Enter') {
 				resolve?.(true);
-				closePrompt();
+				closePromptAction();
 			}
 		};
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
-	}, [isOpen, resolve, closePrompt]);
+	}, [isOpen, resolve, closePromptAction]);
 
 	if (!isOpen) return null;
 
 	return (
 		<>
-			<Dialog open={isOpen} onClose={() => resolve?.(false) || closePrompt()}>
+			<Dialog open={isOpen} onClose={() => resolve?.(false) || closePromptAction()}>
 				<DialogTitle>{title}</DialogTitle>
 				<DialogBody>
 					<div className="flex items-center gap-4">
-						<div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+						<div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100">
 							<TriangleAlertIcon className="size-6 text-red-600" />
 						</div>
 						<div>
@@ -53,8 +53,19 @@ export function Prompt({
 					</div>
 				</DialogBody>
 				<DialogActions>
-					<Button onClick={() => resolve?.(false) || closePrompt()}>{cancelText}</Button>
-					<Button color="red" onClick={() => resolve?.(true) || closePrompt()}>
+					<Button
+						className="w-full justify-center sm:w-auto sm:justify-start"
+						size="sm:px-2.5 sm:py-1.5 p-2.5"
+						onClick={() => resolve?.(false) || closePromptAction()}
+					>
+						{cancelText}
+					</Button>
+					<Button
+						className="w-full justify-center sm:w-auto sm:justify-start"
+						size="sm:px-2.5 sm:py-1.5 p-2.5"
+						color="red"
+						onClick={() => resolve?.(true) || closePromptAction()}
+					>
 						{confirmText}
 					</Button>
 				</DialogActions>

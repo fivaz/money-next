@@ -14,6 +14,7 @@ import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.a
 
 import { mutate } from 'swr';
 import { API } from '@/lib/const';
+import ConfirmButton from '@/components/Button/ConfirmButton';
 
 type BudgetFormProps = {
 	budget?: Budget;
@@ -89,15 +90,16 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 				<DialogActions>
 					<div>
 						{budget?.id && (
-							<Button
+							<ConfirmButton
 								className="w-full justify-center sm:w-auto sm:justify-start"
+								message="This budget will be permanently deleted. This action cannot be undone."
 								size="sm:px-2.5 sm:py-1.5 p-2.5"
 								type="button"
 								color="red"
 								onClick={handleDelete}
 							>
 								Delete
-							</Button>
+							</ConfirmButton>
 						)}
 					</div>
 					<Button

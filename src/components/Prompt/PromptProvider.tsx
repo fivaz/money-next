@@ -36,7 +36,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
 	return (
 		<PromptContext.Provider value={{ createPrompt, closePrompt }}>
 			{children}
-			<Prompt {...prompt} closePrompt={closePrompt} />
+			<Prompt {...prompt} closePromptAction={closePrompt} />
 		</PromptContext.Provider>
 	);
 }

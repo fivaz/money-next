@@ -11,6 +11,7 @@ import { buildSource } from '@/lib/source/source.utils';
 import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
 import { useSourceList } from '@/lib/source/SourceListProvider';
+import ConfirmButton from '@/components/Button/ConfirmButton';
 
 type SourceFormProps = {
 	source?: Source;
@@ -85,7 +86,8 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 				<DialogActions>
 					<div>
 						{source?.id && (
-							<Button
+							<ConfirmButton
+								message="This source will be permanently deleted. This action cannot be undone."
 								className="w-full justify-center sm:w-auto sm:justify-start"
 								type="button"
 								color="red"
@@ -93,7 +95,7 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 								onClick={handleDelete}
 							>
 								Delete
-							</Button>
+							</ConfirmButton>
 						)}
 					</div>
 
