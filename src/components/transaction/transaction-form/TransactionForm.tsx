@@ -27,6 +27,7 @@ import MoneyInput from '@/components/MoneyInput';
 import { API } from '@/lib/const';
 import Tooltip from '@/components/Tooltip';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
+import ConfirmButton from '@/components/Button/ConfirmButton';
 
 type TransactionFormProps = {
 	transaction?: Transaction;
@@ -193,15 +194,16 @@ export default function TransactionForm({
 				<DialogActions>
 					<div>
 						{transaction?.id && (
-							<Button
+							<ConfirmButton
 								className="w-full justify-center sm:w-auto sm:justify-start"
+								message="This transaction will be permanently deleted. This action cannot be undone."
 								type="button"
 								color="red"
 								size="sm:px-2.5 sm:py-1.5 p-2.5"
 								onClick={handleDelete}
 							>
 								Delete
-							</Button>
+							</ConfirmButton>
 						)}
 					</div>
 

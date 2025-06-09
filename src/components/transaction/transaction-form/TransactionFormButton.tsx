@@ -1,6 +1,7 @@
 'use client';
 import { type PropsWithChildren, Suspense, useState } from 'react';
-import Button, { type ButtonProps } from '@/components/Button';
+import Button from '@/components/Button';
+import { type ButtonProps } from '@/components/Button/utils';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import { Transaction } from '@/lib/transaction/transaction.model';

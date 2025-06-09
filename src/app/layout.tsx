@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '@/lib/user/AuthProvider';
 import { getUser } from '@/lib/user/auth.utils.server';
+import PromptProvider from '@/components/Prompt/PromptProvider';
 
 export const metadata: Metadata = {
 	title: 'Money',
@@ -27,7 +28,9 @@ export default async function RootLayout({
 			<body>
 				<ThemeProvider attribute="class">
 					<AuthProvider user={user}>
-						<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+						<PromptProvider>
+							<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+						</PromptProvider>
 					</AuthProvider>
 				</ThemeProvider>
 			</body>

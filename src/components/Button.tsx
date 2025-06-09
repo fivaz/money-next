@@ -1,14 +1,7 @@
 import clsx from 'clsx';
 import { LoaderCircle } from 'lucide-react';
 import { ButtonHTMLAttributes } from 'react';
-
-type ButtonColor = 'default' | 'primary' | 'secondary' | 'red';
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	color?: ButtonColor;
-	loading?: boolean;
-	size?: string;
-}
+import type { ButtonColor, ButtonProps } from './Button/utils';
 
 const disabledClasses = 'opacity-50 cursor-not-allowed';
 
