@@ -193,12 +193,23 @@ export default function TransactionForm({
 				<DialogActions>
 					<div>
 						{transaction?.id && (
-							<Button type="button" color="red" onClick={handleDelete}>
+							<Button
+								className="w-full justify-center sm:w-auto sm:justify-start"
+								type="button"
+								color="red"
+								size="sm:px-2.5 sm:py-1.5 p-2.5"
+								onClick={handleDelete}
+							>
 								Delete
 							</Button>
 						)}
 					</div>
-					<Button type="submit" className="items-center" size="p-3">
+
+					<Button
+						className="w-full justify-center sm:w-auto sm:justify-start"
+						size="sm:px-2.5 sm:py-1.5 p-2.5"
+						type="submit"
+					>
 						Save
 					</Button>
 				</DialogActions>

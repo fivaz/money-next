@@ -85,12 +85,25 @@ export default function SourceForm({ source, isOpen, closeFormAction }: SourceFo
 				<DialogActions>
 					<div>
 						{source?.id && (
-							<Button type="button" color="red" onClick={handleDelete}>
+							<Button
+								className="w-full justify-center sm:w-auto sm:justify-start"
+								type="button"
+								color="red"
+								size="sm:px-2.5 sm:py-1.5 p-2.5"
+								onClick={handleDelete}
+							>
 								Delete
 							</Button>
 						)}
 					</div>
-					<Button type="submit">Save</Button>
+
+					<Button
+						size="sm:px-2.5 sm:py-1.5 p-2.5"
+						className="w-full justify-center sm:w-auto sm:justify-start"
+						type="submit"
+					>
+						Save
+					</Button>
 				</DialogActions>
 			</form>
 		</Dialog>
