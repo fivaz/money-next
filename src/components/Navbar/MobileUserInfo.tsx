@@ -7,21 +7,12 @@ import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import { ROUTES } from '@/lib/const';
 import { useAuth } from '@/lib/user/AuthContext';
-import Button from '@/components/Button';
-import { logOut } from '@/lib/user/auth.utils.client';
-import { useRouter } from 'next/navigation';
 import SignOutButton from '@/components/Navbar/ProfileDropdown/SignOutButton';
 
 type MobileUserInfoProps = {};
 
 export default function MobileUserInfo({}: MobileUserInfoProps) {
 	const { user } = useAuth();
-	const router = useRouter();
-
-	const handleLogout = async () => {
-		await logOut();
-		router.push(ROUTES.LOGIN.path);
-	};
 
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">
