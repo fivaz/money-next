@@ -58,7 +58,7 @@ export default function MonthlySummaryChart({ monthlySummary }: MonthlySummaryCh
 			},
 			title: {
 				display: true,
-				text: 'Monthly Summary (May 2024 - June 2025)',
+				text: 'Monthly Expenses',
 				font: { size: 18 },
 			},
 			tooltip: {
