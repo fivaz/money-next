@@ -12,6 +12,9 @@ import { buildBudget } from '@/lib/budget/budget.utils';
 import type { Budget } from '@/lib/budget/budget.model';
 import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.actions';
 
+import { mutate } from 'swr';
+import { API } from '@/lib/const';
+
 type BudgetFormProps = {
 	budget?: Budget;
 	isOpen: boolean;
@@ -22,38 +25,41 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useBudgetList();
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const newBudget = buildBudget(formData);
 
-		if (budget?.id) editBudget(newBudget);
-		else addBudget(newBudget);
+		if (budget?.id) void editBudget(newBudget);
+		else void addBudget(newBudget);
 
 		formRef.current?.reset();
 		closeFormAction();
 	};
 
-	const addBudget = (budgetWithoutId: Omit<Budget, 'id'>) => {
+	const addBudget = async (budgetWithoutId: Omit<Budget, 'id'>) => {
 		const budget = { ...budgetWithoutId, id: -Date.now() };
 		addItem(budget);
 
-		void addBudgetDB(budgetWithoutId);
+		await addBudgetDB(budgetWithoutId);
+		void mutate(`/api/${API.BUDGETS}`);
 	};
 
-	const editBudget = (budget: Budget) => {
+	const editBudget = async (budget: Budget) => {
 		editItem(budget);
 
-		void editBudgetDB(budget);
+		await editBudgetDB(budget);
+		void mutate(`/api/${API.BUDGETS}`);
 	};
 
-	async function handleDelete() {
+	const handleDelete = async () => {
 		if (budget?.id) {
 			deleteItem(budget.id);
 
-			void deleteBudgetDB(budget.id);
+			await deleteBudgetDB(budget.id);
+			void mutate(`/api/${API.BUDGETS}`);
 		}
-	}
+	};
 
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
