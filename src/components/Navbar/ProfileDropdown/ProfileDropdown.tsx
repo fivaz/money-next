@@ -17,8 +17,8 @@ export default function ProfileDropdown({}: ProfileDropdownProps) {
 				<MenuButton className="relative flex rounded-full bg-white text-sm focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:outline-none dark:bg-gray-800 dark:focus:ring-offset-gray-800">
 					<span className="absolute -inset-1.5" />
 					<span className="sr-only">Open user menu</span>
-					{user?.photoURL ? (
-						<img className="size-8 rounded-full" src={user.photoURL} alt="avatar" />
+					{user?.picture ? (
+						<img className="size-8 rounded-full" src={user.picture} alt="avatar" />
 					) : (
 						<CircleUser className="size-7 text-yellow-500" />
 					)}

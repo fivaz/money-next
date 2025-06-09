@@ -18,16 +18,14 @@ export default function MobileUserInfo({}: MobileUserInfoProps) {
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">
 			<div className="flex items-center px-4">
 				<div className="shrink-0">
-					{user?.photoURL ? (
-						<img className="size-10 rounded-full" src={user.photoURL} alt="" />
+					{user?.picture ? (
+						<img className="size-10 rounded-full" src={user.picture} alt="avatar" />
 					) : (
 						<CircleUser className="size-8 text-yellow-500" />
 					)}
 				</div>
 				<div className="ml-3">
-					<div className="text-base font-medium text-gray-800 dark:text-gray-200">
-						{user?.displayName}
-					</div>
+					<div className="text-base font-medium text-gray-800 dark:text-gray-200">{user?.name}</div>
 					<div className="text-sm font-medium text-gray-500 dark:text-gray-400">{user?.email}</div>
 				</div>
 				<DarkMode className="ml-auto shrink-0" />

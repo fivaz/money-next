@@ -12,9 +12,9 @@ export const getUser = async (): Promise<User | null> => {
 	return tokens
 		? {
 				uid: tokens.decodedToken.uid,
-				email: tokens.decodedToken.email as string,
-				photoURL: tokens.decodedToken.photoURL as string,
-				displayName: tokens.decodedToken.displayName as string,
+				name: tokens.decodedToken.name,
+				email: tokens.decodedToken.email,
+				picture: tokens.decodedToken.picture,
 			}
 		: null;
 };
