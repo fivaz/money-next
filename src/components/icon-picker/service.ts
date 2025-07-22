@@ -18,7 +18,19 @@ import {
 	Stethoscope,
 	TriangleAlert,
 	FireExtinguisher,
-	ScanIcon, // Default icon
+	ScanIcon,
+	ShoppingBasket,
+	Car,
+	Bus,
+	Popcorn,
+	Music,
+	Plug,
+	Lightbulb,
+	BookOpen,
+	Tag,
+	PiggyBank,
+	WalletCards,
+	TrendingUp,
 } from 'lucide-react';
 import { ComponentType } from 'react';
 
@@ -43,6 +55,18 @@ export const iconComponents = {
 	accident: TriangleAlert,
 	fire: FireExtinguisher,
 	empty: ScanIcon,
+	'shopping basket': ShoppingBasket,
+	'car transport': Car,
+	'bus transport': Bus,
+	'entertainment popcorn': Popcorn,
+	'entertainment music': Music,
+	'utility plug': Plug,
+	'utility lightbulb': Lightbulb,
+	'education book': BookOpen,
+	'miscellaneous tag': Tag,
+	'savings piggy bank': PiggyBank,
+	'credit card': WalletCards,
+	'investment trending': TrendingUp,
 } as const;
 
 type IconName = keyof typeof iconComponents;
