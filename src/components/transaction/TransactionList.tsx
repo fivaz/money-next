@@ -6,8 +6,15 @@ import MoneyText from '@/components/MoneyText';
 import { Text } from '@/components/base/text';
 import Button from '@/components/Button';
 import TotalIcon from '@/components/icons/TotalIcon';
-import { ArrowDownNarrowWideIcon, ArrowDownWideNarrowIcon, PlusIcon } from 'lucide-react';
+import {
+	ArrowDownNarrowWideIcon,
+	ArrowDownWideNarrowIcon,
+	ArrowUpNarrowWideIcon,
+	ArrowUpWideNarrowIcon,
+	PlusIcon,
+} from 'lucide-react';
 import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
+import { useState } from 'react';
 
 type TransactionProps = {};
 
@@ -15,7 +22,13 @@ export default function TransactionList({}: TransactionProps) {
 	const { items: transactions } = useTransactionList();
 	const balance = sumTransactions(transactions);
 
-	const isAscending = true;
+	const [isAscending, setAscending] = useState(false);
+
+	const sortedTransactions = [...transactions].sort((a, b) => {
+		const dateA = new Date(a.date);
+		const dateB = new Date(b.date);
+		return isAscending ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+	});
 
 	return (
 		<div className="flex flex-col rounded-lg border border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-800">
@@ -24,9 +37,9 @@ export default function TransactionList({}: TransactionProps) {
 					<TotalIcon className="size-4" />
 					<MoneyText className="shrink-0">{balance}</MoneyText>
 				</Text>
-				<Button size="px-2 py-1.5">
+				<Button size="px-2 py-1.5" onClick={() => setAscending((isAscending) => !isAscending)}>
 					{isAscending ? (
-						<ArrowDownNarrowWideIcon className="size-5" />
+						<ArrowUpNarrowWideIcon className="size-5" />
 					) : (
 						<ArrowDownWideNarrowIcon className="size-5" />
 					)}
@@ -37,7 +50,7 @@ export default function TransactionList({}: TransactionProps) {
 				</TransactionFormButton>
 			</div>
 			<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">
-				{transactions.map((transaction) => (
+				{sortedTransactions.map((transaction) => (
 					<TransactionItem key={transaction.id} transaction={transaction} />
 				))}
 			</ul>
