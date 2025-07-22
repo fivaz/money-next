@@ -174,7 +174,7 @@ export default function TransactionForm({
 							className="mb-2"
 							name="isPaid"
 							color="amber"
-							defaultChecked={transaction?.isPaid || true}
+							defaultChecked={transaction?.isPaid ?? true}
 						/>
 					</Field>
 				</div>

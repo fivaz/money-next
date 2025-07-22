@@ -31,6 +31,12 @@ import {
 	PiggyBank,
 	WalletCards,
 	TrendingUp,
+	Shirt,
+	Heart,
+	Wifi,
+	Smartphone,
+	Package,
+	Tablets,
 } from 'lucide-react';
 import { ComponentType } from 'react';
 
@@ -55,18 +61,20 @@ export const iconComponents = {
 	accident: TriangleAlert,
 	fire: FireExtinguisher,
 	empty: ScanIcon,
-	'shopping basket': ShoppingBasket,
 	'car transport': Car,
 	'bus transport': Bus,
 	'entertainment popcorn': Popcorn,
 	'entertainment music': Music,
-	'utility plug': Plug,
 	'utility lightbulb': Lightbulb,
 	'education book': BookOpen,
 	'miscellaneous tag': Tag,
 	'savings piggy bank': PiggyBank,
-	'credit card': WalletCards,
-	'investment trending': TrendingUp,
+	'clothes shirt': Shirt,
+	heart: Heart,
+	'wifi internet': Wifi,
+	'smartphone internet': Smartphone,
+	'box package': Package,
+	'drug pill medicine': Tablets,
 } as const;
 
 type IconName = keyof typeof iconComponents;
