@@ -47,7 +47,7 @@ export default function TransactionItem({ transaction, isEditable = true }: Tran
 						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
 					</Strong>
 					<Strong className="min-w-0 flex-1 truncate">
-						{transaction.description || transaction.budget?.name}
+						{transaction.description.trim() || transaction.budget?.name}
 					</Strong>
 				</div>
 			</div>
