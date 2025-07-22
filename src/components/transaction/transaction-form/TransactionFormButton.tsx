@@ -15,7 +15,9 @@ export default function TransactionFormButton({
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const closeDialog = () => setIsOpen(false);
+	const closeDialog = () => {
+		setIsOpen(false);
+	};
 	const openDialog = () => {
 		if (transaction?.id) console.log(transaction.id);
 		setIsOpen(true);

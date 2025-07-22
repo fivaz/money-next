@@ -59,6 +59,11 @@ export default function TransactionForm({
 		}, 200);
 	};
 
+	const closeForm = () => {
+		resetForm();
+		closeFormAction();
+	};
+
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -96,10 +101,10 @@ export default function TransactionForm({
 	};
 
 	return (
-		<Dialog open={isOpen} onClose={closeFormAction}>
+		<Dialog open={isOpen} onClose={closeForm}>
 			<DialogTitle className="flex items-center justify-between">
 				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
-				<Button onClick={closeFormAction} size="p-1">
+				<Button onClick={closeForm} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
@@ -169,7 +174,7 @@ export default function TransactionForm({
 							className="mb-2"
 							name="isPaid"
 							color="amber"
-							defaultChecked={transaction?.isPaid}
+							defaultChecked={transaction?.isPaid || true}
 						/>
 					</Field>
 				</div>

@@ -18,5 +18,5 @@ export const buildDate = (year: number, month: number): Date => {
 	const maxDay = lastDayOfMonth(baseDate).getDate();
 	const clampedDay = Math.min(new Date().getDate(), maxDay);
 
-	return set(baseDate, { date: clampedDay });
+	return set(baseDate, { date: clampedDay, hours: 12 });
 };
