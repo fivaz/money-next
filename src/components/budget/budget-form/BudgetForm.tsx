@@ -85,6 +85,18 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 					</Field>
 				</div>
 
+				<div className="mt-2 grid grid-cols-2 gap-4 pb-1">
+					<Field className="col-span-2 md:col-span-1">
+						<Label>Start at</Label>
+						<Input name="startAt" type="date" defaultValue={budget?.startAt} />
+					</Field>
+
+					<Field className="col-span-2 md:col-span-1">
+						<Label>End at</Label>
+						<Input name="endAt" type="date" defaultValue={budget?.endAt} />
+					</Field>
+				</div>
+
 				<IconPicker name="icon" defaultValue={budget?.icon} />
 
 				<DialogActions>

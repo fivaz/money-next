@@ -9,6 +9,8 @@ export const BudgetSchema = z.object({
 	icon: z.string(),
 	sortOrder: z.number(),
 	parent: z.string().nullable(),
+	startAt: z.string().optional(),
+	endAt: z.string().optional(),
 });
 
 export type Budget = z.infer<typeof BudgetSchema>;

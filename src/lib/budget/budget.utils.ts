@@ -8,6 +8,8 @@ export const buildBudget = (formData: FormData): Budget => {
 		parent: null,
 		sortOrder: Number(formData.get('sortOrder')) ?? 10000,
 		amount: parseInt(formData.get('amount') as string),
+		startAt: formData.get('startAt') as string,
+		endAt: formData.get('endAt') as string,
 	};
 };
 
