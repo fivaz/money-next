@@ -8,9 +8,11 @@ export const BudgetSchema = z.object({
 	amount: z.number(),
 	icon: z.string(),
 	sortOrder: z.number(),
-	parent: z.string().nullable(),
+	parentId: z.string().optional().nullable(),
+	parent: z.string().optional().nullable(),
 	startAt: z.string().optional(),
 	endAt: z.string().optional(),
+	previousAmount: z.number().optional(),
 });
 
 export type Budget = z.infer<typeof BudgetSchema>;
