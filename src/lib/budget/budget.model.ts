@@ -10,8 +10,8 @@ export const BudgetSchema = z.object({
 	sortOrder: z.number(),
 	parentId: z.string().optional().nullable(),
 	parent: z.string().optional().nullable(),
-	startAt: z.string().optional(),
-	endAt: z.string().optional(),
+	startAt: z.string().optional().nullable(),
+	endAt: z.string().optional().nullable(),
 	previousAmount: z.number().optional(),
 });
 
