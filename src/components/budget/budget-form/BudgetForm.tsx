@@ -74,6 +74,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={budget?.id} />
 				<input type="hidden" name="sortOrder" defaultValue={budget?.sortOrder} />
+
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Name</Label>
@@ -85,15 +86,15 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 					</Field>
 				</div>
 
-				<div className="mt-2 grid grid-cols-2 gap-4 pb-1">
+				<div className="grid grid-cols-2 gap-4 pb-1">
 					<Field className="col-span-2 md:col-span-1">
 						<Label>Start at</Label>
-						<Input name="startAt" type="date" defaultValue={budget?.startAt} />
+						<Input name="startAt" type="date" defaultValue={budget?.startAt || ''} />
 					</Field>
 
 					<Field className="col-span-2 md:col-span-1">
 						<Label>End at</Label>
-						<Input name="endAt" type="date" defaultValue={budget?.endAt} />
+						<Input name="endAt" type="date" defaultValue={budget?.endAt || ''} />
 					</Field>
 				</div>
 

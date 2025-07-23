@@ -1,6 +1,7 @@
 import React, { InputHTMLAttributes, useMemo, useState } from 'react';
 import { getIcon, iconComponents } from './service';
 import SearchInput from '@/components/SearchInput';
+import { Field, Label } from '../base/fieldset';
 
 type IconPickerProps = Omit<
 	InputHTMLAttributes<HTMLInputElement>,
@@ -44,13 +45,18 @@ export default function IconPicker({
 
 	return (
 		<>
-			<div className="flex flex-col gap-2">
-				<SearchInput
-					value={searchQuery}
-					onChange={(e) => setSearchQuery(e.target.value)}
-					{...props}
-					placeholder="Search icons..."
-				/>
+			<div className="flex flex-col gap-5">
+				<Field>
+					<Label>Icon</Label>
+					<div className="mt-2.5">
+						<SearchInput
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							{...props}
+							placeholder="Search icons..."
+						/>
+					</div>
+				</Field>
 
 				<div className="grid h-[136px] grid-cols-[repeat(auto-fill,minmax(2rem,1fr))] gap-2.5 overflow-auto rounded-md border border-gray-300 p-2 dark:border-gray-600">
 					{filteredIcons.map((iconName) => {
