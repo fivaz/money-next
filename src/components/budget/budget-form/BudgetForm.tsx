@@ -112,7 +112,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 							</Tooltip>
 						</div>
 						<Switch
-							className="mb-2"
+							className="md:mb-2"
 							name="isAccumulative"
 							color="amber"
 							defaultChecked={budget?.isAccumulative ?? false}

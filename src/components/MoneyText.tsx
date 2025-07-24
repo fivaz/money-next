@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
+import { formatMoney } from '@/lib/shared/utils';
 
 type MoneyTextProps = PropsWithChildren<{
 	className?: string;
@@ -15,7 +16,6 @@ export default function MoneyText({
 }: MoneyTextProps) {
 	const moneyInCents = Number(children);
 	const isNegative = moneyInCents < 0;
-	const formattedMoney = (Math.abs(moneyInCents) / 100).toFixed(2);
 	const sign = isNegative ? '-' : '+';
 	const colorClass = isNegative ? 'text-red-500' : 'text-green-500';
 
@@ -23,7 +23,7 @@ export default function MoneyText({
 		<span className={clsx({ [colorClass]: addColor && moneyInCents !== 0 }, className)}>
 			<>
 				${addSign && moneyInCents !== 0 && ` ${sign}`}
-				{formattedMoney}
+				{formatMoney(moneyInCents)}
 			</>
 		</span>
 	);

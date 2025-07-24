@@ -1,4 +1,4 @@
-import { getBudgets, getCurrentMonthBudgets } from '@/lib/budget/budget.actions';
+import { getBudgets, getCurrentMonthBudgetsWithDetails } from '@/lib/budget/budget.actions';
 import BudgetList from '@/components/budget/BudgetList';
 import { Heading } from '@/components/base/heading';
 import { BudgetListProvider } from '@/lib/budget/BudgetListProvider';
@@ -17,7 +17,7 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
 	const month = Number(monthParam) || new Date().getMonth() + 1;
 
 	const [budgets, budgetedSpent] = await Promise.all([
-		getCurrentMonthBudgets({ year, month }),
+		getCurrentMonthBudgetsWithDetails({ year, month }),
 		getBudgetedSpent({ year, month }),
 	]);
 

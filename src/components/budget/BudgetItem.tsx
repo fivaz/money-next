@@ -17,6 +17,9 @@ import { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 import BudgetTransactions from '@/components/budget/BudgetTransactions';
+import JarIcon from '../icons/JarIcon';
+import Tooltip from '@/components/Tooltip';
+import { formatMoney } from '@/lib/shared/utils';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -30,7 +33,9 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-	const { data: initialTransactions, mutate } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(url, fetcher);
+
+	const initialTransactions = initialTransactionsData || [];
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -46,19 +51,18 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
 							</div>
 							<div className="flex shrink-0 items-center gap-2">
-								<MoneyText addColor={false} addSign={false}>
-									{budget.amount}
-								</MoneyText>
+								{budget.isAccumulative && <JarIcon className="size-5 text-green-500" />}
+								<BudgetAmount budget={budget} />
 								<BudgetFormButton budget={budget}>
 									<CogIcon className="size-4 shrink-0" />
 								</BudgetFormButton>
 							</div>
 						</div>
 
-						<ProgressBar budget={budget} transactions={initialTransactions || []} />
+						<ProgressBar budget={budget} transactions={initialTransactions} />
 					</div>
 
-					<TransactionListProvider initialItems={initialTransactions || []} mutate={mutate}>
+					<TransactionListProvider initialItems={initialTransactions} mutate={mutate}>
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>
@@ -83,5 +87,24 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 				</li>
 			)}
 		</Disclosure>
+	);
+}
+
+function BudgetAmount({ budget }: { budget: Budget }) {
+	if (budget.isAccumulative) {
+		const accumulativeAmount = budget.accumulativeAmount || 0;
+		return (
+			<Tooltip message={`$${formatMoney(accumulativeAmount)} + $${formatMoney(budget.amount)}`}>
+				<MoneyText addColor={false} addSign={false}>
+					{budget.amount + accumulativeAmount}
+				</MoneyText>
+			</Tooltip>
+		);
+	}
+
+	return (
+		<MoneyText addColor={false} addSign={false}>
+			{budget.amount}
+		</MoneyText>
 	);
 }

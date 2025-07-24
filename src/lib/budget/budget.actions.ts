@@ -21,6 +21,19 @@ export async function getCurrentMonthBudgets({
 	return validateBudgets(data);
 }
 
+export async function getCurrentMonthBudgetsWithDetails({
+	year,
+	month,
+}: {
+	year: number;
+	month: number;
+}): Promise<Budget[]> {
+	const data = await fetchInAction(
+		`${BUDGETS_URL}/by-date-with-details?year=${year}&month=${month}`,
+	);
+	return validateBudgets(data);
+}
+
 export async function addBudgetDB(budget: Omit<Budget, 'id'>) {
 	const saved = fetchInAction(BUDGETS_URL, {
 		method: 'POST',
