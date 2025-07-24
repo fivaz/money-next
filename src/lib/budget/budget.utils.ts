@@ -10,6 +10,7 @@ export const buildBudget = (formData: FormData): Budget => {
 		amount: parseInt(formData.get('amount') as string),
 		startAt: formData.get('startAt') as string,
 		endAt: formData.get('endAt') as string,
+		isAccumulative: formData.get('isAccumulative') === 'on',
 	};
 };
 

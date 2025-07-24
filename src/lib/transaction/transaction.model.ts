@@ -15,10 +15,10 @@ const TransactionSchema = z.object({
 		), // Validate local datetime format
 	// optional
 	budget: BudgetSchema.nullable(),
-	referenceDate: z.string().date().optional(),
-	isPaid: z.boolean().optional(),
-	spreadStart: z.string().date().optional(),
-	spreadEnd: z.string().date().optional(),
+	isPaid: z.boolean(),
+	referenceDate: z.string().date().nullable(),
+	spreadStart: z.string().date().nullable(),
+	spreadEnd: z.string().date().nullable(),
 });
 
 const PaginatedTransactionSchema = z.object({

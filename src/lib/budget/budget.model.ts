@@ -7,12 +7,11 @@ export const BudgetSchema = z.object({
 	name: z.string(),
 	amount: z.number(),
 	icon: z.string(),
+	isAccumulative: z.boolean(),
 	sortOrder: z.number(),
-	parentId: z.string().optional().nullable(),
-	parent: z.string().optional().nullable(),
-	startAt: z.string().optional().nullable(),
-	endAt: z.string().optional().nullable(),
-	previousAmount: z.number().optional(),
+	parent: z.string().nullable(),
+	startAt: z.string().nullable(),
+	endAt: z.string().nullable(),
 });
 
 export type Budget = z.infer<typeof BudgetSchema>;

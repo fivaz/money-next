@@ -190,7 +190,7 @@ export default function TransactionForm({
 						className="mt-3"
 						name="referenceDate"
 						type="date"
-						defaultValue={transaction?.referenceDate}
+						defaultValue={transaction?.referenceDate || ''}
 					/>
 				</Field>
 
