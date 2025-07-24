@@ -34,8 +34,6 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 
 	const totalAmount = budgets.reduce((total, budget) => budget.amount + total, 0);
 
-	console.log('budgets', budgets);
-
 	const totalAccumulativeAmount = budgets.reduce(
 		(total, budget) => (budget.accumulativeAmount || 0) + total,
 		0,

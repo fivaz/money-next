@@ -94,10 +94,10 @@ function BudgetAmount({ budget }: { budget: Budget }) {
 	if (budget.isAccumulative) {
 		const accumulativeAmount = budget.accumulativeAmount || 0;
 		return (
-			<Tooltip message={`$${formatMoney(accumulativeAmount)} + $${formatMoney(budget.amount)}`}>
-				<MoneyText addColor={false} addSign={false}>
-					{budget.amount + accumulativeAmount}
-				</MoneyText>
+			<Tooltip
+				message={`${formatMoney(budget.amount)} ${accumulativeAmount >= 0 ? '+' : '-'} ${formatMoney(accumulativeAmount)}`}
+			>
+				<MoneyText addColor={false}>{budget.amount + accumulativeAmount}</MoneyText>
 			</Tooltip>
 		);
 	}
