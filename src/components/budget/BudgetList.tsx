@@ -14,6 +14,8 @@ import { Suspense, useMemo } from 'react';
 import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
+import { getAmount } from '@/lib/budget/budget.utils';
+import { formatMoney } from '@/lib/shared/utils';
 
 type BudgetProps = {
 	budgetedSpent: number;
@@ -30,28 +32,38 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		void reorderBudgets(newBudgets);
 	};
 
-	const totalBudget = useMemo(
-		() => budgets.reduce((total, budget) => budget.amount + total, 0),
-		[budgets],
+	const totalAmount = budgets.reduce((total, budget) => budget.amount + total, 0);
+
+	console.log('budgets', budgets);
+
+	const totalAccumulativeAmount = budgets.reduce(
+		(total, budget) => (budget.accumulativeAmount || 0) + total,
+		0,
 	);
 
-	const difference = totalBudget + budgetedSpent;
+	const finalAmount = totalAmount + totalAccumulativeAmount;
+
+	const difference = finalAmount + budgetedSpent;
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-wrap justify-between gap-5 sm:-mt-14 sm:ml-32 sm:flex-row sm:justify-end">
 				<div className="flex items-center gap-2">
-					<Tooltip message={`total budget`}>
+					<Tooltip
+						message={`total budget: ${formatMoney(totalAmount)} ${totalAccumulativeAmount >= 0 ? '+' : '-'} ${formatMoney(totalAccumulativeAmount)}`}
+					>
 						<div className="flex items-center gap-2">
 							<TotalIcon className="text-yellow-500">
 								<PiggyBankIcon className="size-5" />
 							</TotalIcon>
 							<MoneyText addColor={false} addSign={false}>
-								{totalBudget}
+								{finalAmount}
 							</MoneyText>
 						</div>
 					</Tooltip>
-					-
+
+					<span>-</span>
+
 					<Tooltip message={`total spent`}>
 						<div className="flex items-center gap-2">
 							<TotalIcon className="text-yellow-500">
@@ -62,8 +74,12 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 							</MoneyText>
 						</div>
 					</Tooltip>
-					=<MoneyText>{difference}</MoneyText>
+
+					<span>=</span>
+
+					<MoneyText>{difference}</MoneyText>
 				</div>
+
 				<Suspense fallback={<DateSwitcherSkeleton />}>
 					<DateSwitcher />
 				</Suspense>
