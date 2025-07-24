@@ -12,6 +12,7 @@ import {
 	useInteractions,
 	FloatingPortal,
 	useClick,
+	useHover,
 } from '@floating-ui/react';
 import clsx from 'clsx';
 import { FloatingArrow, arrow } from '@floating-ui/react';
@@ -63,14 +64,21 @@ export default function Tooltip({ children, message }: ToolTipProps) {
 	} as const;
 
 	// Event listeners to change the open state
-	const hover = useClick(context);
+	const click = useClick(context);
+	const hover = useHover(context);
 	const focus = useFocus(context);
 	const dismiss = useDismiss(context);
 	// Role props for screen readers
 	const role = useRole(context, { role: 'tooltip' });
 
 	// Merge all the interactions into prop getters
-	const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+	const { getReferenceProps, getFloatingProps } = useInteractions([
+		click,
+		hover,
+		focus,
+		dismiss,
+		role,
+	]);
 
 	return (
 		<>

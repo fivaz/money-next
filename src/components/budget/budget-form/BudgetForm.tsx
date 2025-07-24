@@ -15,6 +15,9 @@ import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.a
 import { mutate } from 'swr';
 import { API } from '@/lib/const';
 import ConfirmButton from '@/components/Button/ConfirmButton';
+import { Switch } from '@/components/base/switch';
+import JarIcon from '@/components/icons/JarIcon';
+import Tooltip from '@/components/Tooltip';
 
 type BudgetFormProps = {
 	budget?: Budget;
@@ -86,15 +89,34 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 					</Field>
 				</div>
 
-				<div className="grid grid-cols-2 gap-4 pb-1">
-					<Field className="col-span-2 md:col-span-1">
+				<div className="grid grid-cols-5 gap-4 pb-1">
+					<Field className="col-span-5 md:col-span-2">
 						<Label>Start at</Label>
 						<Input name="startAt" type="date" defaultValue={budget?.startAt || ''} />
 					</Field>
 
-					<Field className="col-span-2 md:col-span-1">
+					<Field className="col-span-5 md:col-span-2">
 						<Label>End at</Label>
 						<Input name="endAt" type="date" defaultValue={budget?.endAt || ''} />
+					</Field>
+
+					<Field className="col-span-5 flex h-[73px] items-center justify-between md:col-span-1 md:flex-col">
+						<div className="flex gap-2 truncate">
+							<Label className="block truncate md:w-[40px]">
+								<span>Accumulative</span>
+							</Label>
+							<Tooltip
+								message={`accumulative budget is a budget that rolls over to the next month`}
+							>
+								<JarIcon className="size-5 shrink-0" />
+							</Tooltip>
+						</div>
+						<Switch
+							className="mb-2"
+							name="isAccumulative"
+							color="amber"
+							defaultChecked={budget?.isAccumulative ?? false}
+						/>
 					</Field>
 				</div>
 
