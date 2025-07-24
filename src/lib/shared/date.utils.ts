@@ -1,4 +1,4 @@
-import { format, lastDayOfMonth, set } from 'date-fns';
+import { format, formatDate, lastDayOfMonth, parse, set } from 'date-fns';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
@@ -20,3 +20,12 @@ export const buildDate = (year: number, month: number): Date => {
 
 	return set(baseDate, { date: clampedDay, hours: 12 });
 };
+
+export const ISO_DATE = 'yyyy-MM-dd';
+
+export const FR_DATE = 'dd/MM/yyyy';
+
+export const getISODate = (date: Date) => formatDate(date, ISO_DATE);
+
+export const formatFRDate = (dateString: string) =>
+	formatDate(parse(dateString, ISO_DATE, new Date()), FR_DATE);

@@ -3,7 +3,7 @@ import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { getParamsDate } from '@/lib/shared/date.utils';
+import { getISODate, getParamsDate } from '@/lib/shared/date.utils';
 
 type DateSwitcherClientProps = {};
 export default function DateSwitcher({}: DateSwitcherClientProps) {
@@ -55,11 +55,6 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 		}
 	};
 
-	// Convert date to ISO format for input (YYYY-MM-DD)
-	const getISODate = () => {
-		return format(date, 'yyyy-MM-dd');
-	};
-
 	return (
 		<div className="relative flex items-center rounded-md shadow-xs md:items-stretch">
 			<button
@@ -80,7 +75,7 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 			<input
 				ref={dateInput}
 				type="date"
-				value={getISODate()}
+				value={getISODate(date)}
 				onChange={(e) => handleDateChange(e)}
 				className="pointer-events-none absolute opacity-0"
 			/>

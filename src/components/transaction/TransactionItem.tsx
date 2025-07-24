@@ -1,12 +1,12 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { CalendarIcon, ClockIcon, CogIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, CogIcon, CompassIcon } from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
-import { DATE_FORMAT } from '@/lib/shared/date.utils';
+import { DATE_FORMAT, formatFRDate } from '@/lib/shared/date.utils';
 import IconView from '@/components/icon-picker/IconView';
 import PieChartIcon from '@/components/icons/PieChartIcon';
 import Tooltip from '../Tooltip';
@@ -56,6 +56,12 @@ export default function TransactionItem({ transaction, isEditable = true }: Tran
 				{transaction.spreadStart && transaction.spreadEnd && (
 					<Tooltip message={`transaction spreads`}>
 						<PieChartIcon className="size-5 text-yellow-500" />
+					</Tooltip>
+				)}
+
+				{transaction.referenceDate && (
+					<Tooltip message={`reference date: ${formatFRDate(transaction.referenceDate)}`}>
+						<CompassIcon className="size-5 text-yellow-500" />
 					</Tooltip>
 				)}
 
