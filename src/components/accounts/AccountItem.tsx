@@ -62,7 +62,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 					sourceAccountId={account.id}
 				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
-						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
+						<div className="sticky top-0 z-10 flex flex-col gap-2 border-b border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-800">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2 truncate">
 									<Text>
