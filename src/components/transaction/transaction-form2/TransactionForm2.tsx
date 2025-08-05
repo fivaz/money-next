@@ -31,10 +31,11 @@ import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Account } from '@/lib/account/account.model';
 import { fetchBudgets } from '@/lib/budget/budget.utils';
 import { fetchAccounts } from '@/lib/account/account.utils';
+import { TransactionIn } from '@/components/transaction/transaction-form2/transaction-form.utils';
 
 type TransactionFormProps = {
-	transaction: Transaction;
-	setTransaction: Dispatch<SetStateAction<Transaction>>;
+	transaction: TransactionIn;
+	setTransaction: Dispatch<SetStateAction<TransactionIn>>;
 	isOpen: boolean;
 	closeFormAction: () => void;
 };
@@ -118,11 +119,8 @@ export default function TransactionForm2({
 			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
 				<input type="hidden" name="id" defaultValue={transaction?.id} />
 				<OperationSelector
-					defaultValue={
-						transaction && Number(transaction?.amount) > 0
-							? 'income'
-							: 'expense'
-					}
+					setTransaction={setTransaction}
+					transaction={transaction}
 				/>
 
 				<Field>
@@ -198,6 +196,7 @@ export default function TransactionForm2({
 						) : (
 							<Listbox
 								name="destination"
+								disabled={transaction.operation !== 'transfer'}
 								value={transaction?.destination}
 								onChange={handleDestination}
 								placeholder="Select account&hellip;"

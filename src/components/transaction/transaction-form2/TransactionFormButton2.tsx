@@ -5,8 +5,9 @@ import { type ButtonProps } from '@/components/Button/utils';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm2 from '@/components/transaction/transaction-form2/TransactionForm2';
 import { Transaction } from '@/lib/transaction2/transaction2.model';
-import { getEmptyTransaction } from '@/lib/transaction2/transaction2.utils';
+import { getEmptyTransactionIn } from '@/lib/transaction2/transaction2.utils';
 import { fetchAccounts } from '@/lib/account/account.utils';
+import { TransactionIn } from '@/components/transaction/transaction-form2/transaction-form.utils';
 
 type TransactionFormButtonProps = PropsWithChildren<{
 	transaction?: Partial<Transaction>;
@@ -22,17 +23,17 @@ export default function TransactionFormButton2({
 
 	const { accounts } = fetchAccounts();
 
-	const [transactionIn, setTransactionIn] = useState<Transaction>(
-		getEmptyTransaction(transaction, accounts),
+	const [transactionIn, setTransactionIn] = useState<TransactionIn>(
+		getEmptyTransactionIn(transaction, accounts),
 	);
 
 	const closeDialog = () => {
 		setIsOpen(false);
-		setTransactionIn(getEmptyTransaction(undefined, accounts));
+		setTransactionIn(getEmptyTransactionIn(undefined, accounts));
 	};
 	const openDialog = () => {
 		setIsOpen(true);
-		setTransactionIn(getEmptyTransaction(transaction, accounts));
+		setTransactionIn(getEmptyTransactionIn(transaction, accounts));
 	};
 
 	return (

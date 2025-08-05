@@ -5,6 +5,10 @@ import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import type { Budget } from '@/lib/budget/budget.model';
 import { differenceInMonths } from 'date-fns';
+import {
+	OperationType,
+	TransactionIn,
+} from '@/components/transaction/transaction-form2/transaction-form.utils';
 
 export const buildTransaction = (
 	formData: FormData,
@@ -87,10 +91,20 @@ export const fetchAccountTransactions = (
 	return initialTransactionsData || [];
 };
 
-export const getEmptyTransaction = (
+const getOperation = (
+	transaction: Partial<Transaction | undefined>,
+): OperationType => {
+	if (transaction?.destination) {
+		return 'transfer';
+	}
+
+	return transaction?.amount && transaction?.amount > 0 ? 'income' : 'expense';
+};
+
+export const getEmptyTransactionIn = (
 	transaction: Partial<Transaction> | undefined,
 	accounts: Account[],
-): Transaction => {
+): TransactionIn => {
 	return {
 		id: transaction?.id || 0,
 		description: transaction?.description || '',
@@ -103,5 +117,6 @@ export const getEmptyTransaction = (
 		referenceDate: transaction?.referenceDate || '',
 		spreadStart: transaction?.spreadStart || '',
 		spreadEnd: transaction?.spreadEnd || '',
+		operation: getOperation(transaction),
 	};
 };

@@ -3,15 +3,17 @@ import ExpenseIcon from '@/components/icons/ExpenseIcon';
 import IncomeIcon from '@/components/icons/IncomeIcon';
 import { ArrowRightLeft, TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { Transaction } from '@/lib/transaction2/transaction2.model';
+import {
+	OperationType,
+	TransactionIn,
+} from '@/components/transaction/transaction-form2/transaction-form.utils';
 
 interface RadioGroupProps {
-	value?: string;
-	defaultValue?: string;
-	onChange?: (value: 'income' | 'expense' | 'transfer') => void;
+	transaction: TransactionIn;
+	setTransaction: Dispatch<SetStateAction<TransactionIn>>;
 }
-
-type OperationType = 'income' | 'expense' | 'transfer';
 
 const operations: {
 	value: OperationType;
@@ -40,17 +42,20 @@ const operations: {
 ];
 
 export default function OperationSelector({
-	value,
-	defaultValue,
-	onChange,
+	transaction,
+	setTransaction,
 }: RadioGroupProps) {
 	return (
 		<RadioGroup
 			className="grid grid-cols-3 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
-			value={value}
-			defaultValue={defaultValue}
+			value={transaction.operation}
 			name="operation"
-			onChange={onChange}
+			onChange={(operation) => {
+				setTransaction((transaction) => ({
+					...transaction,
+					operation,
+				}));
+			}}
 		>
 			{operations.map((op) => (
 				<Radio
