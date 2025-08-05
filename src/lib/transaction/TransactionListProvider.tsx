@@ -42,14 +42,22 @@ export function TransactionListProvider({
 
 	const createTransaction = async (toCreate: Omit<Transaction, 'id'>) => {
 		const tempId = Date.now();
+		const previousTransactions = transactions;
+
 		const optimisticTransaction: Transaction = { ...toCreate, id: tempId };
 
-		const previousTransactions = transactions;
-		setTransactions((prev) => [optimisticTransaction, ...prev]);
+		if (toCreate.account.id === sourceAccountId) {
+			setTransactions((prev) => [optimisticTransaction, ...prev]);
+		}
 
 		try {
 			const created = await createTransactionAction(toCreate);
-			setTransactions((prev) => prev.map((current) => (current.id === tempId ? created : current)));
+
+			if (toCreate.account.id === sourceAccountId) {
+				setTransactions((prev) =>
+					prev.map((current) => (current.id === tempId ? created : current)),
+				);
+			}
 			mutateAccounts(created, year, month);
 		} catch (err) {
 			console.error('Create failed', err);
