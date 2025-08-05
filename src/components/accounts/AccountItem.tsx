@@ -62,9 +62,9 @@ export default function AccountItem({
 	};
 
 	return (
-		<TransactionListProvider initialTransactions={initialTransactions}>
-			<Disclosure ref={ref} as="div" defaultOpen>
-				{({ open }) => (
+		<Disclosure ref={ref} as="div" defaultOpen>
+			{({ open }) => (
+				<TransactionListProvider initialTransactions={initialTransactions}>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
 							<div className="flex items-center justify-between">
@@ -116,8 +116,8 @@ export default function AccountItem({
 							</Text>
 						</DisclosureButton>
 					</li>
-				)}
-			</Disclosure>
-		</TransactionListProvider>
+				</TransactionListProvider>
+			)}
+		</Disclosure>
 	);
 }

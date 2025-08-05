@@ -2,7 +2,9 @@
 
 import {
 	createContext,
+	Dispatch,
 	ReactNode,
+	SetStateAction,
 	useContext,
 	useState,
 	useTransition,
@@ -16,6 +18,7 @@ import { Account } from './account.model';
 
 type AccountListContextType = {
 	accounts: Account[];
+	setAccounts: Dispatch<SetStateAction<Account[]>>;
 	createAccount: (data: Account) => Promise<void>;
 	updateAccount: (data: Account) => Promise<void>;
 	deleteAccount: (id: number) => Promise<void>;
@@ -83,6 +86,7 @@ export function AccountListProvider({
 		<AccountListContext.Provider
 			value={{
 				accounts,
+				setAccounts,
 				createAccount,
 				updateAccount,
 				deleteAccount,

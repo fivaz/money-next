@@ -24,8 +24,6 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
 		getBudgetedSpent({ year, month }),
 	]);
 
-	console.log(budgets);
-
 	return (
 		<main className="flex flex-col gap-5">
 			<Heading>Budgets</Heading>

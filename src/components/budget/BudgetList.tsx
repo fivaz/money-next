@@ -23,10 +23,6 @@ type BudgetProps = {
 export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
-	useEffect(() => {
-		console.log('budgets', budgets);
-	}, [budgets]);
-
 	const searchParams = useSearchParams();
 	const [year, month] = getParamsDate(searchParams);
 

@@ -39,7 +39,7 @@ export async function deleteAccountAction(id: number): Promise<void> {
 }
 
 export async function reorderAccounts(accounts: Account[]): Promise<void> {
-	return fetchInAction(
+	await fetchInAction(
 		`${ACCOUNTS_URL}/reorder`,
 		{
 			method: 'PUT',
