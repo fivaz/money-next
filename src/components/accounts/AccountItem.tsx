@@ -14,7 +14,7 @@ import {
 	DisclosurePanel,
 } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
@@ -23,15 +23,11 @@ import { TransactionListProvider } from '@/lib/transaction/TransactionListProvid
 import {
 	fetchAccountBalance,
 	fetchAccountTransactions,
-} from '@/lib/transaction/transaction.utils';
+} from '@/lib/transaction/transaction.utils-api';
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { useSearchParams } from 'next/navigation';
-import {
-	buildDate,
-	formatForInput,
-	getParamsDate,
-} from '@/lib/shared/date.utils';
+
+import { buildDate, formatForInput } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 
@@ -50,7 +46,7 @@ export default function AccountItem({
 }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const { data: initialTransactions, mutate } = fetchAccountTransactions(
+	const { data: initialTransactions } = fetchAccountTransactions(
 		account.id,
 		year,
 		month,
@@ -58,7 +54,7 @@ export default function AccountItem({
 
 	const balance = fetchAccountBalance(account.id, year, month);
 
-	const getAccountTransaction = (): Partial<Transaction> => {
+	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
 			account,
 			date: formatForInput(buildDate(year, month)),
@@ -70,7 +66,7 @@ export default function AccountItem({
 			{({ open }) => (
 				<TransactionListProvider
 					initialTransactions={initialTransactions}
-					mutateAction={mutate}
+					sourceAccountId={account.id}
 				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
@@ -89,7 +85,9 @@ export default function AccountItem({
 										<TotalIcon className="size-4" />
 										<MoneyText className="shrink-0">{balance}</MoneyText>
 									</Text>
-									<TransactionFormButton transaction={getAccountTransaction()}>
+									<TransactionFormButton
+										transaction={getNewAccountTransaction()}
+									>
 										<PlusIcon className="size-4 shrink-0" />
 										<HandCoinsIcon className="size-4 shrink-0" />
 									</TransactionFormButton>

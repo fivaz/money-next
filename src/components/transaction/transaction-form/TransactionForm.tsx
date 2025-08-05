@@ -1,10 +1,4 @@
-import {
-	ChangeEvent,
-	Dispatch,
-	FormEvent,
-	SetStateAction,
-	useRef,
-} from 'react';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useRef } from 'react';
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
 import { Textarea } from '@/components/base/textarea';
@@ -43,8 +37,7 @@ export default function TransactionForm({
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
-	const { createTransaction, updateTransaction, deleteTransaction } =
-		useTransactionList();
+	const { createTransaction, updateTransaction, deleteTransaction } = useTransactionList();
 
 	const { budgets, isLoading: isBudgetLoading } = fetchBudgets();
 
@@ -65,13 +58,11 @@ export default function TransactionForm({
 
 	const handleDelete = async () => {
 		if (transactionIn?.id) {
-			void deleteTransaction(transactionIn?.id);
+			void deleteTransaction(transactionIn);
 		}
 	};
 
-	const handleChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-	) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setTransactionIn((transaction) => ({
 			...transaction,
 			[e.target.name]: e.target.value,
@@ -109,9 +100,7 @@ export default function TransactionForm({
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>
-					{transactionIn?.id ? 'Edit Transaction' : 'Add Transaction'}
-				</span>
+				<span>{transactionIn?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
@@ -119,10 +108,7 @@ export default function TransactionForm({
 
 			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
 				<input type="hidden" name="id" defaultValue={transactionIn?.id} />
-				<OperationSelector
-					setTransaction={setTransactionIn}
-					transaction={transactionIn}
-				/>
+				<OperationSelector setTransaction={setTransactionIn} transaction={transactionIn} />
 
 				<Field>
 					<Label>Description</Label>
@@ -163,8 +149,7 @@ export default function TransactionForm({
 						<Label>Account</Label>
 						{isAccountLoading ? (
 							<Text>
-								Loading accounts{' '}
-								<LoaderCircleIcon className="size-5 animate-spin" />
+								Loading accounts <LoaderCircleIcon className="size-5 animate-spin" />
 							</Text>
 						) : (
 							<Listbox
@@ -174,11 +159,7 @@ export default function TransactionForm({
 								placeholder="Select account&hellip;"
 							>
 								{accounts.map((account) => (
-									<ListboxOption
-										key={account.id}
-										value={account}
-										className="flex gap-2"
-									>
+									<ListboxOption key={account.id} value={account} className="flex gap-2">
 										<IconView name={account.icon} className="size-4" />
 										{account.name}
 									</ListboxOption>
@@ -191,8 +172,7 @@ export default function TransactionForm({
 						<Label>Destination</Label>
 						{isAccountLoading ? (
 							<Text>
-								Loading accounts{' '}
-								<LoaderCircleIcon className="size-5 animate-spin" />
+								Loading accounts <LoaderCircleIcon className="size-5 animate-spin" />
 							</Text>
 						) : (
 							<Listbox
@@ -207,15 +187,9 @@ export default function TransactionForm({
 									No account
 								</ListboxOption>
 								{accounts
-									.filter(
-										(account) => account.id !== transactionIn?.account?.id,
-									)
+									.filter((account) => account.id !== transactionIn?.account?.id)
 									.map((account) => (
-										<ListboxOption
-											key={account.id}
-											value={account}
-											className="flex gap-2"
-										>
+										<ListboxOption key={account.id} value={account} className="flex gap-2">
 											<IconView name={account.icon} className="size-4" />
 											{account.name}
 										</ListboxOption>
@@ -230,8 +204,7 @@ export default function TransactionForm({
 						<Label>Budget</Label>
 						{isBudgetLoading ? (
 							<Text>
-								Loading budgets{' '}
-								<LoaderCircleIcon className="size-5 animate-spin" />
+								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
 							</Text>
 						) : (
 							<Listbox
@@ -245,11 +218,7 @@ export default function TransactionForm({
 									No budget
 								</ListboxOption>
 								{budgets.map((budget) => (
-									<ListboxOption
-										key={budget.id}
-										value={budget}
-										className="flex gap-2"
-									>
+									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
 										<IconView name={budget.icon} className="size-4" />
 										{budget.name}
 									</ListboxOption>

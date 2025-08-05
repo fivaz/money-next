@@ -1,89 +1,85 @@
 'use client';
 
-import {
-	createContext,
-	ReactNode,
-	useContext,
-	useEffect,
-	useState,
-	useTransition,
-} from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState, useTransition } from 'react';
 import {
 	createTransactionAction,
 	updateTransactionAction,
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { Transaction } from './transaction.model';
+import { mutateAccounts } from '@/lib/transaction/transaction.utils-api';
+import { useSearchParams } from 'next/navigation';
+import { getParamsDate } from '@/lib/shared/date.utils';
 
 type TransactionListContextType = {
 	transactions: Transaction[];
-	createTransaction: (data: Transaction) => Promise<void>;
-	updateTransaction: (data: Transaction) => Promise<void>;
-	deleteTransaction: (id: number) => Promise<void>;
+	createTransaction: (toCreate: Transaction) => Promise<void>;
+	updateTransaction: (toUpdate: Transaction) => Promise<void>;
+	deleteTransaction: (toDelete: Transaction) => Promise<void>;
 };
 
-export const TransactionListContext = createContext<
-	TransactionListContextType | undefined
->(undefined);
+export const TransactionListContext = createContext<TransactionListContextType | undefined>(
+	undefined,
+);
 
 export function TransactionListProvider({
 	children,
+	sourceAccountId,
 	initialTransactions,
-	mutateAction,
 }: {
 	children: ReactNode;
 	initialTransactions: Transaction[];
-	mutateAction?: () => void;
+	sourceAccountId?: number;
 }) {
-	const [transactions, setTransactions] =
-		useState<Transaction[]>(initialTransactions);
+	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
 
 	useEffect(() => {
 		setTransactions(initialTransactions);
 	}, [initialTransactions]);
 
-	const createTransaction = async (data: Omit<Transaction, 'id'>) => {
+	const searchParams = useSearchParams();
+	const [year, month] = getParamsDate(searchParams);
+
+	const createTransaction = async (toCreate: Omit<Transaction, 'id'>) => {
 		const tempId = Date.now();
-		const optimisticTransaction: Transaction = { ...data, id: tempId };
+		const optimisticTransaction: Transaction = { ...toCreate, id: tempId };
 
 		const previousTransactions = transactions;
 		setTransactions((prev) => [optimisticTransaction, ...prev]);
 
 		try {
-			const created = await createTransactionAction(data);
-			setTransactions((prev) =>
-				prev.map((current) => (current.id === tempId ? created : current)),
-			);
-			mutateAction?.();
+			const created = await createTransactionAction(toCreate);
+			setTransactions((prev) => prev.map((current) => (current.id === tempId ? created : current)));
+			mutateAccounts(created, year, month);
 		} catch (err) {
 			console.error('Create failed', err);
 			setTransactions(previousTransactions); // rollback
 		}
 	};
 
-	const updateTransaction = async (update: Transaction) => {
+	const updateTransaction = async (toUpdate: Transaction) => {
 		const previousTransactions = transactions;
 
 		setTransactions((prev) =>
-			prev.map((current) => (current.id === update.id ? update : current)),
+			prev.map((current) => (current.id === toUpdate.id ? toUpdate : current)),
 		);
 
 		try {
-			await updateTransactionAction(update);
-			mutateAction?.();
+			await updateTransactionAction(toUpdate);
+			mutateAccounts(toUpdate, year, month, sourceAccountId);
 		} catch (err) {
 			console.error('Update failed', err);
 			setTransactions(previousTransactions); // rollback
 		}
 	};
 
-	const deleteTransaction = async (id: number) => {
+	const deleteTransaction = async (toDelete: Transaction) => {
 		const previousTransactions = transactions;
-		setTransactions((prev) => prev.filter((current) => current.id !== id));
+		setTransactions((prev) => prev.filter((current) => current.id !== toDelete.id));
 
 		try {
-			await deleteTransactionAction(id);
-			mutateAction?.();
+			await deleteTransactionAction(toDelete.id);
+			mutateAccounts(toDelete, year, month);
 		} catch (err) {
 			console.error('Delete failed', err);
 			setTransactions(previousTransactions); // rollback

@@ -42,30 +42,3 @@ export const getAmount = (
 
 	return baseAmount;
 };
-
-export const fetchAccountTransactions = (
-	accountId: number,
-	year: number,
-	month: number,
-) => {
-	const url = `/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
-
-	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(
-		url,
-		fetcher,
-	);
-
-	return { data: initialTransactionsData || [], mutate };
-};
-
-export const fetchAccountBalance = (
-	accountId: number,
-	year: number,
-	month: number,
-) => {
-	const url = `/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
-
-	const { data } = useSWR<number>(url, fetcher);
-
-	return data || 0;
-};
