@@ -31,18 +31,21 @@ import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Account } from '@/lib/account/account.model';
 import { fetchBudgets } from '@/lib/budget/budget.utils';
 import { fetchAccounts } from '@/lib/account/account.utils';
-import { TransactionIn } from '@/components/transaction/transaction-form2/transaction-form.utils';
+import {
+	getTransactionFromIn,
+	TransactionIn,
+} from '@/components/transaction/transaction-form2/transaction-form.utils';
 
 type TransactionFormProps = {
-	transaction: TransactionIn;
-	setTransaction: Dispatch<SetStateAction<TransactionIn>>;
+	transactionIn: TransactionIn;
+	setTransactionIn: Dispatch<SetStateAction<TransactionIn>>;
 	isOpen: boolean;
 	closeFormAction: () => void;
 };
 
 export default function TransactionForm2({
-	transaction,
-	setTransaction,
+	transactionIn,
+	setTransactionIn,
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
@@ -58,50 +61,52 @@ export default function TransactionForm2({
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (transaction?.id) void updateTransaction(transaction);
+		const transaction = getTransactionFromIn(transactionIn);
+
+		if (transactionIn?.id) void updateTransaction(transaction);
 		else void createTransaction(transaction);
 
 		closeFormAction();
 	};
 
 	const handleDelete = async () => {
-		if (transaction?.id) {
-			void deleteTransaction(transaction?.id);
+		if (transactionIn?.id) {
+			void deleteTransaction(transactionIn?.id);
 		}
 	};
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		setTransaction((transaction) => ({
+		setTransactionIn((transaction) => ({
 			...transaction,
 			[e.target.name]: e.target.value,
 		}));
 	};
 
 	const handleAccount = (value: Account) => {
-		setTransaction((transaction) => ({
+		setTransactionIn((transaction) => ({
 			...transaction,
 			account: value,
 		}));
 	};
 
 	const handleDestination = (value: Account | null) => {
-		setTransaction((transaction) => ({
+		setTransactionIn((transaction) => ({
 			...transaction,
 			destination: value,
 		}));
 	};
 
 	const handleBudget = (value: Budget | null) => {
-		setTransaction((transaction) => ({
+		setTransactionIn((transaction) => ({
 			...transaction,
 			budget: value,
 		}));
 	};
 
 	const handleSwitch = (value: boolean) => {
-		setTransaction((transaction) => ({
+		setTransactionIn((transaction) => ({
 			...transaction,
 			isPaid: value,
 		}));
@@ -110,24 +115,26 @@ export default function TransactionForm2({
 	return (
 		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
-				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
+				<span>
+					{transactionIn?.id ? 'Edit Transaction' : 'Add Transaction'}
+				</span>
 				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
 
 			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
-				<input type="hidden" name="id" defaultValue={transaction?.id} />
+				<input type="hidden" name="id" defaultValue={transactionIn?.id} />
 				<OperationSelector
-					setTransaction={setTransaction}
-					transaction={transaction}
+					setTransaction={setTransactionIn}
+					transaction={transactionIn}
 				/>
 
 				<Field>
 					<Label>Description</Label>
 					<Textarea
 						name="description"
-						value={transaction.description}
+						value={transactionIn.description}
 						onChange={handleChange}
 						autoFocus
 					/>
@@ -141,7 +148,7 @@ export default function TransactionForm2({
 							required
 							type="datetime-local"
 							onChange={handleChange}
-							value={transaction.date}
+							value={transactionIn.date}
 							autoFocus
 						/>
 					</Field>
@@ -151,7 +158,7 @@ export default function TransactionForm2({
 						<MoneyInput
 							required
 							name="amount"
-							value={transaction.amount.toString()}
+							value={transactionIn.amount.toString()}
 							onChange={handleChange}
 						/>
 					</Field>
@@ -168,7 +175,7 @@ export default function TransactionForm2({
 						) : (
 							<Listbox
 								name="account"
-								value={transaction?.account}
+								value={transactionIn?.account}
 								onChange={handleAccount}
 								placeholder="Select account&hellip;"
 							>
@@ -196,8 +203,8 @@ export default function TransactionForm2({
 						) : (
 							<Listbox
 								name="destination"
-								disabled={transaction.operation !== 'transfer'}
-								value={transaction?.destination}
+								disabled={transactionIn.operation !== 'transfer'}
+								value={transactionIn?.destination}
 								onChange={handleDestination}
 								placeholder="Select account&hellip;"
 							>
@@ -206,7 +213,9 @@ export default function TransactionForm2({
 									No account
 								</ListboxOption>
 								{accounts
-									.filter((account) => account.id !== transaction?.account?.id)
+									.filter(
+										(account) => account.id !== transactionIn?.account?.id,
+									)
 									.map((account) => (
 										<ListboxOption
 											key={account.id}
@@ -233,7 +242,7 @@ export default function TransactionForm2({
 						) : (
 							<Listbox
 								name="budget"
-								value={transaction?.budget}
+								value={transactionIn?.budget}
 								onChange={handleBudget}
 								placeholder="Select budget&hellip;"
 							>
@@ -262,7 +271,7 @@ export default function TransactionForm2({
 							name="isPaid"
 							color="amber"
 							onChange={handleSwitch}
-							checked={transaction?.isPaid}
+							checked={transactionIn?.isPaid}
 						/>
 					</Field>
 				</div>
@@ -278,16 +287,16 @@ export default function TransactionForm2({
 						className="mt-3"
 						name="referenceDate"
 						type="date"
-						value={transaction.referenceDate}
+						value={transactionIn.referenceDate}
 						onChange={handleChange}
 					/>
 				</Field>
 
-				<SpreadForm transaction={transaction} handleChange={handleChange} />
+				<SpreadForm transaction={transactionIn} handleChange={handleChange} />
 
 				<DialogActions>
 					<div>
-						{transaction?.id && (
+						{transactionIn?.id && (
 							<ConfirmButton
 								className="w-full justify-center sm:w-auto sm:justify-start"
 								message="This transaction will be permanently deleted. This action cannot be undone."
