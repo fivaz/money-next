@@ -17,8 +17,8 @@ import Tooltip from '@/components/Tooltip';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Account } from '@/lib/account/account.model';
-import { fetchBudgets } from '@/lib/budget/budget.utils';
-import { fetchAccounts } from '@/lib/account/account.utils';
+import { fetchBudgets } from '@/lib/budget/budget.utils-api';
+import { fetchAccounts } from '@/lib/account/account.utils-api';
 import {
 	getTransactionFromIn,
 	TransactionIn,
@@ -144,6 +144,46 @@ export default function TransactionForm({
 					</Field>
 				</div>
 
+				<div className="flex items-center gap-4">
+					<Field className="flex-1">
+						<Label>Budget</Label>
+						{isBudgetLoading ? (
+							<Text>
+								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
+							</Text>
+						) : (
+							<Listbox
+								name="budget"
+								value={transactionIn?.budget}
+								onChange={handleBudget}
+								placeholder="Select budget&hellip;"
+							>
+								<ListboxOption value={null} className="flex gap-2">
+									<IconView name={''} className="size-4" />
+									No budget
+								</ListboxOption>
+								{budgets.map((budget) => (
+									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
+										<IconView name={budget.icon} className="size-4" />
+										{budget.name}
+									</ListboxOption>
+								))}
+							</Listbox>
+						)}
+					</Field>
+
+					<Field className="flex h-[73px] flex-col items-center justify-between">
+						<Label>Is paid</Label>
+						<Switch
+							className="mb-2"
+							name="isPaid"
+							color="amber"
+							onChange={handleSwitch}
+							checked={transactionIn?.isPaid}
+						/>
+					</Field>
+				</div>
+
 				<div className="grid grid-cols-2 gap-4">
 					<Field className="col-span-2 md:col-span-1">
 						<Label>Account</Label>
@@ -196,46 +236,6 @@ export default function TransactionForm({
 									))}
 							</Listbox>
 						)}
-					</Field>
-				</div>
-
-				<div className="flex items-center gap-4">
-					<Field className="flex-1">
-						<Label>Budget</Label>
-						{isBudgetLoading ? (
-							<Text>
-								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
-							</Text>
-						) : (
-							<Listbox
-								name="budget"
-								value={transactionIn?.budget}
-								onChange={handleBudget}
-								placeholder="Select budget&hellip;"
-							>
-								<ListboxOption value={null} className="flex gap-2">
-									<IconView name={''} className="size-4" />
-									No budget
-								</ListboxOption>
-								{budgets.map((budget) => (
-									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
-										<IconView name={budget.icon} className="size-4" />
-										{budget.name}
-									</ListboxOption>
-								))}
-							</Listbox>
-						)}
-					</Field>
-
-					<Field className="flex h-[73px] flex-col items-center justify-between">
-						<Label>Is paid</Label>
-						<Switch
-							className="mb-2"
-							name="isPaid"
-							color="amber"
-							onChange={handleSwitch}
-							checked={transactionIn?.isPaid}
-						/>
 					</Field>
 				</div>
 

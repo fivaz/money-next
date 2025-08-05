@@ -18,6 +18,7 @@ import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Switch } from '@/components/base/switch';
 import JarIcon from '@/components/icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
+import { mutateBudgets } from '@/lib/budget/budget.utils-api';
 
 type BudgetFormProps = {
 	budget?: Budget;
@@ -46,14 +47,14 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 		addItem(budget);
 
 		await addBudgetDB(budgetWithoutId);
-		void mutate(`/api/${API.BUDGETS}`);
+		mutateBudgets();
 	};
 
 	const editBudget = async (budget: Budget) => {
 		editItem(budget);
 
 		await editBudgetDB(budget);
-		void mutate(`/api/${API.BUDGETS}`);
+		mutateBudgets();
 	};
 
 	const handleDelete = async () => {
@@ -61,7 +62,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 			deleteItem(budget.id);
 
 			await deleteBudgetDB(budget.id);
-			void mutate(`/api/${API.BUDGETS}`);
+			mutateBudgets();
 		}
 	};
 

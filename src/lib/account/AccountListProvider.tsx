@@ -15,6 +15,8 @@ import {
 	deleteAccountAction,
 } from '@/lib/account/account.actions';
 import { Account } from './account.model';
+import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
+import { mutateAccounts } from '@/lib/account/account.utils-api';
 
 type AccountListContextType = {
 	accounts: Account[];
@@ -24,9 +26,7 @@ type AccountListContextType = {
 	deleteAccount: (id: number) => Promise<void>;
 };
 
-export const AccountListContext = createContext<
-	AccountListContextType | undefined
->(undefined);
+export const AccountListContext = createContext<AccountListContextType | undefined>(undefined);
 
 export function AccountListProvider({
 	children,
@@ -46,9 +46,8 @@ export function AccountListProvider({
 
 		try {
 			const created = await createAccountAction(data);
-			setAccounts((prev) =>
-				prev.map((current) => (current.id === tempId ? created : current)),
-			);
+			setAccounts((prev) => prev.map((current) => (current.id === tempId ? created : current)));
+			mutateAccounts();
 		} catch (err) {
 			console.error('Create failed', err);
 			setAccounts(previousAccounts); // rollback
@@ -58,12 +57,11 @@ export function AccountListProvider({
 	const updateAccount = async (update: Account) => {
 		const previousAccounts = accounts;
 
-		setAccounts((prev) =>
-			prev.map((current) => (current.id === update.id ? update : current)),
-		);
+		setAccounts((prev) => prev.map((current) => (current.id === update.id ? update : current)));
 
 		try {
 			await updateAccountAction(update);
+			mutateAccounts();
 		} catch (err) {
 			console.error('Update failed', err);
 			setAccounts(previousAccounts); // rollback
@@ -76,6 +74,7 @@ export function AccountListProvider({
 
 		try {
 			await deleteAccountAction(id);
+			mutateAccounts();
 		} catch (err) {
 			console.error('Delete failed', err);
 			setAccounts(previousAccounts); // rollback

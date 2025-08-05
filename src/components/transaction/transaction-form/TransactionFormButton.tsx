@@ -5,7 +5,7 @@ import { type ButtonProps } from '@/components/Button/utils';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { fetchAccounts } from '@/lib/account/account.utils';
+import { fetchAccounts } from '@/lib/account/account.utils-api';
 import {
 	getEmptyTransactionIn,
 	TransactionIn,

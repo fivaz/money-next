@@ -7,7 +7,7 @@ import {
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { Transaction } from './transaction.model';
-import { mutateAccounts } from '@/lib/transaction/transaction.utils-api';
+import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
 import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
 
@@ -58,7 +58,7 @@ export function TransactionListProvider({
 					prev.map((current) => (current.id === tempId ? created : current)),
 				);
 			}
-			mutateAccounts(created, year, month);
+			mutateTransactions(created, year, month);
 		} catch (err) {
 			console.error('Create failed', err);
 			setTransactions(previousTransactions); // rollback
@@ -74,7 +74,7 @@ export function TransactionListProvider({
 
 		try {
 			await updateTransactionAction(toUpdate);
-			mutateAccounts(toUpdate, year, month, sourceAccountId);
+			mutateTransactions(toUpdate, year, month, sourceAccountId);
 		} catch (err) {
 			console.error('Update failed', err);
 			setTransactions(previousTransactions); // rollback
@@ -87,7 +87,7 @@ export function TransactionListProvider({
 
 		try {
 			await deleteTransactionAction(toDelete.id);
-			mutateAccounts(toDelete, year, month);
+			mutateTransactions(toDelete, year, month);
 		} catch (err) {
 			console.error('Delete failed', err);
 			setTransactions(previousTransactions); // rollback

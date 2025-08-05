@@ -26,7 +26,7 @@ export const fetchAccountBalance = (accountId: number, year: number, month: numb
 	return data || 0;
 };
 
-export const mutateAccounts = (
+export const mutateTransactions = (
 	transaction: Transaction,
 	year: number,
 	month: number,

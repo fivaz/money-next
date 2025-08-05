@@ -1,9 +1,4 @@
 import { Account } from '@/lib/account/account.model';
-import type { Transaction } from '@/lib/transaction/transaction.model';
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import { API } from '@/lib/const';
-import { fetcher } from '@/lib/shared/api-client.utils';
 
 export const buildAccount = (formData: FormData): Account => {
 	return {
@@ -14,16 +9,4 @@ export const buildAccount = (formData: FormData): Account => {
 	};
 };
 
-export const sortAccounts = (a: Account, b: Account) =>
-	a.sortOrder - b.sortOrder;
-
-export const fetchAccounts = () => {
-	const { data: accountsData, isLoading } = useSWR<Account[]>(
-		`/api/${API.ACCOUNTS}`,
-		fetcher,
-	);
-
-	const accounts = accountsData || [];
-
-	return { accounts, isLoading };
-};
+export const sortAccounts = (a: Account, b: Account) => a.sortOrder - b.sortOrder;
