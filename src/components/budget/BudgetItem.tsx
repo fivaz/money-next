@@ -16,7 +16,7 @@ import BudgetTransactions from '@/components/budget/BudgetTransactions';
 import JarIcon from '../icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
-import { fetchBudgetTransactions } from '@/lib/budget/budget.utils-api';
+import { useBudgetTransactions } from '@/lib/budget/budget.utils-api';
 import Button from '@/components/Button';
 
 type BudgetItemProps = {
@@ -29,7 +29,7 @@ type BudgetItemProps = {
 export default function BudgetItem({ budget, index, year, month }: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const initialTransactions = fetchBudgetTransactions(budget.id, year, month);
+	const initialTransactions = useBudgetTransactions(budget.id, year, month);
 
 	const [orderDesc, setOrderDesc] = useState(true);
 

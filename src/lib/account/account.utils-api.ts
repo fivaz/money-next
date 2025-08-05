@@ -5,7 +5,7 @@ import { fetcher } from '@/lib/shared/api-client.utils';
 
 const getAccountsUrl = () => `/api/${API.ACCOUNTS}`;
 
-export const fetchAccounts = () => {
+export const useAccounts = () => {
 	const { data: accountsData, isLoading } = useSWR<Account[]>(getAccountsUrl(), fetcher);
 
 	const accounts = accountsData || [];

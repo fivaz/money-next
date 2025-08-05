@@ -6,7 +6,7 @@ import type { Transaction } from '@/lib/transaction/transaction.model';
 
 const getBudgetUrl = () => `/api/${API.BUDGETS}`;
 
-export const fetchBudgets = () => {
+export const useBudgets = () => {
 	const { data: budgetsData, isLoading } = useSWR<Budget[]>(getBudgetUrl(), fetcher);
 
 	const budgets = budgetsData || [];
@@ -17,7 +17,7 @@ export const fetchBudgets = () => {
 export const getBudgetTransactionsUrl = (budgetId: number, year: number, month: number) =>
 	`/api/${API.BUDGETS}/${budgetId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-export const fetchBudgetTransactions = (budgetId: number, year: number, month: number) => {
+export const useBudgetTransactions = (budgetId: number, year: number, month: number) => {
 	const url = getBudgetTransactionsUrl(budgetId, year, month);
 
 	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);

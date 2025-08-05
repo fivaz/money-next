@@ -3,10 +3,10 @@
 import MoneyText from '@/components/MoneyText';
 import clsx from 'clsx';
 import { Text } from '@/components/base/text';
-import { fetchActualBalance } from '@/lib/source/source.utils-api';
+import { useActualBalance } from '@/lib/source/source.utils-api';
 
 export default function ClientBalanceViewer({ expectedBalance }: { expectedBalance: number }) {
-	const actualBalance = fetchActualBalance();
+	const actualBalance = useActualBalance();
 
 	const balanceDifference = expectedBalance - actualBalance;
 

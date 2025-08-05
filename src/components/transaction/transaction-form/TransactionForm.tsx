@@ -17,8 +17,8 @@ import Tooltip from '@/components/Tooltip';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Account } from '@/lib/account/account.model';
-import { fetchBudgets } from '@/lib/budget/budget.utils-api';
-import { fetchAccounts } from '@/lib/account/account.utils-api';
+import { useBudgets } from '@/lib/budget/budget.utils-api';
+import { useAccounts } from '@/lib/account/account.utils-api';
 import {
 	getTransactionFromIn,
 	TransactionIn,
@@ -39,9 +39,9 @@ export default function TransactionForm({
 }: TransactionFormProps) {
 	const { createTransaction, updateTransaction, deleteTransaction } = useTransactionList();
 
-	const { budgets, isLoading: isBudgetLoading } = fetchBudgets();
+	const { budgets, isLoading: isBudgetLoading } = useBudgets();
 
-	const { accounts, isLoading: isAccountLoading } = fetchAccounts();
+	const { accounts, isLoading: isAccountLoading } = useAccounts();
 
 	const formRef = useRef<HTMLFormElement | null>(null);
 

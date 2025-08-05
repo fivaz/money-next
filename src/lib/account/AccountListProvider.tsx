@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	createContext,
-	Dispatch,
-	ReactNode,
-	SetStateAction,
-	useState,
-} from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import {
 	createAccountAction,
 	updateAccountAction,

@@ -18,10 +18,7 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { TransactionListProvider } from '@/lib/transaction/provider/TransactionListProvider';
-import {
-	fetchAccountBalance,
-	fetchAccountTransactions,
-} from '@/lib/transaction/transaction.utils-api';
+import { useAccountBalance, useAccountTransactions } from '@/lib/transaction/transaction.utils-api';
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
@@ -40,9 +37,9 @@ type AccountItemProps = {
 export default function AccountItem({ account, index, year, month }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const initialTransactions = fetchAccountTransactions(account.id, year, month);
+	const initialTransactions = useAccountTransactions(account.id, year, month);
 
-	const balance = fetchAccountBalance(account.id, year, month);
+	const balance = useAccountBalance(account.id, year, month);
 
 	const [orderDesc, setOrderDesc] = useState(true);
 

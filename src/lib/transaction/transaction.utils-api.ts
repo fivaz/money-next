@@ -8,7 +8,7 @@ import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-export const fetchAccountTransactions = (accountId: number, year: number, month: number) => {
+export const useAccountTransactions = (accountId: number, year: number, month: number) => {
 	const url = getAccountTransactionsUrl(accountId, year, month);
 
 	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
@@ -19,7 +19,7 @@ export const fetchAccountTransactions = (accountId: number, year: number, month:
 const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
 	`/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
 
-export const fetchAccountBalance = (accountId: number, year: number, month: number) => {
+export const useAccountBalance = (accountId: number, year: number, month: number) => {
 	const url = getAccountBalanceUrl(accountId, year, month);
 
 	const { data } = useSWR<number>(url, fetcher);

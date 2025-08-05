@@ -5,7 +5,7 @@ import { type ButtonProps } from '@/components/Button/utils';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { fetchAccounts } from '@/lib/account/account.utils-api';
+import { useAccounts } from '@/lib/account/account.utils-api';
 import {
 	getEmptyTransactionIn,
 	TransactionIn,
@@ -23,7 +23,7 @@ export default function TransactionFormButton({
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const { accounts } = fetchAccounts();
+	const { accounts } = useAccounts();
 
 	const [transactionIn, setTransactionIn] = useState<TransactionIn>(
 		getEmptyTransactionIn(transaction, accounts),

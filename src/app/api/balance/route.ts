@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
 import { fetchInAPI } from '@/lib/shared/api-server.utils';
 import { BACKEND_URL } from '@/lib/const';
 
