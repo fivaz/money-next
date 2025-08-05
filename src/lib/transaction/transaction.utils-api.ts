@@ -15,8 +15,11 @@ export const fetchAccountTransactions = (accountId: number, year: number, month:
 	return { data: initialTransactionsData || [], mutate };
 };
 
+const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
+	`/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
+
 export const fetchAccountBalance = (accountId: number, year: number, month: number) => {
-	const url = `/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
+	const url = getAccountBalanceUrl(accountId, year, month);
 
 	const { data } = useSWR<number>(url, fetcher);
 
@@ -30,10 +33,13 @@ export const mutateAccounts = (
 	previousSourceAccountId?: number,
 ) => {
 	void mutate(getAccountTransactionsUrl(transaction.account.id, year, month));
+	void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
 	if (transaction.destination) {
 		void mutate(getAccountTransactionsUrl(transaction.destination.id, year, month));
+		void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
 	}
 	if (previousSourceAccountId && transaction.account.id !== previousSourceAccountId) {
 		void mutate(getAccountTransactionsUrl(previousSourceAccountId, year, month));
+		void mutate(getAccountBalanceUrl(previousSourceAccountId, year, month));
 	}
 };
