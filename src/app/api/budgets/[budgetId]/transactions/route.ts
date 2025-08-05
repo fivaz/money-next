@@ -7,17 +7,15 @@ import { ACCOUNTS_URL } from '@/lib/account/account.model';
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: Promise<{ accountId: string }> },
+	{ params }: { params: Promise<{ budgetId: string }> },
 ) {
-	const { accountId } = await params;
+	const { budgetId } = await params;
 
 	const { searchParams } = new URL(request.url);
 	const month = searchParams.get('month');
 	const year = searchParams.get('year');
 
-	const backendUrl = new URL(
-		`${ACCOUNTS_URL}/${accountId}/${API.TRANSACTIONS}`,
-	);
+	const backendUrl = new URL(`${BUDGETS_URL}/${budgetId}/${API.TRANSACTIONS}`);
 
 	if (month) backendUrl.searchParams.append('month', month);
 	if (year) backendUrl.searchParams.append('year', year);

@@ -1,10 +1,6 @@
 export const ROUTES = {
-	ACCOUNTS: {
-		name: 'Transactions',
-		path: '/accounts',
-	},
 	ROOT: {
-		name: 'Root',
+		name: 'Transactions',
 		path: '/',
 	},
 	BUDGETS: {
@@ -34,7 +30,6 @@ export const ROUTES = {
 };
 
 export const navLinks = [
-	ROUTES.ACCOUNTS,
 	ROUTES.ROOT,
 	ROUTES.BUDGETS,
 	ROUTES.SOURCES,

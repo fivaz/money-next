@@ -24,6 +24,7 @@ import BudgetTransactions from '@/components/budget/BudgetTransactions';
 import JarIcon from '../icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
+import { fetchBudgetTransactions } from '@/lib/budget/budget.utils';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -40,14 +41,7 @@ export default function BudgetItem({
 }: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
-
-	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(
-		url,
-		fetcher,
-	);
-
-	const initialTransactions = initialTransactionsData || [];
+	const initialTransactions = fetchBudgetTransactions(budget.id, year, month);
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>

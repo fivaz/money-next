@@ -9,10 +9,7 @@ import { Skeleton } from '@/components/Skeleton';
 import AccountListWithData from '@/components/accounts/AccountListWithData';
 
 type HomePageProps = {
-	searchParams: Promise<{
-		query?: string;
-		page?: string;
-	}>;
+	searchParams: Promise<{ query?: string; page?: string }>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {

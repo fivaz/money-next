@@ -37,3 +37,15 @@ export const fetchBudgets = () => {
 
 	return { budgets, isLoading };
 };
+
+export const fetchBudgetTransactions = (
+	budgetId: number,
+	year: number,
+	month: number,
+) => {
+	const url = `/api/${API.BUDGETS}/${budgetId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
+
+	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
+
+	return initialTransactionsData || [];
+};

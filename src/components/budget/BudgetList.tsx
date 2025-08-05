@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useEffect, useMemo } from 'react';
 import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
@@ -23,6 +23,10 @@ type BudgetProps = {
 export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
+	useEffect(() => {
+		console.log('budgets', budgets);
+	}, [budgets]);
+
 	const searchParams = useSearchParams();
 	const [year, month] = getParamsDate(searchParams);
 
@@ -32,7 +36,10 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		void reorderBudgets(newBudgets);
 	};
 
-	const totalAmount = budgets.reduce((total, budget) => budget.amount + total, 0);
+	const totalAmount = budgets.reduce(
+		(total, budget) => budget.amount + total,
+		0,
+	);
 
 	const totalAccumulativeAmount = budgets.reduce(
 		(total, budget) => (budget.accumulativeAmount || 0) + total,
@@ -78,16 +85,24 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 					<MoneyText>{difference}</MoneyText>
 				</div>
 
-				<Suspense fallback={<DateSwitcherSkeleton />}>
-					<DateSwitcher />
-				</Suspense>
+				<>
+					<Suspense fallback={<DateSwitcherSkeleton />}>
+						<DateSwitcher />
+					</Suspense>
+				</>
 				<BudgetFormButton />
 			</div>
 
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem index={index} key={budget.id} budget={budget} year={year} month={month} />
+						<BudgetItem
+							index={index}
+							key={budget.id}
+							budget={budget}
+							year={year}
+							month={month}
+						/>
 					))}
 				</DragDropProvider>
 			</ul>

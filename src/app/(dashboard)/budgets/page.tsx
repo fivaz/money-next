@@ -1,4 +1,7 @@
-import { getBudgets, getCurrentMonthBudgetsWithDetails } from '@/lib/budget/budget.actions';
+import {
+	getBudgets,
+	getCurrentMonthBudgetsWithDetails,
+} from '@/lib/budget/budget.actions';
 import BudgetList from '@/components/budget/BudgetList';
 import { Heading } from '@/components/base/heading';
 import { BudgetListProvider } from '@/lib/budget/BudgetListProvider';
@@ -7,7 +10,7 @@ import BudgetListSkeleton from '@/components/budget/BudgetListSkeleton';
 import { Suspense } from 'react';
 
 type BudgetsPageProps = {
-	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+	searchParams: Promise<{ year?: string; month?: string }>;
 };
 
 export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
@@ -20,6 +23,8 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
 		getCurrentMonthBudgetsWithDetails({ year, month }),
 		getBudgetedSpent({ year, month }),
 	]);
+
+	console.log(budgets);
 
 	return (
 		<main className="flex flex-col gap-5">

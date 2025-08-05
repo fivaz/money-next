@@ -48,6 +48,7 @@ export const fetchAccountTransactions = (
 	year: number,
 	month: number,
 ) => {
+	console.log('x');
 	const url = `/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
 	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
