@@ -1,7 +1,7 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
-import { ChevronDownIcon, CogIcon } from 'lucide-react';
+import { ArrowDown01Icon, ArrowDown10Icon, ChevronDownIcon, CogIcon } from 'lucide-react';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
@@ -9,7 +9,7 @@ import ProgressBar from '@/components/budget/ProgressBar';
 import { API } from '@/lib/const';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import useSWR from 'swr';
@@ -21,6 +21,7 @@ import JarIcon from '../icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
 import { fetchBudgetTransactions } from '@/lib/budget/budget.utils-api';
+import Button from '@/components/Button';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -33,6 +34,8 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 	const { ref } = useSortable({ id: budget.id, index });
 
 	const initialTransactions = fetchBudgetTransactions(budget.id, year, month);
+
+	const [orderDesc, setOrderDesc] = useState(true);
 
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
@@ -48,6 +51,14 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
 							</div>
 							<div className="flex shrink-0 items-center gap-2">
+								<Button onClick={() => setOrderDesc((order) => !order)}>
+									{orderDesc ? (
+										<ArrowDown01Icon className="size-4" />
+									) : (
+										<ArrowDown10Icon className="size-4" />
+									)}
+								</Button>
+
 								{budget.isAccumulative && <JarIcon className="size-5 text-green-500" />}
 								<BudgetAmount budget={budget} />
 								<BudgetFormButton budget={budget}>
@@ -59,7 +70,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 						<ProgressBar budget={budget} transactions={initialTransactions} />
 					</div>
 
-					<TransactionListProvider initialTransactions={initialTransactions}>
+					<TransactionListProvider initialTransactions={initialTransactions} orderDesc={orderDesc}>
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>

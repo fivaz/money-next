@@ -9,25 +9,15 @@ type TransactionProps = {
 	page: number;
 };
 
-export default async function TransactionSearchWithData({
-	query,
-	page,
-}: TransactionProps) {
-	const {
-		content: transactions,
-		totalPages,
-		pageable,
-	} = await searchTransactions(query, page);
+export default async function TransactionSearchWithData({ query, page }: TransactionProps) {
+	const { content: transactions, totalPages, pageable } = await searchTransactions(query, page);
 	return (
 		<>
-			<TransactionListProvider initialTransactions={transactions}>
+			<TransactionListProvider initialTransactions={transactions} orderDesc={true}>
 				<TransactionSearch />
 			</TransactionListProvider>
 			<Suspense>
-				<Pagination
-					totalPages={totalPages}
-					currentPage={pageable.pageNumber + 1}
-				/>
+				<Pagination totalPages={totalPages} currentPage={pageable.pageNumber + 1} />
 			</Suspense>
 		</>
 	);

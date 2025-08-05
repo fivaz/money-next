@@ -10,6 +10,7 @@ import { Transaction } from './transaction.model';
 import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
 import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
+import { sortTransactions } from '@/lib/transaction/transaction.utils';
 
 type TransactionListContextType = {
 	transactions: Transaction[];
@@ -26,10 +27,12 @@ export function TransactionListProvider({
 	children,
 	sourceAccountId,
 	initialTransactions,
+	orderDesc,
 }: {
 	children: ReactNode;
 	initialTransactions: Transaction[];
 	sourceAccountId?: number;
+	orderDesc: boolean;
 }) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
 
@@ -97,7 +100,7 @@ export function TransactionListProvider({
 	return (
 		<TransactionListContext.Provider
 			value={{
-				transactions,
+				transactions: transactions.toSorted((a, b) => sortTransactions(a, b, orderDesc)),
 				createTransaction,
 				updateTransaction,
 				deleteTransaction,

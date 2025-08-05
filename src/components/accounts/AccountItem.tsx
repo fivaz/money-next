@@ -2,19 +2,17 @@
 import { Strong, Text } from '@/components/base/text';
 import { type Account } from '@/lib/account/account.model';
 import {
+	ArrowDown01Icon,
+	ArrowDown10Icon,
 	ChevronDownIcon,
 	CogIcon,
 	HandCoinsIcon,
 	PlusIcon,
 } from 'lucide-react';
 import IconView from '@/components/icon-picker/IconView';
-import {
-	Disclosure,
-	DisclosureButton,
-	DisclosurePanel,
-} from '@headlessui/react';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
@@ -30,6 +28,7 @@ import { Transaction } from '@/lib/transaction/transaction.model';
 import { buildDate, formatForInput } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
+import Button from '@/components/Button';
 
 type AccountItemProps = {
 	account: Account;
@@ -38,21 +37,14 @@ type AccountItemProps = {
 	month: number;
 };
 
-export default function AccountItem({
-	account,
-	index,
-	year,
-	month,
-}: AccountItemProps) {
+export default function AccountItem({ account, index, year, month }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const { data: initialTransactions } = fetchAccountTransactions(
-		account.id,
-		year,
-		month,
-	);
+	const { data: initialTransactions } = fetchAccountTransactions(account.id, year, month);
 
 	const balance = fetchAccountBalance(account.id, year, month);
+
+	const [orderDesc, setOrderDesc] = useState(true);
 
 	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
@@ -66,6 +58,7 @@ export default function AccountItem({
 			{({ open }) => (
 				<TransactionListProvider
 					initialTransactions={initialTransactions}
+					orderDesc={orderDesc}
 					sourceAccountId={account.id}
 				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
@@ -76,21 +69,28 @@ export default function AccountItem({
 										<IconView className="size-5" name={account.icon} />
 									</Text>
 
-									<Strong className="min-w-0 flex-1 truncate">
-										{account.name}
-									</Strong>
+									<Strong className="min-w-0 flex-1 truncate">{account.name}</Strong>
 								</div>
+
 								<div className="flex shrink-0 items-center gap-2">
 									<Text className="flex items-center gap-2">
 										<TotalIcon className="size-4" />
 										<MoneyText className="shrink-0">{balance}</MoneyText>
 									</Text>
-									<TransactionFormButton
-										transaction={getNewAccountTransaction()}
-									>
+
+									<Button onClick={() => setOrderDesc((order) => !order)}>
+										{orderDesc ? (
+											<ArrowDown01Icon className="size-4" />
+										) : (
+											<ArrowDown10Icon className="size-4" />
+										)}
+									</Button>
+
+									<TransactionFormButton transaction={getNewAccountTransaction()}>
 										<PlusIcon className="size-4 shrink-0" />
 										<HandCoinsIcon className="size-4 shrink-0" />
 									</TransactionFormButton>
+
 									<AccountFormButton account={account}>
 										<CogIcon className="size-4 shrink-0" />
 									</AccountFormButton>
@@ -115,9 +115,7 @@ export default function AccountItem({
 
 						<DisclosureButton className="flex w-full justify-center p-2">
 							<Text>
-								<ChevronDownIcon
-									className={clsx(open && 'rotate-180 transform')}
-								/>
+								<ChevronDownIcon className={clsx(open && 'rotate-180 transform')} />
 							</Text>
 						</DisclosureButton>
 					</li>
