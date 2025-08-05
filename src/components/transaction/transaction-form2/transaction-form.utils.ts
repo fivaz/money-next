@@ -46,16 +46,8 @@ export const getTransactionFromIn = (
 
 	return {
 		...rest,
-		// if transfer: keep destination
-		// else: remove destination
 		destination: isTransfer ? rest.destination : null,
-
-		// force amount to be negative if expense, positive if income
 		amount:
-			operation === 'income'
-				? Math.abs(rest.amount)
-				: operation === 'expense'
-					? -Math.abs(rest.amount)
-					: rest.amount,
+			operation === 'income' ? Math.abs(rest.amount) : -Math.abs(rest.amount), // expense or transfer → negative
 	};
 };

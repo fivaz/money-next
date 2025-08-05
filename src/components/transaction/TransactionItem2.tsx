@@ -1,7 +1,13 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction2/transaction2.model';
-import { CalendarIcon, ClockIcon, CogIcon, CompassIcon } from 'lucide-react';
+import {
+	ArrowLeftRightIcon,
+	CalendarIcon,
+	ClockIcon,
+	CogIcon,
+	CompassIcon,
+} from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form2/TransactionFormButton2';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
@@ -13,11 +19,13 @@ import Tooltip from '../Tooltip';
 import { getAmount } from '@/lib/transaction2/transaction2.utils';
 
 type TransactionItemProps = {
+	accountId: number;
 	transaction: Transaction;
 	isEditable?: boolean;
 };
 
 export default function TransactionItem({
+	accountId,
 	transaction,
 	isEditable = true,
 }: TransactionItemProps) {
@@ -73,9 +81,15 @@ export default function TransactionItem({
 					</Tooltip>
 				)}
 
+				{transaction.destination && (
+					<Tooltip message={`transfer between accounts`}>
+						<ArrowLeftRightIcon className="size-4 text-yellow-500" />
+					</Tooltip>
+				)}
+
 				<Text>
 					<MoneyText addColor={transaction.isPaid}>
-						{getAmount(transaction)}
+						{getAmount(transaction, accountId)}
 					</MoneyText>
 				</Text>
 

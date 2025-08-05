@@ -57,26 +57,38 @@ export const buildTransaction = (
 export const sortTransactions = (a: Transaction, b: Transaction) =>
 	new Date(b.date).getTime() - new Date(a.date).getTime();
 
-export const sumTransactions = (transactions: Transaction[]): number =>
-	transactions
-		.filter((t) => t.isPaid)
-		.reduce((sum, t) => sum + getAmount(t), 0);
+// export const sumTransactions = (transactions: Transaction[]): number =>
+// 	transactions
+// 		.filter((t) => t.isPaid)
+// 		.reduce((sum, t) => sum + getAmount(t), 0);
 
-export const getAmount = (transaction: Transaction): number => {
-	if (!transaction.spreadStart || !transaction.spreadEnd) {
-		return transaction.amount;
+export const getAmount = (
+	transaction: Transaction,
+	accountId: number,
+): number => {
+	let baseAmount = transaction.amount;
+
+	// Handle spread
+	if (transaction.spreadStart && transaction.spreadEnd) {
+		try {
+			const spreadMonths =
+				differenceInMonths(
+					new Date(transaction.spreadEnd),
+					new Date(transaction.spreadStart),
+				) + 1;
+			baseAmount = baseAmount / spreadMonths;
+		} catch (error) {
+			console.error(error);
+			// fallback to full amount if error in spread calc
+		}
 	}
-	try {
-		const spreadMonths =
-			differenceInMonths(
-				new Date(transaction.spreadEnd),
-				new Date(transaction.spreadStart),
-			) + 1;
-		return transaction.amount / spreadMonths;
-	} catch (error) {
-		console.error(error);
-		return transaction.amount;
+
+	// Make amount positive if this account is the destination
+	if (transaction.destination?.id === accountId) {
+		return Math.abs(baseAmount);
 	}
+
+	return baseAmount;
 };
 
 export const fetchAccountTransactions = (

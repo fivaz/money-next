@@ -91,7 +91,7 @@ export default function AccountItem({
 										exit={{ scale: 0.95, opacity: 0 }}
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
-										<AccountTransactions />
+										<AccountTransactions accountId={account.id} />
 									</motion.div>
 								</DisclosurePanel>
 							)}
