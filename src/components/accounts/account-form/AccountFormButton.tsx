@@ -5,11 +5,17 @@ import { PiggyBankIcon, Vault, VaultIcon } from 'lucide-react';
 import { Account } from '@/lib/account/account.model';
 import AccountForm from '@/components/accounts/account-form/AccountForm';
 
-type AccountFormButtonProps = PropsWithChildren<{ account?: Account }>;
+type AccountFormButtonProps = PropsWithChildren<{
+	account?: Account;
+	className?: string;
+	size?: string;
+}>;
 
 export default function AccountFormButton({
 	children,
 	account,
+	size,
+	className,
 }: AccountFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -18,11 +24,11 @@ export default function AccountFormButton({
 	return (
 		<>
 			<>
-				<Button onClick={openDialog}>
+				<Button onClick={openDialog} className={className} size={size}>
 					{children || (
 						<>
 							<VaultIcon className="size-5" />
-							Add Account
+							<span>Add Account</span>
 						</>
 					)}
 				</Button>
