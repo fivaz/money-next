@@ -3,6 +3,7 @@ import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import { BALANCE_URL } from '@/lib/source/source.utils-api';
+import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
@@ -10,9 +11,9 @@ const getAccountTransactionsUrl = (accountId: number, year: number, month: numbe
 export const fetchAccountTransactions = (accountId: number, year: number, month: number) => {
 	const url = getAccountTransactionsUrl(accountId, year, month);
 
-	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
 
-	return { data: initialTransactionsData || [], mutate };
+	return initialTransactionsData || [];
 };
 
 const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
@@ -26,25 +27,40 @@ export const fetchAccountBalance = (accountId: number, year: number, month: numb
 	return data || 0;
 };
 
+type SourceType = 'account' | 'budget';
+
 export const mutateTransactions = (
-	transaction: Transaction,
+	transaction: Omit<Transaction, 'id'>,
 	year: number,
 	month: number,
-	previousSourceAccountId?: number,
+	source?: { type: SourceType; id: number },
 ) => {
 	void mutate(BALANCE_URL);
 
-	void mutate(getAccountTransactionsUrl(transaction.account.id, year, month));
-	void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
-	// void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
-
-	if (transaction.destination) {
-		void mutate(getAccountTransactionsUrl(transaction.destination.id, year, month));
-		void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
+	if (!source) {
+		return;
 	}
 
-	if (previousSourceAccountId && transaction.account.id !== previousSourceAccountId) {
-		void mutate(getAccountTransactionsUrl(previousSourceAccountId, year, month));
-		void mutate(getAccountBalanceUrl(previousSourceAccountId, year, month));
+	if (source.type === 'account') {
+		void mutate(getAccountTransactionsUrl(transaction.account.id, year, month));
+		void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
+
+		if (transaction.destination) {
+			void mutate(getAccountTransactionsUrl(transaction.destination.id, year, month));
+			void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
+		}
+
+		if (source.id && transaction.account.id !== source.id) {
+			void mutate(getAccountTransactionsUrl(source.id, year, month));
+			void mutate(getAccountBalanceUrl(source.id, year, month));
+		}
+	}
+
+	if (source.type === 'budget' && transaction.budget) {
+		void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
+
+		if (source.id && transaction.budget.id !== source.id) {
+			void mutate(getBudgetTransactionsUrl(source.id, year, month));
+		}
 	}
 };

@@ -13,7 +13,7 @@ import { getParamsDate } from '@/lib/shared/date.utils';
 
 export function useTransactionListActions(
 	initialTransactions: Transaction[],
-	sourceAccountId?: number,
+	source?: { type: 'account' | 'budget'; id: number },
 ) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
 	const searchParams = useSearchParams();
@@ -23,23 +23,35 @@ export function useTransactionListActions(
 		setTransactions(initialTransactions);
 	}, [initialTransactions]);
 
+	const isFromSource = (transaction: Omit<Transaction, 'id'>) => {
+		if (!source) return false;
+		if (source.type === 'account') return transaction.account?.id === source.id;
+		if (source.type === 'budget') return transaction.budget?.id === source.id;
+		return false;
+	};
+
 	const createTransaction = async (toCreate: Omit<Transaction, 'id'>) => {
 		const tempId = Date.now();
 		const optimisticTransaction: Transaction = { ...toCreate, id: tempId };
 		const previousTransactions = transactions;
 
-		if (toCreate.account.id === sourceAccountId) {
+		// Only optimistically add if it belongs to the current source
+		if (isFromSource(toCreate)) {
 			setTransactions((prev) => [optimisticTransaction, ...prev]);
 		}
 
 		try {
 			const created = await createTransactionAction(toCreate);
-			if (toCreate.account.id === sourceAccountId) {
+
+			// Only update optimistic entry if it was added
+			if (isFromSource(toCreate)) {
 				setTransactions((prev) =>
 					prev.map((current) => (current.id === tempId ? created : current)),
 				);
 			}
-			mutateTransactions(created, year, month);
+
+			// Let global SWR mutate trigger the rest
+			mutateTransactions(toCreate, year, month, source);
 		} catch (err) {
 			console.error('Create failed', err);
 			setTransactions(previousTransactions);
@@ -47,17 +59,19 @@ export function useTransactionListActions(
 	};
 
 	const updateTransaction = async (toUpdate: Transaction) => {
-		const previousTransactions = transactions;
+		const previousTransactions = transactions; // Save the full list before optimistic update
+
 		setTransactions((prev) =>
 			prev.map((current) => (current.id === toUpdate.id ? toUpdate : current)),
 		);
 
 		try {
 			await updateTransactionAction(toUpdate);
-			mutateTransactions(toUpdate, year, month, sourceAccountId);
+
+			mutateTransactions(toUpdate, year, month, source);
 		} catch (err) {
 			console.error('Update failed', err);
-			setTransactions(previousTransactions);
+			setTransactions(previousTransactions); // ⬅️ Restore old state on failure
 		}
 	};
 
@@ -67,7 +81,7 @@ export function useTransactionListActions(
 
 		try {
 			await deleteTransactionAction(toDelete.id);
-			mutateTransactions(toDelete, year, month);
+			mutateTransactions(toDelete, year, month, source);
 		} catch (err) {
 			console.error('Delete failed', err);
 			setTransactions(previousTransactions);

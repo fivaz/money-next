@@ -66,7 +66,11 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 						<ProgressBar budget={budget} transactions={initialTransactions} />
 					</div>
 
-					<TransactionListProvider initialTransactions={initialTransactions} orderDesc={orderDesc}>
+					<TransactionListProvider
+						source={{ type: 'budget', id: budget.id }}
+						initialTransactions={initialTransactions}
+						orderDesc={orderDesc}
+					>
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>

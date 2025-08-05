@@ -40,7 +40,7 @@ type AccountItemProps = {
 export default function AccountItem({ account, index, year, month }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const { data: initialTransactions } = fetchAccountTransactions(account.id, year, month);
+	const initialTransactions = fetchAccountTransactions(account.id, year, month);
 
 	const balance = fetchAccountBalance(account.id, year, month);
 
@@ -59,7 +59,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 				<TransactionListProvider
 					initialTransactions={initialTransactions}
 					orderDesc={orderDesc}
-					sourceAccountId={account.id}
+					source={{ type: 'account', id: account.id }}
 				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 						<div className="sticky top-0 z-10 flex flex-col gap-2 border-b border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-800">

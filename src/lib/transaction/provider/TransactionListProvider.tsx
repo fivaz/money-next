@@ -9,16 +9,16 @@ import { useTransactionListActions } from '@/lib/transaction/provider/useTransac
 export function TransactionListProvider({
 	children,
 	initialTransactions,
-	sourceAccountId,
+	source,
 	orderDesc,
 }: {
 	children: ReactNode;
 	initialTransactions: Transaction[];
-	sourceAccountId?: number;
+	source?: { type: 'account' | 'budget'; id: number };
 	orderDesc: boolean;
 }) {
 	const { transactions, createTransaction, updateTransaction, deleteTransaction } =
-		useTransactionListActions(initialTransactions, sourceAccountId);
+		useTransactionListActions(initialTransactions, source);
 
 	return (
 		<TransactionListContext.Provider
