@@ -102,3 +102,15 @@ export const fetchAccountTransactions = (
 
 	return initialTransactionsData || [];
 };
+
+export const fetchAccountBalance = (
+	accountId: number,
+	year: number,
+	month: number,
+) => {
+	const url = `/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
+
+	const { data } = useSWR<number>(url, fetcher);
+
+	return data || 0;
+};

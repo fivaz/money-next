@@ -20,7 +20,10 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
 import TransactionFormButton2 from '@/components/transaction/transaction-form2/TransactionFormButton2';
 import { TransactionListProvider2 } from '@/lib/transaction2/TransactionListProvider2';
-import { fetchAccountTransactions } from '@/lib/transaction2/transaction2.utils';
+import {
+	fetchAccountBalance,
+	fetchAccountTransactions,
+} from '@/lib/transaction2/transaction2.utils';
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction2/transaction2.model';
 import { useSearchParams } from 'next/navigation';
@@ -29,6 +32,8 @@ import {
 	formatForInput,
 	getParamsDate,
 } from '@/lib/shared/date.utils';
+import TotalIcon from '@/components/icons/TotalIcon';
+import MoneyText from '@/components/MoneyText';
 
 type AccountItemProps = {
 	account: Account;
@@ -46,6 +51,8 @@ export default function AccountItem({
 	const { ref } = useSortable({ id: account.id, index });
 
 	const initialTransactions = fetchAccountTransactions(account.id, year, month);
+
+	const balance = fetchAccountBalance(account.id, year, month);
 
 	const getAccountTransaction = (): Partial<Transaction> => {
 		return {
@@ -71,6 +78,10 @@ export default function AccountItem({
 									</Strong>
 								</div>
 								<div className="flex shrink-0 items-center gap-2">
+									<Text className="flex items-center gap-2">
+										<TotalIcon className="size-4" />
+										<MoneyText className="shrink-0">{balance}</MoneyText>
+									</Text>
 									<TransactionFormButton2 transaction={getAccountTransaction()}>
 										<PlusIcon className="size-4 shrink-0" />
 										<HandCoinsIcon className="size-4 shrink-0" />
