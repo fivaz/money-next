@@ -25,6 +25,11 @@ export const buildTransaction = (
 		(account) => account.id === Number(formData.get('account')),
 	);
 
+	let destination =
+		accounts.find(
+			(account) => account.id === Number(formData.get('destination')),
+		) || null;
+
 	if (!account) {
 		console.error('Account not found');
 		account = accounts[0];
@@ -37,6 +42,7 @@ export const buildTransaction = (
 		date: formData.get('date') as string,
 		budget,
 		account,
+		destination,
 		isPaid: formData.get('isPaid') === 'on',
 		referenceDate: formData.get('referenceDate') as string,
 		spreadStart: formData.get('spreadStart') as string,
@@ -79,4 +85,23 @@ export const fetchAccountTransactions = (
 	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
 
 	return initialTransactionsData || [];
+};
+
+export const getEmptyTransaction = (
+	transaction: Partial<Transaction> | undefined,
+	accounts: Account[],
+): Transaction => {
+	return {
+		id: transaction?.id || 0,
+		description: transaction?.description || '',
+		amount: transaction?.amount || 0,
+		date: transaction?.date || '',
+		budget: transaction?.budget || null,
+		account: transaction?.account || accounts[0],
+		destination: transaction?.destination || null,
+		isPaid: transaction?.isPaid || true,
+		referenceDate: transaction?.referenceDate || '',
+		spreadStart: transaction?.spreadStart || '',
+		spreadEnd: transaction?.spreadEnd || '',
+	};
 };

@@ -1,55 +1,74 @@
 import { RadioGroup, Radio } from '@headlessui/react';
 import ExpenseIcon from '@/components/icons/ExpenseIcon';
 import IncomeIcon from '@/components/icons/IncomeIcon';
+import { ArrowRightLeft, TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 import clsx from 'clsx';
+import { ReactNode } from 'react';
 
 interface RadioGroupProps {
 	value?: string;
 	defaultValue?: string;
-	onChange?: (value: 'income' | 'expense') => void;
+	onChange?: (value: 'income' | 'expense' | 'transfer') => void;
 }
 
-export default function OperationSelector({ value, defaultValue, onChange }: RadioGroupProps) {
+type OperationType = 'income' | 'expense' | 'transfer';
+
+const operations: {
+	value: OperationType;
+	label: string;
+	Icon: ReactNode;
+	activeClass: string;
+}[] = [
+	{
+		value: 'expense',
+		label: 'Expense',
+		Icon: <TrendingDownIcon className="size-5" />,
+		activeClass: 'bg-red-500 text-white dark:bg-red-600 dark:text-red-50',
+	},
+	{
+		value: 'transfer',
+		label: 'Transfer',
+		Icon: <ArrowRightLeft className="size-5" />,
+		activeClass: 'bg-blue-500 text-white dark:bg-blue-600 dark:text-blue-50',
+	},
+	{
+		value: 'income',
+		label: 'Income',
+		Icon: <TrendingUpIcon className="size-5" />,
+		activeClass: 'bg-green-500 text-white dark:bg-green-600 dark:text-green-50',
+	},
+];
+
+export default function OperationSelector({
+	value,
+	defaultValue,
+	onChange,
+}: RadioGroupProps) {
 	return (
 		<RadioGroup
-			className="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
+			className="grid grid-cols-3 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
 			value={value}
 			defaultValue={defaultValue}
 			name="operation"
 			onChange={onChange}
 		>
-			<Radio
-				key="expense"
-				value="expense"
-				className={({ checked }) =>
-					`${
-						checked
-							? 'bg-red-500 text-white dark:bg-red-600 dark:text-red-50'
-							: 'text-gray-600 dark:text-gray-300'
-					} flex cursor-pointer items-center justify-center gap-1 rounded-full px-2.5 py-1`
-				}
-			>
-				<>
-					<ExpenseIcon className={clsx('size-5')} />
-					<span>expense</span>
-				</>
-			</Radio>
-			<Radio
-				key="income"
-				value="income"
-				className={({ checked }) =>
-					`${
-						checked
-							? 'bg-green-500 text-white dark:bg-green-600 dark:text-green-50'
-							: 'text-gray-600 dark:text-gray-300'
-					} flex cursor-pointer items-center justify-center gap-1 rounded-full px-2.5 py-1`
-				}
-			>
-				<>
-					<IncomeIcon className={clsx('size-5')} />
-					<span>income</span>
-				</>
-			</Radio>
+			{operations.map((op) => (
+				<Radio
+					key={op.value}
+					value={op.value}
+					className={({ checked }) =>
+						clsx(
+							'flex cursor-pointer items-center justify-center gap-1 rounded-full px-2.5 py-1',
+							checked ? op.activeClass : 'text-gray-600 dark:text-gray-300',
+						)
+					}
+				>
+					<>
+						{op.Icon}
+						<span>{op.label}</span>
+					</>
+				</Radio>
+			))}
 		</RadioGroup>
 	);
 }

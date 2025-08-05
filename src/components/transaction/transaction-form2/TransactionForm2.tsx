@@ -1,4 +1,11 @@
-import { FormEvent, useRef, useState } from 'react';
+import {
+	ChangeEvent,
+	Dispatch,
+	FormEvent,
+	SetStateAction,
+	useRef,
+	useState,
+} from 'react';
 import { Transaction } from '@/lib/transaction2/transaction2.model';
 import OperationSelector from '@/components/transaction/transaction-form2/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
@@ -26,13 +33,15 @@ import { fetchBudgets } from '@/lib/budget/budget.utils';
 import { fetchAccounts } from '@/lib/account/account.utils';
 
 type TransactionFormProps = {
-	transaction?: Partial<Transaction>;
+	transaction: Transaction;
+	setTransaction: Dispatch<SetStateAction<Transaction>>;
 	isOpen: boolean;
 	closeFormAction: () => void;
 };
 
 export default function TransactionForm2({
 	transaction,
+	setTransaction,
 	isOpen,
 	closeFormAction,
 }: TransactionFormProps) {
@@ -45,32 +54,13 @@ export default function TransactionForm2({
 
 	const formRef = useRef<HTMLFormElement | null>(null);
 
-	const [amount, setAmount] = useState<string>(
-		transaction?.amount?.toString() || '',
-	);
-
-	const resetForm = () => {
-		setTimeout(() => {
-			formRef.current?.reset();
-			setAmount(transaction?.amount?.toString() || '');
-		}, 200);
-	};
-
-	const closeForm = () => {
-		resetForm();
-		closeFormAction();
-	};
-
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const formData = new FormData(e.currentTarget);
-		const finalTransaction = buildTransaction(formData, budgets, accounts);
 
-		if (transaction?.id) void updateTransaction(finalTransaction);
-		else void createTransaction(finalTransaction);
+		if (transaction?.id) void updateTransaction(transaction);
+		else void createTransaction(transaction);
 
 		closeFormAction();
-		resetForm();
 	};
 
 	const handleDelete = async () => {
@@ -79,11 +69,48 @@ export default function TransactionForm2({
 		}
 	};
 
+	const handleChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		setTransaction((transaction) => ({
+			...transaction,
+			[e.target.name]: e.target.value,
+		}));
+	};
+
+	const handleAccount = (value: Account) => {
+		setTransaction((transaction) => ({
+			...transaction,
+			account: value,
+		}));
+	};
+
+	const handleDestination = (value: Account | null) => {
+		setTransaction((transaction) => ({
+			...transaction,
+			destination: value,
+		}));
+	};
+
+	const handleBudget = (value: Budget | null) => {
+		setTransaction((transaction) => ({
+			...transaction,
+			budget: value,
+		}));
+	};
+
+	const handleSwitch = (value: boolean) => {
+		setTransaction((transaction) => ({
+			...transaction,
+			isPaid: value,
+		}));
+	};
+
 	return (
-		<Dialog open={isOpen} onClose={closeForm}>
+		<Dialog open={isOpen} onClose={closeFormAction}>
 			<DialogTitle className="flex items-center justify-between">
 				<span>{transaction?.id ? 'Edit Transaction' : 'Add Transaction'}</span>
-				<Button onClick={closeForm} size="p-1">
+				<Button onClick={closeFormAction} size="p-1">
 					<XIcon />
 				</Button>
 			</DialogTitle>
@@ -97,14 +124,17 @@ export default function TransactionForm2({
 							: 'expense'
 					}
 				/>
+
 				<Field>
 					<Label>Description</Label>
 					<Textarea
 						name="description"
-						defaultValue={transaction?.description}
+						value={transaction.description}
+						onChange={handleChange}
 						autoFocus
 					/>
 				</Field>
+
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Date</Label>
@@ -112,7 +142,8 @@ export default function TransactionForm2({
 							name="date"
 							required
 							type="datetime-local"
-							defaultValue={transaction?.date}
+							onChange={handleChange}
+							value={transaction.date}
 							autoFocus
 						/>
 					</Field>
@@ -122,42 +153,75 @@ export default function TransactionForm2({
 						<MoneyInput
 							required
 							name="amount"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
+							value={transaction.amount.toString()}
+							onChange={handleChange}
 						/>
 					</Field>
 				</div>
 
-				<Field>
-					<Label>Account</Label>
-					{isAccountLoading ? (
-						<Text>
-							Loading accounts{' '}
-							<LoaderCircleIcon className="size-5 animate-spin" />
-						</Text>
-					) : (
-						<Listbox
-							name="account"
-							defaultValue={transaction?.account?.id}
-							placeholder="Select account&hellip;"
-						>
-							<ListboxOption value={null} className="flex gap-2">
-								<IconView name={''} className="size-4" />
-								No account
-							</ListboxOption>
-							{accounts.map((account) => (
-								<ListboxOption
-									key={account.id}
-									value={account.id}
-									className="flex gap-2"
-								>
-									<IconView name={account.icon} className="size-4" />
-									{account.name}
+				<div className="grid grid-cols-2 gap-4">
+					<Field className="col-span-2 md:col-span-1">
+						<Label>Account</Label>
+						{isAccountLoading ? (
+							<Text>
+								Loading accounts{' '}
+								<LoaderCircleIcon className="size-5 animate-spin" />
+							</Text>
+						) : (
+							<Listbox
+								name="account"
+								value={transaction?.account}
+								onChange={handleAccount}
+								placeholder="Select account&hellip;"
+							>
+								{accounts.map((account) => (
+									<ListboxOption
+										key={account.id}
+										value={account}
+										className="flex gap-2"
+									>
+										<IconView name={account.icon} className="size-4" />
+										{account.name}
+									</ListboxOption>
+								))}
+							</Listbox>
+						)}
+					</Field>
+
+					<Field className="col-span-2 md:col-span-1">
+						<Label>Destination</Label>
+						{isAccountLoading ? (
+							<Text>
+								Loading accounts{' '}
+								<LoaderCircleIcon className="size-5 animate-spin" />
+							</Text>
+						) : (
+							<Listbox
+								name="destination"
+								value={transaction?.destination}
+								onChange={handleDestination}
+								placeholder="Select account&hellip;"
+							>
+								<ListboxOption value={null} className="flex gap-2">
+									<IconView name={''} className="size-4" />
+									No account
 								</ListboxOption>
-							))}
-						</Listbox>
-					)}
-				</Field>
+								{accounts
+									.filter((account) => account.id !== transaction?.account?.id)
+									.map((account) => (
+										<ListboxOption
+											key={account.id}
+											value={account}
+											className="flex gap-2"
+										>
+											<IconView name={account.icon} className="size-4" />
+											{account.name}
+										</ListboxOption>
+									))}
+							</Listbox>
+						)}
+					</Field>
+				</div>
 
 				<div className="flex items-center gap-4">
 					<Field className="flex-1">
@@ -170,7 +234,8 @@ export default function TransactionForm2({
 						) : (
 							<Listbox
 								name="budget"
-								defaultValue={transaction?.budget?.id}
+								value={transaction?.budget}
+								onChange={handleBudget}
 								placeholder="Select budget&hellip;"
 							>
 								<ListboxOption value={null} className="flex gap-2">
@@ -180,7 +245,7 @@ export default function TransactionForm2({
 								{budgets.map((budget) => (
 									<ListboxOption
 										key={budget.id}
-										value={budget.id}
+										value={budget}
 										className="flex gap-2"
 									>
 										<IconView name={budget.icon} className="size-4" />
@@ -197,7 +262,8 @@ export default function TransactionForm2({
 							className="mb-2"
 							name="isPaid"
 							color="amber"
-							defaultChecked={transaction?.isPaid ?? true}
+							onChange={handleSwitch}
+							checked={transaction?.isPaid}
 						/>
 					</Field>
 				</div>
@@ -213,11 +279,12 @@ export default function TransactionForm2({
 						className="mt-3"
 						name="referenceDate"
 						type="date"
-						defaultValue={transaction?.referenceDate || ''}
+						value={transaction.referenceDate}
+						onChange={handleChange}
 					/>
 				</Field>
 
-				<SpreadForm transaction={transaction} amount={amount} />
+				<SpreadForm transaction={transaction} handleChange={handleChange} />
 
 				<DialogActions>
 					<div>

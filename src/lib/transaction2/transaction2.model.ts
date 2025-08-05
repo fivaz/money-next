@@ -16,11 +16,22 @@ const TransactionSchema = z.object({
 		), // Validate local datetime format
 	// optional
 	budget: BudgetSchema.nullable(),
-	account: AccountSchema.nullable(),
+	account: AccountSchema,
+	destination: AccountSchema.nullable(),
 	isPaid: z.boolean(),
-	referenceDate: z.string().date().nullable(),
-	spreadStart: z.string().date().nullable(),
-	spreadEnd: z.string().date().nullable(),
+	// ✅ Accept either YYYY-MM-DD or empty string
+	referenceDate: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
+	spreadStart: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
+	spreadEnd: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
 });
 export type Transaction = z.infer<typeof TransactionSchema>;
 

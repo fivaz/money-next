@@ -2,7 +2,7 @@
 
 import * as Headless from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment } from 'react';
+import { ComponentPropsWithoutRef, Fragment, ReactNode } from 'react';
 
 export function Listbox<T>({
 	className,
@@ -13,10 +13,10 @@ export function Listbox<T>({
 	...props
 }: {
 	className?: string;
-	placeholder?: React.ReactNode;
+	placeholder?: ReactNode;
 	autoFocus?: boolean;
 	'aria-label'?: string;
-	children?: React.ReactNode;
+	children?: ReactNode;
 } & Omit<Headless.ListboxProps<typeof Fragment, T>, 'as' | 'multiple'>) {
 	return (
 		<Headless.Listbox {...props} multiple={false}>
@@ -44,7 +44,11 @@ export function Listbox<T>({
 					as="span"
 					options={options}
 					placeholder={
-						placeholder && <span className="block truncate text-zinc-500">{placeholder}</span>
+						placeholder && (
+							<span className="block truncate text-zinc-500">
+								{placeholder}
+							</span>
+						)
 					}
 					className={clsx([
 						// Basic layout
@@ -136,7 +140,9 @@ export function ListboxOption<T>({
 		<Headless.ListboxOption as={Fragment} {...props}>
 			{({ selectedOption }) => {
 				if (selectedOption) {
-					return <div className={clsx(className, sharedClasses)}>{children}</div>;
+					return (
+						<div className={clsx(className, sharedClasses)}>{children}</div>
+					);
 				}
 
 				return (
@@ -167,7 +173,9 @@ export function ListboxOption<T>({
 								strokeLinejoin="round"
 							/>
 						</svg>
-						<span className={clsx(className, sharedClasses, 'col-start-2')}>{children}</span>
+						<span className={clsx(className, sharedClasses, 'col-start-2')}>
+							{children}
+						</span>
 					</div>
 				);
 			}}
@@ -175,11 +183,17 @@ export function ListboxOption<T>({
 	);
 }
 
-export function ListboxLabel({ className, ...props }: React.ComponentPropsWithoutRef<'span'>) {
+export function ListboxLabel({
+	className,
+	...props
+}: ComponentPropsWithoutRef<'span'>) {
 	return (
 		<span
 			{...props}
-			className={clsx(className, 'ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0')}
+			className={clsx(
+				className,
+				'ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0',
+			)}
 		/>
 	);
 }
@@ -188,7 +202,7 @@ export function ListboxDescription({
 	className,
 	children,
 	...props
-}: React.ComponentPropsWithoutRef<'span'>) {
+}: ComponentPropsWithoutRef<'span'>) {
 	return (
 		<span
 			{...props}
