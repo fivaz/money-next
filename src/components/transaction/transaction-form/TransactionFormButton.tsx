@@ -35,6 +35,7 @@ export default function TransactionFormButton({
 	};
 	const openDialog = () => {
 		setIsOpen(true);
+		if (transaction?.id) console.log(transaction.id);
 		setTransactionIn(getEmptyTransactionIn(transaction, accounts));
 	};
 

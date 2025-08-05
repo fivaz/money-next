@@ -50,9 +50,12 @@ export const fetchAccountTransactions = (
 ) => {
 	const url = `/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(
+		url,
+		fetcher,
+	);
 
-	return initialTransactionsData || [];
+	return { data: initialTransactionsData || [], mutate };
 };
 
 export const fetchAccountBalance = (

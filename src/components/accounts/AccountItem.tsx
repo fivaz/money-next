@@ -50,7 +50,11 @@ export default function AccountItem({
 }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const initialTransactions = fetchAccountTransactions(account.id, year, month);
+	const { data: initialTransactions, mutate } = fetchAccountTransactions(
+		account.id,
+		year,
+		month,
+	);
 
 	const balance = fetchAccountBalance(account.id, year, month);
 
@@ -64,7 +68,10 @@ export default function AccountItem({
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
 			{({ open }) => (
-				<TransactionListProvider initialTransactions={initialTransactions}>
+				<TransactionListProvider
+					initialTransactions={initialTransactions}
+					mutateAction={mutate}
+				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
 							<div className="flex items-center justify-between">

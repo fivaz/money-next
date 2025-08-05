@@ -29,9 +29,11 @@ export const TransactionListContext = createContext<
 export function TransactionListProvider({
 	children,
 	initialTransactions,
+	mutateAction,
 }: {
 	children: ReactNode;
 	initialTransactions: Transaction[];
+	mutateAction?: () => void;
 }) {
 	const [transactions, setTransactions] =
 		useState<Transaction[]>(initialTransactions);
@@ -52,6 +54,7 @@ export function TransactionListProvider({
 			setTransactions((prev) =>
 				prev.map((current) => (current.id === tempId ? created : current)),
 			);
+			mutateAction?.();
 		} catch (err) {
 			console.error('Create failed', err);
 			setTransactions(previousTransactions); // rollback
@@ -67,6 +70,7 @@ export function TransactionListProvider({
 
 		try {
 			await updateTransactionAction(update);
+			mutateAction?.();
 		} catch (err) {
 			console.error('Update failed', err);
 			setTransactions(previousTransactions); // rollback
@@ -79,6 +83,7 @@ export function TransactionListProvider({
 
 		try {
 			await deleteTransactionAction(id);
+			mutateAction?.();
 		} catch (err) {
 			console.error('Delete failed', err);
 			setTransactions(previousTransactions); // rollback
