@@ -7,9 +7,7 @@ export type TransactionIn = Transaction & {
 	operation: OperationType;
 };
 
-const getOperation = (
-	transaction: Partial<Transaction | undefined>,
-): OperationType => {
+const getOperation = (transaction: Partial<Transaction | undefined>): OperationType => {
 	if (transaction?.destination) {
 		return 'transfer';
 	}
@@ -37,9 +35,7 @@ export const getEmptyTransactionIn = (
 	};
 };
 
-export const getTransactionFromIn = (
-	transactionIn: TransactionIn,
-): Transaction => {
+export const getTransactionFromIn = (transactionIn: TransactionIn): Transaction => {
 	const { operation, ...rest } = transactionIn;
 
 	const isTransfer = operation === 'transfer';
@@ -47,7 +43,6 @@ export const getTransactionFromIn = (
 	return {
 		...rest,
 		destination: isTransfer ? rest.destination : null,
-		amount:
-			operation === 'income' ? Math.abs(rest.amount) : -Math.abs(rest.amount), // expense or transfer → negative
+		amount: operation === 'income' ? Math.abs(rest.amount) : -Math.abs(rest.amount), // expense or transfer → negative
 	};
 };

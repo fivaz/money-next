@@ -1,7 +1,7 @@
 'use client';
 import { type PropsWithChildren, useState } from 'react';
 import Button from '@/components/Button';
-import { PiggyBankIcon, Vault, VaultIcon } from 'lucide-react';
+import { VaultIcon } from 'lucide-react';
 import { Account } from '@/lib/account/account.model';
 import AccountForm from '@/components/accounts/account-form/AccountForm';
 
@@ -34,11 +34,7 @@ export default function AccountFormButton({
 				</Button>
 			</>
 
-			<AccountForm
-				account={account}
-				isOpen={isOpen}
-				closeFormAction={closeDialog}
-			/>
+			<AccountForm account={account} isOpen={isOpen} closeFormAction={closeDialog} />
 		</>
 	);
 }

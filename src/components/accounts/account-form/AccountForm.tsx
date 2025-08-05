@@ -5,17 +5,11 @@ import { Input } from '@/components/base/input';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import Button from '@/components/Button';
 import { XIcon } from 'lucide-react';
-import MoneyInput from '@/components/MoneyInput';
 import IconPicker from '@/components/icon-picker/IconPicker';
 import { buildAccount } from '@/lib/account/account.utils';
 import type { Account } from '@/lib/account/account.model';
 
-import { mutate } from 'swr';
-import { API } from '@/lib/const';
 import ConfirmButton from '@/components/Button/ConfirmButton';
-import { Switch } from '@/components/base/switch';
-import JarIcon from '@/components/icons/JarIcon';
-import Tooltip from '@/components/Tooltip';
 import { useAccountList } from '@/lib/account/useAccountList';
 
 type AccountFormProps = {
@@ -24,11 +18,7 @@ type AccountFormProps = {
 	closeFormAction: () => void;
 };
 
-export default function AccountForm({
-	account,
-	isOpen,
-	closeFormAction,
-}: AccountFormProps) {
+export default function AccountForm({ account, isOpen, closeFormAction }: AccountFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const { createAccount, updateAccount, deleteAccount } = useAccountList();
 
@@ -59,17 +49,9 @@ export default function AccountForm({
 				</Button>
 			</DialogTitle>
 
-			<form
-				className="z-20 mt-4 space-y-4"
-				onSubmit={handleSubmit}
-				ref={formRef}
-			>
+			<form className="z-20 mt-4 space-y-4" onSubmit={handleSubmit} ref={formRef}>
 				<input type="hidden" name="id" defaultValue={account?.id} />
-				<input
-					type="hidden"
-					name="sortOrder"
-					defaultValue={account?.sortOrder}
-				/>
+				<input type="hidden" name="sortOrder" defaultValue={account?.sortOrder} />
 
 				<Field>
 					<Label>Name</Label>

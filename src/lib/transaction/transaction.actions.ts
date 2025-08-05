@@ -5,10 +5,8 @@ import {
 	type Transaction,
 	TRANSACTIONS_URL,
 	validatePaginatedTransactions,
-	validateTransactions,
 } from '@/lib/transaction/transaction.model';
 import { fetchInAction } from '@/lib/shared/api-server.utils';
-import { ACCOUNTS_URL } from '@/lib/account/account.model';
 
 export async function searchTransactions(
 	query: string,
@@ -23,9 +21,7 @@ export async function searchTransactions(
 	return validatePaginatedTransactions(data);
 }
 
-export async function createTransactionAction(
-	transaction: Omit<Transaction, 'id'>,
-) {
+export async function createTransactionAction(transaction: Omit<Transaction, 'id'>) {
 	return fetchInAction(TRANSACTIONS_URL, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },

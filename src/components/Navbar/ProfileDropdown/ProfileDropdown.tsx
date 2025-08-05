@@ -1,9 +1,7 @@
 'use client';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
-import Link from 'next/link';
 import SignOutButton from './SignOutButton';
-import { ROUTES } from '@/lib/const';
 import { useAuth } from '@/lib/user/AuthContext';
 
 interface ProfileDropdownProps {}

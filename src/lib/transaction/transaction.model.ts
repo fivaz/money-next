@@ -50,9 +50,7 @@ export type PaginatedTransactions = z.infer<typeof PaginatedTransactionSchema>;
 export const validateTransactions = (data: unknown) =>
 	validateSchema(data, TransactionSchema, 'transaction');
 
-export const validatePaginatedTransactions = (
-	data: unknown,
-): PaginatedTransactions => {
+export const validatePaginatedTransactions = (data: unknown): PaginatedTransactions => {
 	const result = PaginatedTransactionSchema.safeParse(data);
 	if (result.success) {
 		return result.data;

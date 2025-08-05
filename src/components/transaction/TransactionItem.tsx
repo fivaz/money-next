@@ -1,13 +1,7 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import {
-	ArrowLeftRightIcon,
-	CalendarIcon,
-	ClockIcon,
-	CogIcon,
-	CompassIcon,
-} from 'lucide-react';
+import { ArrowLeftRightIcon, CalendarIcon, ClockIcon, CogIcon, CompassIcon } from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
@@ -55,10 +49,7 @@ export default function TransactionItem({
 
 				<div className="flex items-center gap-2 truncate">
 					<Strong>
-						<IconView
-							className="size-4 shrink-0 text-yellow-500"
-							name={transaction.budget?.icon}
-						/>
+						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
 					</Strong>
 					<Strong className="min-w-0 flex-1 truncate">
 						{transaction.description.trim() || transaction.budget?.name}
@@ -74,9 +65,7 @@ export default function TransactionItem({
 				)}
 
 				{transaction.referenceDate && (
-					<Tooltip
-						message={`reference date: ${formatFRDate(transaction.referenceDate)}`}
-					>
+					<Tooltip message={`reference date: ${formatFRDate(transaction.referenceDate)}`}>
 						<CompassIcon className="size-5 text-yellow-500" />
 					</Tooltip>
 				)}
@@ -88,9 +77,7 @@ export default function TransactionItem({
 				)}
 
 				<Text>
-					<MoneyText addColor={transaction.isPaid}>
-						{getAmount(transaction, accountId)}
-					</MoneyText>
+					<MoneyText addColor={transaction.isPaid}>{getAmount(transaction, accountId)}</MoneyText>
 				</Text>
 
 				{isEditable && (

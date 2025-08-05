@@ -29,12 +29,7 @@ export const ROUTES = {
 	},
 };
 
-export const navLinks = [
-	ROUTES.ROOT,
-	ROUTES.BUDGETS,
-	ROUTES.SOURCES,
-	ROUTES.RECAP,
-];
+export const navLinks = [ROUTES.ROOT, ROUTES.BUDGETS, ROUTES.SOURCES, ROUTES.RECAP];
 
 export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
 

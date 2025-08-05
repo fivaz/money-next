@@ -44,11 +44,7 @@ export function Listbox<T>({
 					as="span"
 					options={options}
 					placeholder={
-						placeholder && (
-							<span className="block truncate text-zinc-500">
-								{placeholder}
-							</span>
-						)
+						placeholder && <span className="block truncate text-zinc-500">{placeholder}</span>
 					}
 					className={clsx([
 						// Basic layout
@@ -140,9 +136,7 @@ export function ListboxOption<T>({
 		<Headless.ListboxOption as={Fragment} {...props}>
 			{({ selectedOption }) => {
 				if (selectedOption) {
-					return (
-						<div className={clsx(className, sharedClasses)}>{children}</div>
-					);
+					return <div className={clsx(className, sharedClasses)}>{children}</div>;
 				}
 
 				return (
@@ -173,9 +167,7 @@ export function ListboxOption<T>({
 								strokeLinejoin="round"
 							/>
 						</svg>
-						<span className={clsx(className, sharedClasses, 'col-start-2')}>
-							{children}
-						</span>
+						<span className={clsx(className, sharedClasses, 'col-start-2')}>{children}</span>
 					</div>
 				);
 			}}
@@ -183,17 +175,11 @@ export function ListboxOption<T>({
 	);
 }
 
-export function ListboxLabel({
-	className,
-	...props
-}: ComponentPropsWithoutRef<'span'>) {
+export function ListboxLabel({ className, ...props }: ComponentPropsWithoutRef<'span'>) {
 	return (
 		<span
 			{...props}
-			className={clsx(
-				className,
-				'ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0',
-			)}
+			className={clsx(className, 'ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0')}
 		/>
 	);
 }

@@ -1,7 +1,4 @@
-import {
-	getBudgets,
-	getCurrentMonthBudgetsWithDetails,
-} from '@/lib/budget/budget.actions';
+import { getCurrentMonthBudgetsWithDetails } from '@/lib/budget/budget.actions';
 import BudgetList from '@/components/budget/BudgetList';
 import { Heading } from '@/components/base/heading';
 import { BudgetListProvider } from '@/lib/budget/BudgetListProvider';

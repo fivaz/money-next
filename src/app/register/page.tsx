@@ -7,9 +7,6 @@ import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
 import {
 	createUserWithEmailAndPassword,
-	GoogleAuthProvider,
-	signInWithEmailAndPassword,
-	signInWithPopup,
 } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
 import { auth } from '@/lib/firebase';

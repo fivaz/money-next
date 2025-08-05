@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext } from 'react';
 
 export type PromptOptions = {
 	title: string;

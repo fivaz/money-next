@@ -1,10 +1,6 @@
 'use server';
 
-import {
-	type Account,
-	ACCOUNTS_URL,
-	validateAccounts,
-} from '@/lib/account/account.model';
+import { type Account, ACCOUNTS_URL, validateAccounts } from '@/lib/account/account.model';
 import { fetchInAction } from '@/lib/shared/api-server.utils';
 
 export async function getAccounts(): Promise<Account[]> {

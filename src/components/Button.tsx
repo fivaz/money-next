@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { LoaderCircle } from 'lucide-react';
-import { ButtonHTMLAttributes } from 'react';
 import type { ButtonColor, ButtonProps } from './Button/utils';
 
 const disabledClasses = 'opacity-50 cursor-not-allowed';

@@ -2,7 +2,7 @@ import { API } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
-import { getAccounts } from '@/lib/account/account.actions';
+import { BALANCE_URL } from '@/lib/source/source.utils-api';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
@@ -32,6 +32,7 @@ export const mutateTransactions = (
 	month: number,
 	previousSourceAccountId?: number,
 ) => {
+	void mutate(BALANCE_URL);
 	void mutate(getAccountTransactionsUrl(transaction.account.id, year, month));
 	void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
 	if (transaction.destination) {

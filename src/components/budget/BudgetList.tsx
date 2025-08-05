@@ -10,11 +10,10 @@ import { useSearchParams } from 'next/navigation';
 import { getParamsDate } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
-import { Suspense, useEffect, useMemo } from 'react';
+import { Suspense } from 'react';
 import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
-import { getAmount } from '@/lib/budget/budget.utils';
 import { formatMoney } from '@/lib/shared/utils';
 
 type BudgetProps = {
@@ -32,10 +31,7 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		void reorderBudgets(newBudgets);
 	};
 
-	const totalAmount = budgets.reduce(
-		(total, budget) => budget.amount + total,
-		0,
-	);
+	const totalAmount = budgets.reduce((total, budget) => budget.amount + total, 0);
 
 	const totalAccumulativeAmount = budgets.reduce(
 		(total, budget) => (budget.accumulativeAmount || 0) + total,
@@ -92,13 +88,7 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem
-							index={index}
-							key={budget.id}
-							budget={budget}
-							year={year}
-							month={month}
-						/>
+						<BudgetItem index={index} key={budget.id} budget={budget} year={year} month={month} />
 					))}
 				</DragDropProvider>
 			</ul>

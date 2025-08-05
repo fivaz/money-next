@@ -2,10 +2,6 @@
 import { BACKEND_URL } from '@/lib/const';
 import { fetchInAction } from '@/lib/shared/api-server.utils';
 
-export async function getActualBalance(): Promise<number> {
-	return fetchInAction(`${BACKEND_URL}/calculate-balance`);
-}
-
 export async function getBudgetedSpent({
 	year,
 	month,

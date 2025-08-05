@@ -14,19 +14,12 @@ export async function GET(
 	const month = searchParams.get('month');
 	const year = searchParams.get('year');
 
-	const backendUrl = new URL(
-		`${ACCOUNTS_URL}/${accountId}/${API.TRANSACTIONS}`,
-	);
+	const backendUrl = new URL(`${ACCOUNTS_URL}/${accountId}/${API.TRANSACTIONS}`);
 
 	if (month) backendUrl.searchParams.append('month', month);
 	if (year) backendUrl.searchParams.append('year', year);
 
-	const data = await fetchInAPI(
-		request.cookies,
-		backendUrl.toString(),
-		{},
-		true,
-	);
+	const data = await fetchInAPI(request.cookies, backendUrl.toString(), {}, true);
 
 	const transactions = validateTransactions(data);
 

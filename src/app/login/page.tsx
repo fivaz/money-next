@@ -5,7 +5,7 @@ import Button from '@/components/Button';
 import { ROUTES } from '@/lib/const';
 import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';

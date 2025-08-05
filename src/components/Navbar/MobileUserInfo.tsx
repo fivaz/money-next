@@ -1,11 +1,8 @@
 'use client';
 
-import { DisclosureButton } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
-import Link from 'next/link';
 import DarkMode from './DarkMode';
 import clsx from 'clsx';
-import { ROUTES } from '@/lib/const';
 import { useAuth } from '@/lib/user/AuthContext';
 import SignOutButton from '@/components/Navbar/ProfileDropdown/SignOutButton';
 

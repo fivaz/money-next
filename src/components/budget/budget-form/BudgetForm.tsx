@@ -12,8 +12,6 @@ import { buildBudget } from '@/lib/budget/budget.utils';
 import type { Budget } from '@/lib/budget/budget.model';
 import { addBudgetDB, deleteBudgetDB, editBudgetDB } from '@/lib/budget/budget.actions';
 
-import { mutate } from 'swr';
-import { API } from '@/lib/const';
 import ConfirmButton from '@/components/Button/ConfirmButton';
 import { Switch } from '@/components/base/switch';
 import JarIcon from '@/components/icons/JarIcon';

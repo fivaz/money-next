@@ -1,10 +1,7 @@
 import { RadioGroup, Radio } from '@headlessui/react';
-import ExpenseIcon from '@/components/icons/ExpenseIcon';
-import IncomeIcon from '@/components/icons/IncomeIcon';
 import { ArrowRightLeft, TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 import clsx from 'clsx';
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import { Transaction } from '@/lib/transaction/transaction.model';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import {
 	OperationType,
 	TransactionIn,
@@ -41,10 +38,7 @@ const operations: {
 	},
 ];
 
-export default function OperationSelector({
-	transaction,
-	setTransaction,
-}: RadioGroupProps) {
+export default function OperationSelector({ transaction, setTransaction }: RadioGroupProps) {
 	return (
 		<RadioGroup
 			className="grid grid-cols-3 gap-x-1 rounded-full p-1 text-center text-xs leading-5 font-semibold ring-1 ring-gray-200 ring-inset"
