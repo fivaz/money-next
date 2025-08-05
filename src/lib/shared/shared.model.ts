@@ -18,6 +18,8 @@ export function validateSchema<T extends z.ZodTypeAny>(
 		if (result.success) {
 			validItems.push(result.data);
 		} else {
+			console.log(JSON.stringify(result.error.format()));
+
 			console.warn(`Invalid ${typeName} at index ${index}:`, {
 				item,
 				errors: result.error.format(),

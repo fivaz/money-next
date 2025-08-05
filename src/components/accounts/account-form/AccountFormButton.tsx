@@ -14,11 +14,7 @@ export default function AccountFormButton({
 	const [isOpen, setIsOpen] = useState(false);
 
 	const closeDialog = () => setIsOpen(false);
-	const openDialog = () => {
-		console.log('account', account);
-		setIsOpen(true);
-	};
-
+	const openDialog = () => setIsOpen(true);
 	return (
 		<>
 			<>

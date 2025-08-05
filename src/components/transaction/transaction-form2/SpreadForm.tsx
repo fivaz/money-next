@@ -10,7 +10,7 @@ import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
 import { useEffect, useState } from 'react';
 import { differenceInMonths } from 'date-fns';
-import { Transaction } from '@/lib/transaction/transaction.model';
+import { Transaction } from '@/lib/transaction2/transaction2.model';
 
 type SpreadFormProps = {
 	transaction?: Partial<Transaction>;

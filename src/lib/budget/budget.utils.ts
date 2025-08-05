@@ -1,6 +1,9 @@
 import { Budget } from '@/lib/budget/budget.model';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { useMemo } from 'react';
+import useSWR from 'swr';
+import { API } from '@/lib/const';
+import { fetcher } from '@/lib/shared/api-client.utils';
 
 export const buildBudget = (formData: FormData): Budget => {
 	return {
@@ -20,4 +23,17 @@ export const buildBudget = (formData: FormData): Budget => {
 export const sortBudgets = (a: Budget, b: Budget) => a.sortOrder - b.sortOrder;
 
 export const getAmount = (budget: Budget): number =>
-	budget.isAccumulative ? budget.amount + (budget.accumulativeAmount || 0) : budget.amount;
+	budget.isAccumulative
+		? budget.amount + (budget.accumulativeAmount || 0)
+		: budget.amount;
+
+export const fetchBudgets = () => {
+	const { data: budgetsData, isLoading } = useSWR<Budget[]>(
+		`/api/${API.BUDGETS}`,
+		fetcher,
+	);
+
+	const budgets = budgetsData || [];
+
+	return { budgets, isLoading };
+};
