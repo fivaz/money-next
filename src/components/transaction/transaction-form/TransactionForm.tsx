@@ -163,9 +163,9 @@ export default function TransactionForm({
 									No budget
 								</ListboxOption>
 								{budgets.map((budget) => (
-									<ListboxOption key={budget.id} value={budget} className="flex gap-2">
-										<IconView name={budget.icon} className="size-4" />
-										{budget.name}
+									<ListboxOption key={budget.id} value={budget} className="flex gap-2 truncate">
+										<IconView name={budget.icon} className="size-4 shrink-0" />
+										<span className="truncate">{budget.name}</span>
 									</ListboxOption>
 								))}
 							</Listbox>
@@ -200,8 +200,8 @@ export default function TransactionForm({
 							>
 								{accounts.map((account) => (
 									<ListboxOption key={account.id} value={account} className="flex gap-2">
-										<IconView name={account.icon} className="size-4" />
-										{account.name}
+										<IconView name={account.icon} className="size-4 shrink-0" />
+										<span className="truncate">{account.name}</span>
 									</ListboxOption>
 								))}
 							</Listbox>
@@ -230,8 +230,8 @@ export default function TransactionForm({
 									.filter((account) => account.id !== transactionIn?.account?.id)
 									.map((account) => (
 										<ListboxOption key={account.id} value={account} className="flex gap-2">
-											<IconView name={account.icon} className="size-4" />
-											{account.name}
+											<IconView name={account.icon} className="size-4 shrink-0" />
+											<span className="truncate">{account.name}</span>
 										</ListboxOption>
 									))}
 							</Listbox>
