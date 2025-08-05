@@ -1,12 +1,12 @@
 'use client';
 
 import { useContext } from 'react';
-import { TransactionListContext } from '@/lib/transaction/provider/TransactionListContext';
+import { TransactionListContext } from './TransactionListContext';
 
 export function useTransactionList() {
 	const context = useContext(TransactionListContext);
 	if (!context) {
-		throw new Error('useTransactionList must be used within an TransactionListProvider');
+		throw new Error('useTransactionList must be used within a TransactionListProvider');
 	}
 	return context;
 }

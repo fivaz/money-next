@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { Fragment, useState } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
-import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
+import { TransactionListProvider } from '@/lib/transaction/provider/TransactionListProvider';
 import BudgetTransactions from '@/components/budget/BudgetTransactions';
 import JarIcon from '../icons/JarIcon';
 import Tooltip from '@/components/Tooltip';

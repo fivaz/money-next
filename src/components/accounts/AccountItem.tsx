@@ -17,7 +17,7 @@ import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
+import { TransactionListProvider } from '@/lib/transaction/provider/TransactionListProvider';
 import {
 	fetchAccountBalance,
 	fetchAccountTransactions,
