@@ -32,6 +32,7 @@ export default function LoginPage() {
 			const credential = await signInWithEmailAndPassword(auth, email, password);
 			const idToken = await credential.user.getIdToken();
 
+			// send to the middleware configured for next-firebase-auth-edge
 			await fetch('/api/login', {
 				headers: {
 					Authorization: `Bearer ${idToken}`,

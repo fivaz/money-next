@@ -4,10 +4,9 @@ import { ROUTES } from '@/lib/const';
 import { type Source, SOURCES_URL, validateSources } from '@/lib/source/source.model';
 import { revalidatePath } from 'next/cache';
 import { fetchInAction } from '@/lib/shared/api-server.utils';
-import { EXPECTED_BALANCE_URL } from '@/lib/source/source.utils-api';
 
 export async function getExpectedBalance(): Promise<number> {
-	return await fetchInAction(EXPECTED_BALANCE_URL);
+	return await fetchInAction(`${SOURCES_URL}/expected-balance`);
 }
 
 export async function getSources(): Promise<Source[]> {

@@ -1,7 +1,7 @@
 import Tooltip from '@/components/Tooltip';
 import NavbarDisclosure from '@/components/Navbar/NavbarDisclosure';
 import Logo from '@/components/Logo';
-import BalanceViewer from '@/components/Navbar/balance-viewer/BalanceViewer';
+import ServerBalanceViewer from '@/components/Navbar/balance-viewer/BalanceViewer';
 import BalanceViewerSkeleton from '@/components/Navbar/balance-viewer/BalanceViewerSkeleton';
 import { Suspense } from 'react';
 import NavLinks from '@/components/Navbar/NavLinks';
@@ -26,7 +26,7 @@ export default function Navbar() {
 						</div>
 						<div className="flex">
 							<Suspense fallback={<BalanceViewerSkeleton />}>
-								<BalanceViewer />
+								<ServerBalanceViewer />
 							</Suspense>
 
 							<div className="hidden sm:ml-6 sm:flex sm:items-center">

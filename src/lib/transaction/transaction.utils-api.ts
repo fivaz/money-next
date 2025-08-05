@@ -33,12 +33,16 @@ export const mutateTransactions = (
 	previousSourceAccountId?: number,
 ) => {
 	void mutate(BALANCE_URL);
+
 	void mutate(getAccountTransactionsUrl(transaction.account.id, year, month));
 	void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
+	// void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
+
 	if (transaction.destination) {
 		void mutate(getAccountTransactionsUrl(transaction.destination.id, year, month));
 		void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
 	}
+
 	if (previousSourceAccountId && transaction.account.id !== previousSourceAccountId) {
 		void mutate(getAccountTransactionsUrl(previousSourceAccountId, year, month));
 		void mutate(getAccountBalanceUrl(previousSourceAccountId, year, month));

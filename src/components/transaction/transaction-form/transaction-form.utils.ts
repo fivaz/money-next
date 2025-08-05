@@ -27,7 +27,7 @@ export const getEmptyTransactionIn = (
 		budget: transaction?.budget || null,
 		account: transaction?.account || accounts[0],
 		destination: transaction?.destination || null,
-		isPaid: transaction?.isPaid || true,
+		isPaid: transaction?.isPaid ?? true,
 		referenceDate: transaction?.referenceDate || '',
 		spreadStart: transaction?.spreadStart || '',
 		spreadEnd: transaction?.spreadEnd || '',
