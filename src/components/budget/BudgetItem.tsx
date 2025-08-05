@@ -7,7 +7,11 @@ import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
 import ProgressBar from '@/components/budget/ProgressBar';
 import { API } from '@/lib/const';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import {
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+} from '@headlessui/react';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
@@ -28,12 +32,20 @@ type BudgetItemProps = {
 	month: number;
 };
 
-export default function BudgetItem({ budget, index, year, month }: BudgetItemProps) {
+export default function BudgetItem({
+	budget,
+	index,
+	year,
+	month,
+}: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
 	const url = `/api/${API.BUDGETS}/${budget.id}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
 
-	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(url, fetcher);
+	const { data: initialTransactionsData, mutate } = useSWR<Transaction[]>(
+		url,
+		fetcher,
+	);
 
 	const initialTransactions = initialTransactionsData || [];
 
@@ -48,10 +60,14 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 									<IconView className="size-5" name={budget.icon} />
 								</Text>
 
-								<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
+								<Strong className="min-w-0 flex-1 truncate">
+									{budget.name}
+								</Strong>
 							</div>
 							<div className="flex shrink-0 items-center gap-2">
-								{budget.isAccumulative && <JarIcon className="size-5 text-green-500" />}
+								{budget.isAccumulative && (
+									<JarIcon className="size-5 text-green-500" />
+								)}
 								<BudgetAmount budget={budget} />
 								<BudgetFormButton budget={budget}>
 									<CogIcon className="size-4 shrink-0" />
@@ -62,7 +78,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 						<ProgressBar budget={budget} transactions={initialTransactions} />
 					</div>
 
-					<TransactionListProvider initialItems={initialTransactions} mutate={mutate}>
+					<TransactionListProvider initialTransactions={initialTransactions}>
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>
@@ -81,7 +97,9 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 
 					<DisclosureButton className="flex w-full justify-center p-2">
 						<Text>
-							<ChevronDownIcon className={clsx(open && 'rotate-180 transform')} />
+							<ChevronDownIcon
+								className={clsx(open && 'rotate-180 transform')}
+							/>
 						</Text>
 					</DisclosureButton>
 				</li>
@@ -97,7 +115,9 @@ function BudgetAmount({ budget }: { budget: Budget }) {
 			<Tooltip
 				message={`${formatMoney(budget.amount)} ${accumulativeAmount >= 0 ? '+' : '-'} ${formatMoney(accumulativeAmount)}`}
 			>
-				<MoneyText addColor={false}>{budget.amount + accumulativeAmount}</MoneyText>
+				<MoneyText addColor={false}>
+					{budget.amount + accumulativeAmount}
+				</MoneyText>
 			</Tooltip>
 		);
 	}

@@ -1,15 +1,14 @@
 'use server';
 
-import { ROUTES } from '@/lib/const';
 import {
 	PaginatedTransactions,
-	Transaction,
+	type Transaction,
 	TRANSACTIONS_URL,
 	validatePaginatedTransactions,
 	validateTransactions,
 } from '@/lib/transaction/transaction.model';
-import { revalidatePath } from 'next/cache';
 import { fetchInAction } from '@/lib/shared/api-server.utils';
+import { ACCOUNTS_URL } from '@/lib/account/account.model';
 
 export async function searchTransactions(
 	query: string,
@@ -24,49 +23,25 @@ export async function searchTransactions(
 	return validatePaginatedTransactions(data);
 }
 
-export async function getCurrentMonthTransactions({
-	year,
-	month,
-}: {
-	year: number;
-	month: number;
-}): Promise<Transaction[]> {
-	const data = await fetchInAction(`${TRANSACTIONS_URL}/by-date?year=${year}&month=${month}`);
-	return validateTransactions(data);
-}
-
-export async function addTransactionDB(
+export async function createTransactionAction(
 	transaction: Omit<Transaction, 'id'>,
-	hasMutateFn: boolean = false,
 ) {
-	const saved = fetchInAction(TRANSACTIONS_URL, {
+	return fetchInAction(TRANSACTIONS_URL, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
-
-	if (!hasMutateFn) {
-		revalidatePath(ROUTES.ROOT.path);
-	}
-
-	return saved;
 }
 
-export async function editTransactionDB(transaction: Transaction, hasMutateFn: boolean = false) {
-	const saved = fetchInAction(`${TRANSACTIONS_URL}/${transaction.id}`, {
+export async function updateTransactionAction(transaction: Transaction) {
+	return fetchInAction(`${TRANSACTIONS_URL}/${transaction.id}`, {
 		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
-
-	if (!hasMutateFn) {
-		revalidatePath(ROUTES.ROOT.path);
-	}
-
-	return saved;
 }
 
-export async function deleteTransactionDB(id: number, hasMutateFn: boolean = false): Promise<void> {
+export async function deleteTransactionAction(id: number): Promise<void> {
 	await fetchInAction(
 		`${TRANSACTIONS_URL}/${id}`,
 		{
@@ -74,10 +49,6 @@ export async function deleteTransactionDB(id: number, hasMutateFn: boolean = fal
 		},
 		false,
 	); // false = we don't expect JSON response
-
-	if (!hasMutateFn) {
-		revalidatePath(ROUTES.ROOT.path);
-	}
 }
 
 export async function getTransactionsByDateDataset() {

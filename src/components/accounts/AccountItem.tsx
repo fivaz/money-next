@@ -18,14 +18,14 @@ import { Fragment, useEffect } from 'react';
 import { AnimatePresence, easeOut, motion } from 'framer-motion';
 import { useSortable } from '@dnd-kit/react/sortable';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
-import TransactionFormButton2 from '@/components/transaction/transaction-form2/TransactionFormButton2';
-import { TransactionListProvider2 } from '@/lib/transaction2/TransactionListProvider2';
+import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
+import { TransactionListProvider } from '@/lib/transaction/TransactionListProvider';
 import {
 	fetchAccountBalance,
 	fetchAccountTransactions,
-} from '@/lib/transaction2/transaction2.utils';
+} from '@/lib/transaction/transaction.utils';
 import AccountTransactions from '@/components/accounts/AccountTransactions';
-import { Transaction } from '@/lib/transaction2/transaction2.model';
+import { Transaction } from '@/lib/transaction/transaction.model';
 import { useSearchParams } from 'next/navigation';
 import {
 	buildDate,
@@ -62,7 +62,7 @@ export default function AccountItem({
 	};
 
 	return (
-		<TransactionListProvider2 initialTransactions={initialTransactions}>
+		<TransactionListProvider initialTransactions={initialTransactions}>
 			<Disclosure ref={ref} as="div" defaultOpen>
 				{({ open }) => (
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
@@ -82,10 +82,10 @@ export default function AccountItem({
 										<TotalIcon className="size-4" />
 										<MoneyText className="shrink-0">{balance}</MoneyText>
 									</Text>
-									<TransactionFormButton2 transaction={getAccountTransaction()}>
+									<TransactionFormButton transaction={getAccountTransaction()}>
 										<PlusIcon className="size-4 shrink-0" />
 										<HandCoinsIcon className="size-4 shrink-0" />
-									</TransactionFormButton2>
+									</TransactionFormButton>
 									<AccountFormButton account={account}>
 										<CogIcon className="size-4 shrink-0" />
 									</AccountFormButton>
@@ -118,6 +118,6 @@ export default function AccountItem({
 					</li>
 				)}
 			</Disclosure>
-		</TransactionListProvider2>
+		</TransactionListProvider>
 	);
 }

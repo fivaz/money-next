@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { TransactionListContext } from './TransactionListProvider2';
+import { TransactionListContext } from './TransactionListProvider';
 
 export function useTransactionList() {
 	const context = useContext(TransactionListContext);

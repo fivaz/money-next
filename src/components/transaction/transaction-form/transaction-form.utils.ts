@@ -1,4 +1,4 @@
-import { Transaction } from '@/lib/transaction2/transaction2.model';
+import { Transaction } from '@/lib/transaction/transaction.model';
 import { Account } from '@/lib/account/account.model';
 
 export type OperationType = 'income' | 'expense' | 'transfer';

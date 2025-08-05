@@ -5,8 +5,16 @@ import { type ButtonProps } from '@/components/Button/utils';
 import { HandCoinsIcon } from 'lucide-react';
 import TransactionForm from '@/components/transaction/transaction-form/TransactionForm';
 import { Transaction } from '@/lib/transaction/transaction.model';
+import { fetchAccounts } from '@/lib/account/account.utils';
+import {
+	getEmptyTransactionIn,
+	TransactionIn,
+} from '@/components/transaction/transaction-form/transaction-form.utils';
 
-type TransactionFormButtonProps = PropsWithChildren<{ transaction?: Transaction }> & ButtonProps;
+type TransactionFormButtonProps = PropsWithChildren<{
+	transaction?: Partial<Transaction>;
+}> &
+	ButtonProps;
 
 export default function TransactionFormButton({
 	children,
@@ -15,12 +23,19 @@ export default function TransactionFormButton({
 }: TransactionFormButtonProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const { accounts } = fetchAccounts();
+
+	const [transactionIn, setTransactionIn] = useState<TransactionIn>(
+		getEmptyTransactionIn(transaction, accounts),
+	);
+
 	const closeDialog = () => {
 		setIsOpen(false);
+		setTransactionIn(getEmptyTransactionIn(undefined, accounts));
 	};
 	const openDialog = () => {
-		if (transaction?.id) console.log(transaction.id);
 		setIsOpen(true);
+		setTransactionIn(getEmptyTransactionIn(transaction, accounts));
 	};
 
 	return (
@@ -35,7 +50,12 @@ export default function TransactionFormButton({
 			</Button>
 
 			<Suspense>
-				<TransactionForm transaction={transaction} isOpen={isOpen} closeFormAction={closeDialog} />
+				<TransactionForm
+					transactionIn={transactionIn}
+					setTransactionIn={setTransactionIn}
+					isOpen={isOpen}
+					closeFormAction={closeDialog}
+				/>
 			</Suspense>
 		</>
 	);

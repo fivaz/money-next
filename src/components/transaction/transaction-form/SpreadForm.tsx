@@ -8,35 +8,25 @@ import Tooltip from '@/components/Tooltip';
 import { InfoIcon } from 'lucide-react';
 import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { differenceInMonths } from 'date-fns';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
 type SpreadFormProps = {
-	transaction?: Partial<Transaction>;
-	amount: string;
+	transaction: Transaction;
+	handleChange: (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => void;
 };
 
-export function SpreadForm({ transaction, amount }: SpreadFormProps) {
-	const [spreadStart, setSpreadStart] = useState<string>(
-		transaction?.spreadStart || '',
-	);
-	const [spreadEnd, setSpreadEnd] = useState<string>(
-		transaction?.spreadEnd || '',
-	);
-
-	useEffect(() => {
-		setSpreadStart(transaction?.spreadStart || '');
-		setSpreadEnd(transaction?.spreadEnd || '');
-	}, [transaction]);
-
+export function SpreadForm({ transaction, handleChange }: SpreadFormProps) {
 	const getMessage = () => {
-		if (!spreadEnd || !spreadStart) {
+		if (!transaction.spreadEnd || !transaction.spreadStart) {
 			return 'enter start and end date';
 		}
 
-		const spreadStartDate = new Date(spreadStart);
-		const spreadEndDate = new Date(spreadEnd);
+		const spreadStartDate = new Date(transaction.spreadStart);
+		const spreadEndDate = new Date(transaction.spreadEnd);
 
 		if (spreadStartDate > spreadEndDate) {
 			return 'End date should be after start';
@@ -45,7 +35,7 @@ export function SpreadForm({ transaction, amount }: SpreadFormProps) {
 		const numberOfMonths =
 			differenceInMonths(spreadEndDate, spreadStartDate) + 1;
 
-		const parsedAmount = Number(amount) / 100;
+		const parsedAmount = transaction.amount / 100;
 
 		const monthlyAmount = Math.abs(parsedAmount / numberOfMonths).toFixed(2);
 
@@ -74,19 +64,19 @@ export function SpreadForm({ transaction, amount }: SpreadFormProps) {
 						<Label>Start at</Label>
 						<Input
 							name="spreadStart"
-							onChange={(e) => setSpreadStart(e.target.value)}
+							onChange={handleChange}
 							type="date"
-							value={spreadStart}
+							value={transaction.spreadStart}
 						/>
 					</Field>
 
 					<Field className="col-span-2 md:col-span-1">
 						<Label>End at</Label>
 						<Input
-							onChange={(e) => setSpreadEnd(e.target.value)}
+							onChange={handleChange}
 							name="spreadEnd"
 							type="date"
-							value={spreadEnd}
+							value={transaction.spreadEnd}
 						/>
 					</Field>
 				</div>

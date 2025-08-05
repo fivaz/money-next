@@ -1,7 +1,13 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { CalendarIcon, ClockIcon, CogIcon, CompassIcon } from 'lucide-react';
+import {
+	ArrowLeftRightIcon,
+	CalendarIcon,
+	ClockIcon,
+	CogIcon,
+	CompassIcon,
+} from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
@@ -13,11 +19,16 @@ import Tooltip from '../Tooltip';
 import { getAmount } from '@/lib/transaction/transaction.utils';
 
 type TransactionItemProps = {
+	accountId?: number;
 	transaction: Transaction;
 	isEditable?: boolean;
 };
 
-export default function TransactionItem({ transaction, isEditable = true }: TransactionItemProps) {
+export default function TransactionItem({
+	transaction,
+	accountId = transaction.account.id,
+	isEditable = true,
+}: TransactionItemProps) {
 	const date = useMemo(() => {
 		const date = parse(transaction.date, DATE_FORMAT, new Date());
 		return {
@@ -44,7 +55,10 @@ export default function TransactionItem({ transaction, isEditable = true }: Tran
 
 				<div className="flex items-center gap-2 truncate">
 					<Strong>
-						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
+						<IconView
+							className="size-4 shrink-0 text-yellow-500"
+							name={transaction.budget?.icon}
+						/>
 					</Strong>
 					<Strong className="min-w-0 flex-1 truncate">
 						{transaction.description.trim() || transaction.budget?.name}
@@ -60,13 +74,23 @@ export default function TransactionItem({ transaction, isEditable = true }: Tran
 				)}
 
 				{transaction.referenceDate && (
-					<Tooltip message={`reference date: ${formatFRDate(transaction.referenceDate)}`}>
+					<Tooltip
+						message={`reference date: ${formatFRDate(transaction.referenceDate)}`}
+					>
 						<CompassIcon className="size-5 text-yellow-500" />
 					</Tooltip>
 				)}
 
+				{transaction.destination && (
+					<Tooltip message={`transfer between accounts`}>
+						<ArrowLeftRightIcon className="size-4 text-yellow-500" />
+					</Tooltip>
+				)}
+
 				<Text>
-					<MoneyText addColor={transaction.isPaid}>{getAmount(transaction)}</MoneyText>
+					<MoneyText addColor={transaction.isPaid}>
+						{getAmount(transaction, accountId)}
+					</MoneyText>
 				</Text>
 
 				{isEditable && (

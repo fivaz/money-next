@@ -1,6 +1,6 @@
 'use client';
-import TransactionItem from '@/components/transaction/TransactionItem2';
-import { useTransactionList } from '@/lib/transaction2/useTransactionList';
+import TransactionItem from '@/components/transaction/TransactionItem';
+import { useTransactionList } from '@/lib/transaction/useTransactionList';
 import { useEffect } from 'react';
 
 type AccountTransactionsProps = {

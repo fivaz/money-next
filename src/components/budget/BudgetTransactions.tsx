@@ -1,9 +1,9 @@
 'use client';
 import TransactionItem from '@/components/transaction/TransactionItem';
-import { useTransactionList } from '@/lib/transaction/TransactionListProvider';
+import { useTransactionList } from '@/lib/transaction/useTransactionList';
 
 export default function BudgetTransactions({}) {
-	const { items: transactions } = useTransactionList();
+	const { transactions } = useTransactionList();
 
 	return (
 		<ul role="list" className="divide-y divide-gray-300 dark:divide-gray-600">

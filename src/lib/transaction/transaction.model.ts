@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { validateSchema } from '@/lib/shared/shared.model';
-import { BudgetSchema } from '@/lib/budget/budget.model';
 import { API, BACKEND_URL } from '@/lib/const';
+import { BudgetSchema } from '@/lib/budget/budget.model';
+import { AccountSchema } from '@/lib/account/account.model';
 
 const TransactionSchema = z.object({
 	id: z.number().int(),
@@ -15,10 +16,22 @@ const TransactionSchema = z.object({
 		), // Validate local datetime format
 	// optional
 	budget: BudgetSchema.nullable(),
+	account: AccountSchema,
+	destination: AccountSchema.nullable(),
 	isPaid: z.boolean(),
-	referenceDate: z.string().date().nullable(),
-	spreadStart: z.string().date().nullable(),
-	spreadEnd: z.string().date().nullable(),
+	// ✅ Accept either YYYY-MM-DD or empty string
+	referenceDate: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
+	spreadStart: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
+	spreadEnd: z.union([
+		z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
+		z.literal(''),
+	]),
 });
 
 const PaginatedTransactionSchema = z.object({
@@ -34,11 +47,12 @@ export type Transaction = z.infer<typeof TransactionSchema>;
 
 export type PaginatedTransactions = z.infer<typeof PaginatedTransactionSchema>;
 
-// Function to validate transactions and filter out invalid ones
 export const validateTransactions = (data: unknown) =>
 	validateSchema(data, TransactionSchema, 'transaction');
 
-export const validatePaginatedTransactions = (data: unknown): PaginatedTransactions => {
+export const validatePaginatedTransactions = (
+	data: unknown,
+): PaginatedTransactions => {
 	const result = PaginatedTransactionSchema.safeParse(data);
 	if (result.success) {
 		return result.data;

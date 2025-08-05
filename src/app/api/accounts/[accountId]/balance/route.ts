@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateTransactions } from '@/lib/transaction2/transaction2.model';
+import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { API } from '@/lib/const';
 import { fetchInAPI } from '@/lib/shared/api-server.utils';
 import { ACCOUNTS_URL } from '@/lib/account/account.model';

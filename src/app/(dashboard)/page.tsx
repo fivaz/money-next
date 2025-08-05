@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import TransactionListWithData from '@/components/transaction/TransactionListWithData';
 import { TransactionListSkeleton } from '@/app/(dashboard)/loading';
 import { Heading } from '@/components/base/heading';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
@@ -7,24 +6,19 @@ import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleto
 import SearchTransactions from '@/components/transaction/SearchTransactions';
 import TransactionSearchWithData from '@/components/transaction/TransactionSearchWithData';
 import { Skeleton } from '@/components/Skeleton';
+import AccountListWithData from '@/components/accounts/AccountListWithData';
 
 type HomePageProps = {
 	searchParams: Promise<{
-		year?: string;
-		month?: string;
 		query?: string;
 		page?: string;
 	}>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-	const { year: yearParam, month: monthParam, query, page } = await searchParams;
+	const { query, page } = await searchParams;
 
-	const year = Number(yearParam) || new Date().getFullYear();
-	const month = Number(monthParam) || new Date().getMonth() + 1;
 	const currentPage = Number(page) || 1;
-
-	const suspenseKey = `${year}-${month}-${query}`;
 
 	return (
 		<main className="flex flex-col gap-5">
@@ -40,13 +34,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 				</div>
 			</div>
 			{query ? (
-				<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
+				<Suspense fallback={<TransactionListSkeleton />}>
 					<TransactionSearchWithData query={query} page={currentPage} />
 				</Suspense>
 			) : (
-				<Suspense key={suspenseKey} fallback={<TransactionListSkeleton />}>
-					<TransactionListWithData year={year} month={month} />
-				</Suspense>
+				<AccountListWithData />
 			)}
 		</main>
 	);
