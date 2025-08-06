@@ -11,7 +11,10 @@ export default function BudgetFormButton({ children, budget }: BudgetFormButtonP
 	const [isOpen, setIsOpen] = useState(false);
 
 	const closeDialog = () => setIsOpen(false);
-	const openDialog = () => setIsOpen(true);
+	const openDialog = () => {
+		if (budget?.id) console.log(budget.id);
+		setIsOpen(true);
+	};
 
 	return (
 		<>
