@@ -15,7 +15,8 @@ export const buildBudget = (formData: FormData): Budget => {
 	};
 };
 
-export const sortBudgets = (a: Budget, b: Budget) => a.sortOrder - b.sortOrder;
+export const getTotalAmount = (budgets: Budget[]) =>
+	budgets.reduce((total, budget) => budget.amount + total, 0);
 
-export const getAmount = (budget: Budget): number =>
-	budget.isAccumulative ? budget.amount + (budget.accumulativeAmount || 0) : budget.amount;
+export const getTotalAccumulativeAmount = (budgets: Budget[]) =>
+	budgets.reduce((total, budget) => (budget.accumulativeAmount || 0) + total, 0);

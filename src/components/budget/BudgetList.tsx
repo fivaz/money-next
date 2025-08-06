@@ -15,10 +15,12 @@ import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 import { formatMoney } from '@/lib/shared/utils';
+import { getTotalAccumulativeAmount, getTotalAmount } from '@/lib/budget/budget.utils';
 
 type BudgetProps = {
 	budgetedSpent: number;
 };
+
 export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
@@ -31,15 +33,10 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 		void reorderBudgets(newBudgets);
 	};
 
-	const totalAmount = budgets.reduce((total, budget) => budget.amount + total, 0);
-
-	const totalAccumulativeAmount = budgets.reduce(
-		(total, budget) => (budget.accumulativeAmount || 0) + total,
-		0,
-	);
+	const totalAmount = getTotalAmount(budgets);
+	const totalAccumulativeAmount = getTotalAccumulativeAmount(budgets);
 
 	const finalAmount = totalAmount + totalAccumulativeAmount;
-
 	const difference = finalAmount + budgetedSpent;
 
 	return (
@@ -77,11 +74,7 @@ export default function BudgetList({ budgetedSpent }: BudgetProps) {
 					<MoneyText>{difference}</MoneyText>
 				</div>
 
-				<>
-					<Suspense fallback={<DateSwitcherSkeleton />}>
-						<DateSwitcher />
-					</Suspense>
-				</>
+				<DateSwitcher />
 				<BudgetFormButton />
 			</div>
 
