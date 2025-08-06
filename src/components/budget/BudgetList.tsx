@@ -35,7 +35,7 @@ export default function BudgetList() {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex flex-wrap justify-between gap-5 sm:-mt-14 sm:ml-32 sm:flex-row sm:justify-end">
+			<div className="sticky top-0 z-10 -m-2 flex flex-wrap justify-between gap-5 bg-gray-100 p-2 sm:-mt-14 sm:ml-32 sm:flex-row sm:justify-end dark:bg-gray-900">
 				<div className="flex items-center gap-2">
 					<Tooltip
 						message={`total budget: ${formatMoney(totalAmount)} ${totalAccumulativeAmount >= 0 ? '+' : '-'} ${formatMoney(totalAccumulativeAmount)}`}
