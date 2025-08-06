@@ -69,7 +69,7 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 			</div>
 			<Text className="text-gray-600">
 				<Tooltip
-					message={`${formatMoney(amount)} - ${formatMoney(totalSpent)} = ${formatMoney(amount + totalSpent)}`}
+					message={`${formatMoney(amount)} - ${formatMoney(totalSpent)} = ${formatMoney(amount + totalSpent, true)}`}
 				>
 					(<MoneyText>{totalSpent}</MoneyText> /{' '}
 					<MoneyText addSign={false} addColor={false}>
