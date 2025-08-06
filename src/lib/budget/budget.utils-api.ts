@@ -3,13 +3,13 @@ import { Budget } from '@/lib/budget/budget.model';
 import { API } from '@/lib/const';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import type { Transaction } from '@/lib/transaction/transaction.model';
-import { getYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils';
 
 const getBudgetUrl = (year: number, month: number) =>
 	`/api/${API.BUDGETS}?year=${year}&month=${month}`;
 
 export const useBudgets = () => {
-	const [year, month] = getYearMonth();
+	const [year, month] = useYearMonth();
 	const { data: budgetsData, isLoading } = useSWR<Budget[]>(getBudgetUrl(year, month), fetcher);
 
 	const budgets = budgetsData || [];
@@ -28,7 +28,6 @@ export const useBudgetTransactions = (budgetId: number, year: number, month: num
 	return initialTransactionsData || [];
 };
 
-export const mutateBudgets = () => {
-	const [year, month] = getYearMonth();
+export const mutateBudgets = (year: number, month: number) => {
 	void mutate(getBudgetUrl(year, month));
 };

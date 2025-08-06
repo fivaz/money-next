@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import {
 	createTransactionAction,
@@ -9,14 +8,14 @@ import {
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
-import { getParamsDate, getYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils';
 
 export function useTransactionListActions(
 	initialTransactions: Transaction[],
 	source?: { type: 'account' | 'budget'; id: number },
 ) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-	const [year, month] = getYearMonth();
+	const [year, month] = useYearMonth();
 
 	useEffect(() => {
 		setTransactions(initialTransactions);

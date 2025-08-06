@@ -3,8 +3,7 @@
 import AccountItem from '@/components/accounts/AccountItem';
 import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
 import { useAccountList } from '@/lib/account/useAccountList';
-import { useSearchParams } from 'next/navigation';
-import { getParamsDate, getYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils';
 import { VaultIcon } from 'lucide-react';
 import { move } from '@dnd-kit/helpers';
 import { reorderAccounts } from '@/lib/account/account.actions';
@@ -13,7 +12,7 @@ import { DragDropProvider } from '@dnd-kit/react';
 export default function AccountList() {
 	const { accounts, setAccounts } = useAccountList();
 
-	const [year, month] = getYearMonth();
+	const [year, month] = useYearMonth();
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newAccounts = move(accounts, event);

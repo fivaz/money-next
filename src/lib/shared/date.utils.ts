@@ -12,7 +12,7 @@ export const getParamsDate = (searchParams: ReadonlyURLSearchParams) => {
 	return [year, month];
 };
 
-export const getYearMonth = () => {
+export const useYearMonth = () => {
 	const searchParams = useSearchParams();
 	return getParamsDate(searchParams);
 };

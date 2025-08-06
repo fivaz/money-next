@@ -17,6 +17,7 @@ import { Switch } from '@/components/base/switch';
 import JarIcon from '@/components/icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
 import { mutateBudgets } from '@/lib/budget/budget.utils-api';
+import { useYearMonth } from '@/lib/shared/date.utils';
 
 type BudgetFormProps = {
 	budget?: Budget;
@@ -27,6 +28,8 @@ type BudgetFormProps = {
 export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useBudgetList();
+
+	const [year, month] = useYearMonth();
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -45,14 +48,14 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 		addItem(budget);
 
 		await addBudgetDB(budgetWithoutId);
-		mutateBudgets();
+		mutateBudgets(year, month);
 	};
 
 	const editBudget = async (budget: Budget) => {
 		editItem(budget);
 
 		await editBudgetDB(budget);
-		mutateBudgets();
+		mutateBudgets(year, month);
 	};
 
 	const handleDelete = async () => {
@@ -60,7 +63,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 			deleteItem(budget.id);
 
 			await deleteBudgetDB(budget.id);
-			mutateBudgets();
+			mutateBudgets(year, month);
 		}
 	};
 

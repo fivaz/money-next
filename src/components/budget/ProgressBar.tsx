@@ -5,7 +5,6 @@ import { type Budget } from '@/lib/budget/budget.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import clsx from 'clsx';
 import { sumTransactions } from '@/lib/transaction/transaction.utils';
-import { InfoIcon } from 'lucide-react';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
 

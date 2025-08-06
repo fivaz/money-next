@@ -6,14 +6,11 @@ import { move } from '@dnd-kit/helpers';
 import { reorderBudgets } from '@/lib/budget/budget.actions';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { useBudgetList } from '@/lib/budget/BudgetListProvider';
-import { useSearchParams } from 'next/navigation';
-import { getParamsDate, getYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
-import { Suspense } from 'react';
 import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
-import DateSwitcherSkeleton from '@/components/date-switcher/DateSwitcherSkeleton';
 import { formatMoney } from '@/lib/shared/utils';
 import { getTotalAccumulativeAmount, getTotalAmount } from '@/lib/budget/budget.utils';
 
@@ -24,7 +21,7 @@ type BudgetProps = {
 export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
-	const [year, month] = getYearMonth();
+	const [year, month] = useYearMonth();
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
