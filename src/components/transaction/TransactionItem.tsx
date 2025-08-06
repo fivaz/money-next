@@ -33,7 +33,7 @@ export default function TransactionItem({
 		return {
 			short: format(date, 'dd.MM'),
 			long: format(date, 'dd.MMM'),
-			time: format(date, 'hh:mm'),
+			time: format(date, 'HH:mm'),
 		};
 	}, [transaction.date]);
 
