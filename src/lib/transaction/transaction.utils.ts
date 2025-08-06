@@ -13,18 +13,6 @@ export const sumTransactions = (transactions: Transaction[]): number =>
 export const getAmount = (transaction: Transaction, accountId: number): number => {
 	let baseAmount = transaction.amount;
 
-	// Handle spread
-	if (transaction.spreadStart && transaction.spreadEnd) {
-		try {
-			const spreadMonths =
-				differenceInMonths(new Date(transaction.spreadEnd), new Date(transaction.spreadStart)) + 1;
-			baseAmount = baseAmount / spreadMonths;
-		} catch (error) {
-			console.error(error);
-			// fallback to full amount if error in spread calc
-		}
-	}
-
 	// Make amount positive if this account is the destination
 	if (transaction.destination?.id === accountId) {
 		return Math.abs(baseAmount);

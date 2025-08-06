@@ -9,7 +9,7 @@ import { InfoIcon, XIcon } from 'lucide-react';
 import { useTransactionList } from '@/lib/transaction/useTransactionList';
 import MoneyInput from '@/components/MoneyInput';
 import Tooltip from '@/components/Tooltip';
-import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
+import { RecurringSection } from '@/components/transaction/transaction-form/RecurringSection';
 import ConfirmButton from '@/components/Button/ConfirmButton';
 import {
 	getTransactionFromIn,
@@ -109,7 +109,7 @@ export default function TransactionForm({
 
 				<AccountsSection transactionIn={transactionIn} setTransactionIn={setTransactionIn} />
 
-				<Field>
+				<Field className="mb-5">
 					<div className="flex items-center gap-2">
 						<Label className="grow text-left">Reference date</Label>
 						<Tooltip message="Moves the transaction to another date’s budget">
@@ -125,11 +125,13 @@ export default function TransactionForm({
 					/>
 				</Field>
 
-				<SpreadForm transaction={transactionIn} handleChange={handleChange} />
+				{transactionIn?.operation === 'transfer' && (
+					<RecurringSection transaction={transactionIn} handleChange={handleChange} />
+				)}
 
 				<DialogActions>
 					<div>
-						{transactionIn?.id && (
+						{transactionIn?.id > 0 && (
 							<ConfirmButton
 								className="w-full justify-center sm:w-auto sm:justify-start"
 								message="This transaction will be permanently deleted. This action cannot be undone."

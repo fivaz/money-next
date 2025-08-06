@@ -8,12 +8,12 @@ import { ChangeEvent } from 'react';
 import { differenceInMonths } from 'date-fns';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
-type SpreadFormProps = {
+type RecurringSectionProps = {
 	transaction: Transaction;
 	handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
-export function SpreadForm({ transaction, handleChange }: SpreadFormProps) {
+export function RecurringSection({ transaction, handleChange }: RecurringSectionProps) {
 	const getMessage = () => {
 		if (!transaction.spreadEnd || !transaction.spreadStart) {
 			return 'enter start and end date';
@@ -37,22 +37,22 @@ export function SpreadForm({ transaction, handleChange }: SpreadFormProps) {
 
 	return (
 		<Disclosure
+			defaultOpen
 			as={Fieldset}
 			className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-700"
 		>
 			<div className="flex items-center gap-2">
-				<DisclosureButton className="grow text-left">Spread transaction</DisclosureButton>
+				<DisclosureButton className="grow text-left text-base sm:text-sm">
+					Spread transaction
+				</DisclosureButton>
 				<Tooltip message="Divides a single amount across months to represent multiple recurring transactions.">
 					<InfoIcon className="size-5" />
 				</Tooltip>
 			</div>
 			<DisclosurePanel unmount={false}>
-				<Text size="text-sm" color="text-yellow-500">
-					{getMessage()}
-				</Text>
 				<div className="mt-2 grid grid-cols-2 gap-4 pb-1">
 					<Field className="col-span-2 md:col-span-1">
-						<Label>Start at</Label>
+						<Label className="text-sm">Start at</Label>
 						<Input
 							name="spreadStart"
 							onChange={handleChange}
@@ -62,7 +62,7 @@ export function SpreadForm({ transaction, handleChange }: SpreadFormProps) {
 					</Field>
 
 					<Field className="col-span-2 md:col-span-1">
-						<Label>End at</Label>
+						<Label className="text-sm">End at</Label>
 						<Input
 							onChange={handleChange}
 							name="spreadEnd"
