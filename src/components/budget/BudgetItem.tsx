@@ -1,7 +1,14 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
-import { ArrowDown01Icon, ArrowDown10Icon, ChevronDownIcon, CogIcon } from 'lucide-react';
+import {
+	ArrowDown01Icon,
+	ArrowDown10Icon,
+	ChevronDownIcon,
+	CogIcon,
+	HandCoinsIcon,
+	PlusIcon,
+} from 'lucide-react';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';
@@ -18,6 +25,9 @@ import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
 import { useBudgetTransactions } from '@/lib/budget/budget.utils-api';
 import Button from '@/components/Button';
+import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
+import { Transaction } from '@/lib/transaction/transaction.model';
+import { buildDate, formatForInput } from '@/lib/shared/date.utils';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -33,44 +43,57 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 
 	const [orderDesc, setOrderDesc] = useState(true);
 
+	const getNewBudgetTransaction = (): Partial<Transaction> => {
+		return {
+			budget,
+			date: formatForInput(buildDate(year, month)),
+		};
+	};
+
 	return (
 		<Disclosure ref={ref} as="div" defaultOpen>
 			{({ open }) => (
 				<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
-					<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
-						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-2 truncate">
-								<Text>
-									<IconView className="size-5" name={budget.icon} />
-								</Text>
-
-								<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
-							</div>
-							<div className="flex shrink-0 items-center gap-2">
-								<Button onClick={() => setOrderDesc((order) => !order)}>
-									{orderDesc ? (
-										<ArrowDown01Icon className="size-4" />
-									) : (
-										<ArrowDown10Icon className="size-4" />
-									)}
-								</Button>
-
-								{budget.isAccumulative && <JarIcon className="size-5 text-green-500" />}
-								<BudgetAmount budget={budget} />
-								<BudgetFormButton budget={budget}>
-									<CogIcon className="size-4 shrink-0" />
-								</BudgetFormButton>
-							</div>
-						</div>
-
-						<ProgressBar budget={budget} transactions={initialTransactions} />
-					</div>
-
 					<TransactionListProvider
 						source={{ type: 'budget', id: budget.id }}
 						initialTransactions={initialTransactions}
 						orderDesc={orderDesc}
 					>
+						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-2 truncate">
+									<Text>
+										<IconView className="size-5" name={budget.icon} />
+									</Text>
+
+									<Strong className="min-w-0 flex-1 truncate">{budget.name}</Strong>
+								</div>
+								<div className="flex shrink-0 items-center gap-2">
+									{budget.isAccumulative && <JarIcon className="size-5 text-green-500" />}
+									<BudgetAmount budget={budget} />
+
+									<TransactionFormButton transaction={getNewBudgetTransaction()}>
+										<PlusIcon className="size-4" />
+										<HandCoinsIcon className="size-4" />
+									</TransactionFormButton>
+
+									<Button onClick={() => setOrderDesc((order) => !order)}>
+										{orderDesc ? (
+											<ArrowDown01Icon className="size-4" />
+										) : (
+											<ArrowDown10Icon className="size-4" />
+										)}
+									</Button>
+
+									<BudgetFormButton budget={budget}>
+										<CogIcon className="size-4 shrink-0" />
+									</BudgetFormButton>
+								</div>
+							</div>
+
+							<ProgressBar budget={budget} transactions={initialTransactions} />
+						</div>
+
 						<AnimatePresence>
 							{open && (
 								<DisclosurePanel static as={Fragment}>
@@ -85,13 +108,13 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								</DisclosurePanel>
 							)}
 						</AnimatePresence>
-					</TransactionListProvider>
 
-					<DisclosureButton className="flex w-full justify-center p-2">
-						<Text>
-							<ChevronDownIcon className={clsx(open && 'rotate-180 transform')} />
-						</Text>
-					</DisclosureButton>
+						<DisclosureButton className="flex w-full justify-center p-2">
+							<Text>
+								<ChevronDownIcon className={clsx(open && 'rotate-180 transform')} />
+							</Text>
+						</DisclosureButton>
+					</TransactionListProvider>
 				</li>
 			)}
 		</Disclosure>

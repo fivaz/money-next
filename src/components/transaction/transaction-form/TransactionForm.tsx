@@ -99,7 +99,7 @@ export default function TransactionForm({
 						<MoneyInput
 							required
 							name="amount"
-							value={transactionIn.amount.toString()}
+							value={transactionIn.amount ? transactionIn.amount.toString() : ''}
 							onChange={handleChange}
 						/>
 					</Field>
