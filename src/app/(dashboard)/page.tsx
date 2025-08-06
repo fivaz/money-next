@@ -7,6 +7,7 @@ import SearchTransactions from '@/components/transaction/SearchTransactions';
 import TransactionSearchWithData from '@/components/transaction/TransactionSearchWithData';
 import { Skeleton } from '@/components/Skeleton';
 import AccountListWithData from '@/components/accounts/AccountListWithData';
+import AccountListSkeleton from '@/components/accounts/AccountListSkeleton';
 
 type HomePageProps = {
 	searchParams: Promise<{ query?: string; page?: string }>;
@@ -30,12 +31,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 					</Suspense>
 				</div>
 			</div>
+
 			{query ? (
 				<Suspense fallback={<TransactionListSkeleton />}>
 					<TransactionSearchWithData query={query} page={currentPage} />
 				</Suspense>
 			) : (
-				<AccountListWithData />
+				<Suspense fallback={<AccountListSkeleton />}>
+					<AccountListWithData />
+				</Suspense>
 			)}
 		</main>
 	);

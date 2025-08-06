@@ -2,7 +2,6 @@ import { Field, Fieldset, Label } from '@/components/base/fieldset';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import Tooltip from '@/components/Tooltip';
 import { InfoIcon } from 'lucide-react';
-import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
 import { ChangeEvent } from 'react';
 import { differenceInMonths } from 'date-fns';

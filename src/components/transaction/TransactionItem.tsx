@@ -15,13 +15,11 @@ import { getAmount } from '@/lib/transaction/transaction.utils';
 type TransactionItemProps = {
 	accountId?: number;
 	transaction: Transaction;
-	isEditable?: boolean;
 };
 
 export default function TransactionItem({
 	transaction,
 	accountId = transaction.account.id,
-	isEditable = true,
 }: TransactionItemProps) {
 	const date = useMemo(() => {
 		const date = parse(transaction.date, DATE_FORMAT, new Date());
@@ -80,11 +78,9 @@ export default function TransactionItem({
 					<MoneyText addColor={transaction.isPaid}>{getAmount(transaction, accountId)}</MoneyText>
 				</Text>
 
-				{isEditable && (
-					<TransactionFormButton transaction={transaction} size="p-2">
-						<CogIcon className="size-4 shrink-0" />
-					</TransactionFormButton>
-				)}
+				<TransactionFormButton transaction={transaction} size="p-2">
+					<CogIcon className="size-4 shrink-0" />
+				</TransactionFormButton>
 			</div>
 		</li>
 	);

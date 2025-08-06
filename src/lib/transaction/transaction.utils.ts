@@ -1,5 +1,4 @@
 import type { Transaction } from '@/lib/transaction/transaction.model';
-import { differenceInMonths } from 'date-fns';
 
 export const sortTransactions = (a: Transaction, b: Transaction, desc: boolean = true) => {
 	const dateA = new Date(a.date).getTime();
@@ -11,12 +10,10 @@ export const sumTransactions = (transactions: Transaction[]): number =>
 	transactions.filter((t) => t.isPaid).reduce((sum, t) => sum + getAmount(t, t.account.id), 0);
 
 export const getAmount = (transaction: Transaction, accountId: number): number => {
-	let baseAmount = transaction.amount;
-
 	// Make amount positive if this account is the destination
 	if (transaction.destination?.id === accountId) {
-		return Math.abs(baseAmount);
+		return Math.abs(transaction.amount);
 	}
 
-	return baseAmount;
+	return transaction.amount;
 };
