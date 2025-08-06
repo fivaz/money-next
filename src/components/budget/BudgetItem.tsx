@@ -1,7 +1,7 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { type Budget } from '@/lib/budget/budget.model';
-import { ArrowDown01Icon, ArrowDown10Icon, ChevronDownIcon, CogIcon } from 'lucide-react';
+import { ArrowDown01Icon, ArrowDown10Icon, ChevronDownIcon, CogIcon, InfoIcon } from 'lucide-react';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import MoneyText from '@/components/MoneyText';
 import IconView from '@/components/icon-picker/IconView';

@@ -5,6 +5,9 @@ import { type Budget } from '@/lib/budget/budget.model';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import clsx from 'clsx';
 import { sumTransactions } from '@/lib/transaction/transaction.utils';
+import { InfoIcon } from 'lucide-react';
+import Tooltip from '@/components/Tooltip';
+import { formatMoney } from '@/lib/shared/utils';
 
 // Define props interface
 interface ProgressBarProps {
@@ -65,11 +68,15 @@ export default function ProgressBar({ budget, transactions }: ProgressBarProps) 
 				)}
 			</div>
 			<Text className="text-gray-600">
-				(<MoneyText>{totalSpent}</MoneyText> /{' '}
-				<MoneyText addSign={false} addColor={false}>
-					{amount}
-				</MoneyText>
-				)
+				<Tooltip
+					message={`${formatMoney(amount)} - ${formatMoney(totalSpent)} = ${formatMoney(amount + totalSpent)}`}
+				>
+					(<MoneyText>{totalSpent}</MoneyText> /{' '}
+					<MoneyText addSign={false} addColor={false}>
+						{amount}
+					</MoneyText>
+					)
+				</Tooltip>
 			</Text>
 		</div>
 	);
