@@ -7,7 +7,7 @@ import { reorderBudgets } from '@/lib/budget/budget.actions';
 import DateSwitcher from '@/components/date-switcher/DateSwitcher';
 import { useBudgetList } from '@/lib/budget/BudgetListProvider';
 import { useSearchParams } from 'next/navigation';
-import { getParamsDate } from '@/lib/shared/date.utils';
+import { getParamsDate, getYearMonth } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import { Suspense } from 'react';
@@ -24,8 +24,7 @@ type BudgetProps = {
 export default function BudgetList({ budgetedSpent }: BudgetProps) {
 	const { updateList, items: budgets } = useBudgetList();
 
-	const searchParams = useSearchParams();
-	const [year, month] = getParamsDate(searchParams);
+	const [year, month] = getYearMonth();
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);

@@ -1,5 +1,5 @@
 import { format, formatDate, lastDayOfMonth, parse, set } from 'date-fns';
-import { ReadonlyURLSearchParams } from 'next/navigation';
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
@@ -10,6 +10,11 @@ export const getParamsDate = (searchParams: ReadonlyURLSearchParams) => {
 	const month = Number(searchParams.get('month')) || new Date().getMonth() + 1;
 
 	return [year, month];
+};
+
+export const getYearMonth = () => {
+	const searchParams = useSearchParams();
+	return getParamsDate(searchParams);
 };
 
 export const buildDate = (year: number, month: number): Date => {

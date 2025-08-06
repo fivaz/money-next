@@ -9,15 +9,14 @@ import {
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
-import { getParamsDate } from '@/lib/shared/date.utils';
+import { getParamsDate, getYearMonth } from '@/lib/shared/date.utils';
 
 export function useTransactionListActions(
 	initialTransactions: Transaction[],
 	source?: { type: 'account' | 'budget'; id: number },
 ) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-	const searchParams = useSearchParams();
-	const [year, month] = getParamsDate(searchParams);
+	const [year, month] = getYearMonth();
 
 	useEffect(() => {
 		setTransactions(initialTransactions);
