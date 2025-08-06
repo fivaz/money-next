@@ -2,27 +2,21 @@ import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useRef } from 'react'
 import OperationSelector from '@/components/transaction/transaction-form/OperationSelector';
 import { Field, Label } from '@/components/base/fieldset';
 import { Textarea } from '@/components/base/textarea';
-import { Text } from '@/components/base/text';
 import { Input } from '@/components/base/input';
-import { Switch } from '@/components/base/switch';
 import { Dialog, DialogActions, DialogTitle } from '@/components/base/dialog';
 import Button from '@/components/Button';
-import { InfoIcon, LoaderCircleIcon, XIcon } from 'lucide-react';
-import { Listbox, ListboxOption } from '@/components/base/listbox';
-import { Budget } from '@/lib/budget/budget.model';
-import IconView from '@/components/icon-picker/IconView';
+import { InfoIcon, XIcon } from 'lucide-react';
 import { useTransactionList } from '@/lib/transaction/useTransactionList';
 import MoneyInput from '@/components/MoneyInput';
 import Tooltip from '@/components/Tooltip';
 import { SpreadForm } from '@/components/transaction/transaction-form/SpreadForm';
 import ConfirmButton from '@/components/Button/ConfirmButton';
-import { Account } from '@/lib/account/account.model';
-import { useBudgets } from '@/lib/budget/budget.utils-api';
-import { useAccounts } from '@/lib/account/account.utils-api';
 import {
 	getTransactionFromIn,
 	TransactionIn,
 } from '@/components/transaction/transaction-form/transaction-form.utils';
+import AccountsSection from '@/components/transaction/transaction-form/AccountsSection';
+import BudgetAndPaidSection from '@/components/transaction/transaction-form/BudgetAndPaidSection';
 
 type TransactionFormProps = {
 	transactionIn: TransactionIn;
@@ -39,10 +33,6 @@ export default function TransactionForm({
 }: TransactionFormProps) {
 	const { createTransaction, updateTransaction, deleteTransaction } = useTransactionList();
 
-	const { budgets, isLoading: isBudgetLoading } = useBudgets();
-
-	const { accounts, isLoading: isAccountLoading } = useAccounts();
-
 	const formRef = useRef<HTMLFormElement | null>(null);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -56,7 +46,7 @@ export default function TransactionForm({
 		closeFormAction();
 	};
 
-	const handleDelete = async () => {
+	const handleDelete = () => {
 		if (transactionIn?.id) {
 			void deleteTransaction(transactionIn);
 		}
@@ -66,34 +56,6 @@ export default function TransactionForm({
 		setTransactionIn((transaction) => ({
 			...transaction,
 			[e.target.name]: e.target.value,
-		}));
-	};
-
-	const handleAccount = (value: Account) => {
-		setTransactionIn((transaction) => ({
-			...transaction,
-			account: value,
-		}));
-	};
-
-	const handleDestination = (value: Account | null) => {
-		setTransactionIn((transaction) => ({
-			...transaction,
-			destination: value,
-		}));
-	};
-
-	const handleBudget = (value: Budget | null) => {
-		setTransactionIn((transaction) => ({
-			...transaction,
-			budget: value,
-		}));
-	};
-
-	const handleSwitch = (value: boolean) => {
-		setTransactionIn((transaction) => ({
-			...transaction,
-			isPaid: value,
 		}));
 	};
 
@@ -107,7 +69,6 @@ export default function TransactionForm({
 			</DialogTitle>
 
 			<form ref={formRef} className="mt-4 space-y-4" onSubmit={handleSubmit}>
-				<input type="hidden" name="id" defaultValue={transactionIn?.id} />
 				<OperationSelector setTransaction={setTransactionIn} transaction={transactionIn} />
 
 				<Field>
@@ -144,100 +105,9 @@ export default function TransactionForm({
 					</Field>
 				</div>
 
-				<div className="flex items-center gap-4">
-					<Field className="flex-1">
-						<Label>Budget</Label>
-						{isBudgetLoading ? (
-							<Text>
-								Loading budgets <LoaderCircleIcon className="size-5 animate-spin" />
-							</Text>
-						) : (
-							<Listbox
-								name="budget"
-								value={transactionIn?.budget}
-								onChange={handleBudget}
-								placeholder="Select budget&hellip;"
-							>
-								<ListboxOption value={null} className="flex gap-2">
-									<IconView name={''} className="size-4" />
-									No budget
-								</ListboxOption>
-								{budgets.map((budget) => (
-									<ListboxOption key={budget.id} value={budget} className="flex gap-2 truncate">
-										<IconView name={budget.icon} className="size-4 shrink-0" />
-										<span className="truncate">{budget.name}</span>
-									</ListboxOption>
-								))}
-							</Listbox>
-						)}
-					</Field>
+				<BudgetAndPaidSection transactionIn={transactionIn} setTransactionIn={setTransactionIn} />
 
-					<Field className="flex h-[73px] flex-col items-center justify-between">
-						<Label>Is paid</Label>
-						<Switch
-							className="mb-2"
-							name="isPaid"
-							color="amber"
-							onChange={handleSwitch}
-							checked={transactionIn?.isPaid}
-						/>
-					</Field>
-				</div>
-
-				<div className="grid grid-cols-2 gap-4">
-					<Field className="col-span-2 md:col-span-1">
-						<Label>Account</Label>
-						{isAccountLoading ? (
-							<Text>
-								Loading accounts <LoaderCircleIcon className="size-5 animate-spin" />
-							</Text>
-						) : (
-							<Listbox
-								name="account"
-								value={transactionIn?.account}
-								onChange={handleAccount}
-								placeholder="Select account&hellip;"
-							>
-								{accounts.map((account) => (
-									<ListboxOption key={account.id} value={account} className="flex gap-2">
-										<IconView name={account.icon} className="size-4 shrink-0" />
-										<span className="truncate">{account.name}</span>
-									</ListboxOption>
-								))}
-							</Listbox>
-						)}
-					</Field>
-
-					<Field className="col-span-2 md:col-span-1">
-						<Label>Destination</Label>
-						{isAccountLoading ? (
-							<Text>
-								Loading accounts <LoaderCircleIcon className="size-5 animate-spin" />
-							</Text>
-						) : (
-							<Listbox
-								name="destination"
-								disabled={transactionIn.operation !== 'transfer'}
-								value={transactionIn?.destination}
-								onChange={handleDestination}
-								placeholder="Select account&hellip;"
-							>
-								<ListboxOption value={null} className="flex gap-2">
-									<IconView name={''} className="size-4" />
-									No account
-								</ListboxOption>
-								{accounts
-									.filter((account) => account.id !== transactionIn?.account?.id)
-									.map((account) => (
-										<ListboxOption key={account.id} value={account} className="flex gap-2">
-											<IconView name={account.icon} className="size-4 shrink-0" />
-											<span className="truncate">{account.name}</span>
-										</ListboxOption>
-									))}
-							</Listbox>
-						)}
-					</Field>
-				</div>
+				<AccountsSection transactionIn={transactionIn} setTransactionIn={setTransactionIn} />
 
 				<Field>
 					<div className="flex items-center gap-2">
