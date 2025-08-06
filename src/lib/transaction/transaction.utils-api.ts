@@ -56,12 +56,14 @@ export const mutateTransactions = (
 		}
 	}
 
-	if (source.type === 'budget' && transaction.budget) {
+	if (source.type === 'budget') {
 		void mutate(getBudgetedSpentUrl(year, month));
 
-		void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
+		if (transaction.budget) {
+			void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
+		}
 
-		if (source.id && transaction.budget.id !== source.id) {
+		if (source.id && transaction.budget?.id !== source.id) {
 			void mutate(getBudgetTransactionsUrl(source.id, year, month));
 		}
 	}
