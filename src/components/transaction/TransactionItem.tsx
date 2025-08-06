@@ -1,7 +1,14 @@
 'use client';
 import { Strong, Text } from '@/components/base/text';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { ArrowLeftRightIcon, CalendarIcon, ClockIcon, CogIcon, CompassIcon } from 'lucide-react';
+import {
+	ArrowLeftRightIcon,
+	CalendarFoldIcon,
+	CalendarIcon,
+	ClockIcon,
+	CogIcon,
+	CompassIcon,
+} from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
@@ -58,13 +65,13 @@ export default function TransactionItem({
 			<div className="flex shrink-0 items-center gap-2">
 				{transaction.spreadStart && transaction.spreadEnd && (
 					<Tooltip message={`transaction spreads`}>
-						<PieChartIcon className="size-5 text-yellow-500" />
+						<CalendarFoldIcon className="size-4 text-yellow-500" />
 					</Tooltip>
 				)}
 
 				{transaction.referenceDate && (
 					<Tooltip message={`reference date: ${formatFRDate(transaction.referenceDate)}`}>
-						<CompassIcon className="size-5 text-yellow-500" />
+						<CompassIcon className="size-4 text-yellow-500" />
 					</Tooltip>
 				)}
 

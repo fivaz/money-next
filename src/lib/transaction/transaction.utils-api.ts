@@ -2,7 +2,7 @@ import { API } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
-import { BALANCE_URL } from '@/lib/source/source.utils-api';
+import { BALANCE_URL, getBudgetedSpentUrl, useBudgetedSpent } from '@/lib/source/source.utils-api';
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
@@ -57,6 +57,8 @@ export const mutateTransactions = (
 	}
 
 	if (source.type === 'budget' && transaction.budget) {
+		void mutate(getBudgetedSpentUrl(year, month));
+
 		void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
 
 		if (source.id && transaction.budget.id !== source.id) {

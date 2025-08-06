@@ -13,15 +13,13 @@ import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
 import { getTotalAccumulativeAmount, getTotalAmount } from '@/lib/budget/budget.utils';
+import { useBudgetedSpent } from '@/lib/source/source.utils-api';
 
-type BudgetProps = {
-	budgetedSpent: number;
-};
-
-export default function BudgetList({ budgetedSpent }: BudgetProps) {
+export default function BudgetList() {
 	const { updateList, items: budgets } = useBudgetList();
 
 	const [year, month] = useYearMonth();
+	const budgetedSpent = useBudgetedSpent(year, month);
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
