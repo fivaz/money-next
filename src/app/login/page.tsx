@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { Link } from '@/components/base/link';
 import GoogleAuthButton from '@/app/login/GoogleAuthButton';
 import { parseError } from '@/lib/user/auth.utils.client';
-import { TriangleAlertIcon } from 'lucide-react';
+import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
 
 export default function LoginPage() {
 	const [error, setError] = useState('');
@@ -50,9 +50,13 @@ export default function LoginPage() {
 	return (
 		<div className="flex min-h-screen flex-1 flex-col justify-center gap-5 bg-gray-100 px-6 py-12 lg:px-8 dark:bg-gray-900">
 			<div className="sm:mx-auto sm:w-full sm:max-w-sm">
-				<Logo className="mx-auto size-10 w-auto" />
+				{isLoading ? (
+					<Loader2Icon className="mx-auto size-10 w-auto animate-spin text-yellow-500" />
+				) : (
+					<Logo className="mx-auto size-10 w-auto" />
+				)}
 				<h2 className="text-brown-500 mt-10 text-center text-2xl/9 font-bold tracking-tight dark:text-white">
-					Sign in to your account
+					Sign in to your account{' '}
 				</h2>
 			</div>
 
@@ -115,7 +119,7 @@ export default function LoginPage() {
 						</div>
 					</div>
 
-					<GoogleAuthButton setErrorAction={setError} />
+					<GoogleAuthButton setError={setError} setIsLoading={setIsLoading} />
 				</form>
 
 				<p className="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">

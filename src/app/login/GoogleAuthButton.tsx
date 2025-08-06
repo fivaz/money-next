@@ -1,4 +1,3 @@
-'use client';
 import Button from '@/components/Button';
 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
@@ -8,14 +7,16 @@ import { ROUTES } from '@/lib/const';
 import { Dispatch, SetStateAction } from 'react';
 
 type GoogleAuthButtonProps = {
-	setErrorAction: Dispatch<SetStateAction<string>>;
+	setError: Dispatch<SetStateAction<string>>;
+	setIsLoading: Dispatch<SetStateAction<boolean>>;
 };
-export default function GoogleAuthButton({ setErrorAction }: GoogleAuthButtonProps) {
+export default function GoogleAuthButton({ setError, setIsLoading }: GoogleAuthButtonProps) {
 	const provider = new GoogleAuthProvider();
 	const router = useRouter();
 
 	const handleGoogleSignIn = async () => {
 		try {
+			setIsLoading(true);
 			const result = await signInWithPopup(auth, provider);
 			const idToken = await result.user.getIdToken();
 
@@ -27,7 +28,9 @@ export default function GoogleAuthButton({ setErrorAction }: GoogleAuthButtonPro
 
 			router.push(ROUTES.ROOT.path);
 		} catch (error) {
-			setErrorAction(`Error signing in: ${(error as Error).message}`);
+			setError(`Error signing in: ${(error as Error).message}`);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

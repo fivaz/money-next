@@ -4,7 +4,6 @@ import Tooltip from '@/components/Tooltip';
 import { InfoIcon } from 'lucide-react';
 import { Input } from '@/components/base/input';
 import { ChangeEvent } from 'react';
-import { differenceInMonths } from 'date-fns';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
 type RecurringSectionProps = {
@@ -13,27 +12,6 @@ type RecurringSectionProps = {
 };
 
 export function RecurringSection({ transaction, handleChange }: RecurringSectionProps) {
-	const getMessage = () => {
-		if (!transaction.spreadEnd || !transaction.spreadStart) {
-			return 'enter start and end date';
-		}
-
-		const spreadStartDate = new Date(transaction.spreadStart);
-		const spreadEndDate = new Date(transaction.spreadEnd);
-
-		if (spreadStartDate > spreadEndDate) {
-			return 'End date should be after start';
-		}
-
-		const numberOfMonths = differenceInMonths(spreadEndDate, spreadStartDate) + 1;
-
-		const parsedAmount = transaction.amount / 100;
-
-		const monthlyAmount = Math.abs(parsedAmount / numberOfMonths).toFixed(2);
-
-		return `Divides into $ ${monthlyAmount} monthly for ${numberOfMonths} months`;
-	};
-
 	return (
 		<Disclosure
 			defaultOpen

@@ -1,4 +1,3 @@
-import AccountFormButton from '@/components/accounts/account-form/AccountFormButton';
 import {
 	ArrowDown01Icon,
 	ChevronDownIcon,
@@ -9,7 +8,6 @@ import {
 } from 'lucide-react';
 import { Strong, Text } from '@/components/base/text';
 import TotalIcon from '@/components/icons/TotalIcon';
-import MoneyText from '@/components/MoneyText';
 import Button from '@/components/Button';
 import { Skeleton } from '@/components/Skeleton';
 

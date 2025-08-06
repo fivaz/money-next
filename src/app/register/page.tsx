@@ -111,7 +111,7 @@ export default function LoginPage() {
 						</div>
 					</div>
 
-					<GoogleAuthButton setErrorAction={setError} />
+					<GoogleAuthButton setError={setError} setIsLoading={setIsLoading} />
 				</form>
 
 				<p className="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">
