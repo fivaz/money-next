@@ -15,7 +15,6 @@ import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
 import { DATE_FORMAT, formatFRDate } from '@/lib/shared/date.utils';
 import IconView from '@/components/icon-picker/IconView';
-import PieChartIcon from '@/components/icons/PieChartIcon';
 import Tooltip from '../Tooltip';
 import { getAmount } from '@/lib/transaction/transaction.utils';
 
