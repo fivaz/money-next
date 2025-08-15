@@ -43,3 +43,8 @@ next-env.d.ts
 types/**
 
 !types/env.d.ts
+
+
+# Serwist
+public/sw*
+public/swe-worker*
