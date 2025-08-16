@@ -13,11 +13,13 @@ export async function GET(
 	const { searchParams } = new URL(request.url);
 	const month = searchParams.get('month');
 	const year = searchParams.get('year');
+	const timezone = searchParams.get('timezone') || 'UTC';
 
 	const backendUrl = new URL(`${ACCOUNTS_URL}/${accountId}/${API.TRANSACTIONS}`);
 
 	if (month) backendUrl.searchParams.append('month', month);
 	if (year) backendUrl.searchParams.append('year', year);
+	backendUrl.searchParams.append('timezone', timezone);
 
 	const data = await fetchInAPI(request.cookies, backendUrl.toString(), {}, true);
 

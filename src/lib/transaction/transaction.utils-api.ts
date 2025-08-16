@@ -6,7 +6,7 @@ import { BALANCE_URL, getBudgetedSpentUrl } from '@/lib/source/source.utils-api'
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
-	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}`;
+	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
 
 export const useAccountTransactions = (accountId: number, year: number, month: number) => {
 	const url = getAccountTransactionsUrl(accountId, year, month);

@@ -1,8 +1,8 @@
 'use client';
 
 import { InputHTMLAttributes, ChangeEvent, forwardRef, useRef } from 'react';
-import { format, formatISO, parseISO } from 'date-fns';
-import { DATE_FORMAT, isoToInputFormat } from '@/lib/shared/date.utils';
+import { formatISO } from 'date-fns';
+import { isoToInputFormat } from '@/lib/shared/date.utils';
 import { Input } from '@/components/base/input';
 
 type DateInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> & {
