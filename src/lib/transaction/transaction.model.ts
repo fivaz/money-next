@@ -8,12 +8,7 @@ const TransactionSchema = z.object({
 	id: z.number().int(),
 	description: z.string(),
 	amount: z.number(),
-	date: z
-		.string()
-		.regex(
-			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/,
-			'Date must be in YYYY-MM-DDTHH:mm format (e.g., 2025-05-30T23:53)',
-		), // Validate local datetime format
+	date: z.string().datetime(),
 	// optional
 	budget: BudgetSchema.nullable(),
 	account: AccountSchema,

@@ -22,7 +22,7 @@ import { useAccountBalance, useAccountTransactions } from '@/lib/transaction/tra
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
-import { buildDate, formatForInput } from '@/lib/shared/date.utils';
+import { buildDate, dateToInputFormat } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import Button from '@/components/Button';
@@ -46,7 +46,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
 			account,
-			date: formatForInput(buildDate(year, month)),
+			date: dateToInputFormat(buildDate(year, month)),
 		};
 	};
 

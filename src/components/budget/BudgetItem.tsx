@@ -27,7 +27,7 @@ import { useBudgetTransactions } from '@/lib/budget/budget.utils-api';
 import Button from '@/components/Button';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { buildDate, formatForInput } from '@/lib/shared/date.utils';
+import { buildDate, dateToInputFormat } from '@/lib/shared/date.utils';
 
 type BudgetItemProps = {
 	budget: Budget;
@@ -46,7 +46,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 	const getNewBudgetTransaction = (): Partial<Transaction> => {
 		return {
 			budget,
-			date: formatForInput(buildDate(year, month)),
+			date: dateToInputFormat(buildDate(year, month)),
 		};
 	};
 

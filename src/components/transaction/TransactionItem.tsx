@@ -10,10 +10,10 @@ import {
 	CompassIcon,
 } from 'lucide-react';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
-import { format, parse } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import MoneyText from '@/components/MoneyText';
-import { DATE_FORMAT, formatFRDate } from '@/lib/shared/date.utils';
+import { formatFRDate } from '@/lib/shared/date.utils';
 import IconView from '@/components/icon-picker/IconView';
 import Tooltip from '../Tooltip';
 import { getAmount } from '@/lib/transaction/transaction.utils';
@@ -28,7 +28,7 @@ export default function TransactionItem({
 	accountId = transaction.account.id,
 }: TransactionItemProps) {
 	const date = useMemo(() => {
-		const date = parse(transaction.date, DATE_FORMAT, new Date());
+		const date = parseISO(transaction.date);
 		return {
 			short: format(date, 'dd.MM'),
 			long: format(date, 'dd.MMM'),

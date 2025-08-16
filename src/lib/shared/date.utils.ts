@@ -1,9 +1,11 @@
-import { format, formatDate, lastDayOfMonth, parse, set } from 'date-fns';
+import { format, formatDate, lastDayOfMonth, parse, parseISO, set } from 'date-fns';
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
-export const formatForInput = (date: Date = new Date()) => format(date, DATE_FORMAT);
+export const isoToInputFormat = (isoDate: string) => format(parseISO(isoDate), DATE_FORMAT);
+
+export const dateToInputFormat = (date: Date = new Date()) => format(date, DATE_FORMAT);
 
 export const getParamsDate = (searchParams: ReadonlyURLSearchParams) => {
 	const year = Number(searchParams.get('year')) || new Date().getFullYear();

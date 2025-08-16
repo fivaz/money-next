@@ -17,6 +17,7 @@ import {
 } from '@/components/transaction/transaction-form/transaction-form.utils';
 import AccountsSection from '@/components/transaction/transaction-form/AccountsSection';
 import BudgetAndPaidSection from '@/components/transaction/transaction-form/BudgetAndPaidSection';
+import DateInput from '@/components/transaction/transaction-form/DateInput';
 
 type TransactionFormProps = {
 	transactionIn: TransactionIn;
@@ -84,10 +85,9 @@ export default function TransactionForm({
 				<div className="grid grid-cols-3 gap-4">
 					<Field className="col-span-2">
 						<Label>Date</Label>
-						<Input
+						<DateInput
 							name="date"
 							required
-							type="datetime-local"
 							onChange={handleChange}
 							value={transactionIn.date}
 							autoFocus
