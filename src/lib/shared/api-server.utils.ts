@@ -12,21 +12,27 @@ export async function fetchInAPI(request: NextRequest, backendUrl: string, expec
 		url.searchParams.append(key, value);
 	});
 
-	return fetchWithAuth(token, url.toString(), expectJson);
+	return fetchWithAuth(token, url.toString(), {}, expectJson);
 }
 
-export async function fetchInAction(input: RequestInfo, expectJson = true) {
+export async function fetchInAction(input: RequestInfo, init: RequestInit = {}, expectJson = true) {
 	const token = await getTokenForServerAction();
 
-	return fetchWithAuth(token, input, expectJson);
+	return fetchWithAuth(token, input, init, expectJson);
 }
 
-async function fetchWithAuth(token: string | null, input: RequestInfo, expectJson = true) {
+async function fetchWithAuth(
+	token: string | null,
+	input: RequestInfo,
+	init: RequestInit = {},
+	expectJson = true,
+) {
 	if (!token) throw new Error('User not authenticated');
 
 	const headers = {
+		...(init.headers || {}),
 		Authorization: `Bearer ${token}`,
-		cache: 'no-store',
+		cache: init.cache ?? 'no-store',
 	};
 
 	const res = await fetch(input, { headers });

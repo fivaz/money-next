@@ -1,4 +1,4 @@
-import { API } from '@/lib/const';
+import { API, dateParams } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
@@ -6,7 +6,7 @@ import { BALANCE_URL, getBudgetedSpentUrl } from '@/lib/source/source.utils-api'
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
-	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams(year, month)}`;
 
 export const useAccountTransactions = (accountId: number, year: number, month: number) => {
 	const url = getAccountTransactionsUrl(accountId, year, month);
@@ -17,7 +17,7 @@ export const useAccountTransactions = (accountId: number, year: number, month: n
 };
 
 const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
-	`/api/${API.ACCOUNTS}/${accountId}/balance?year=${year}&month=${month}`;
+	`/api/${API.ACCOUNTS}/${accountId}/balance?${dateParams(year, month)}`;
 
 export const useAccountBalance = (accountId: number, year: number, month: number) => {
 	const url = getAccountBalanceUrl(accountId, year, month);

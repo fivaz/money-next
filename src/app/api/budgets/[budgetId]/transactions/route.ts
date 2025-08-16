@@ -10,16 +10,7 @@ export async function GET(
 ) {
 	const { budgetId } = await params;
 
-	const { searchParams } = new URL(request.url);
-	const month = searchParams.get('month');
-	const year = searchParams.get('year');
-
-	const backendUrl = new URL(`${BUDGETS_URL}/${budgetId}/${API.TRANSACTIONS}`);
-
-	if (month) backendUrl.searchParams.append('month', month);
-	if (year) backendUrl.searchParams.append('year', year);
-
-	const data = await fetchInAPI(request.cookies, backendUrl.toString());
+	const data = await fetchInAPI(request, `${BUDGETS_URL}/${budgetId}/${API.TRANSACTIONS}`);
 
 	const transactions = validateTransactions(data);
 

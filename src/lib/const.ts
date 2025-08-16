@@ -39,3 +39,6 @@ export const API = {
 	BUDGETS: 'budgets',
 	SOURCES: 'sources',
 };
+
+export const dateParams = (year: number, month: number) =>
+	`year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;

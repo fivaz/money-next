@@ -3,7 +3,7 @@ import { fetchInAPI } from '@/lib/shared/api-server.utils';
 import { ACCOUNTS_URL, validateAccounts } from '@/lib/account/account.model';
 
 export async function GET(request: NextRequest) {
-	const data = await fetchInAPI(request.cookies, ACCOUNTS_URL);
+	const data = await fetchInAPI(request, ACCOUNTS_URL);
 
 	const accounts = validateAccounts(data);
 
