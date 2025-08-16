@@ -8,18 +8,9 @@ export async function GET(
 ) {
 	const { accountId } = await params;
 
-	const { searchParams } = new URL(request.url);
-	const month = searchParams.get('month');
-	const year = searchParams.get('year');
+	const backendUrl = `${ACCOUNTS_URL}/${accountId}/balance`;
 
-	const backendUrl = new URL(`${ACCOUNTS_URL}/${accountId}/balance`);
+	const data = await fetchInAPI(request, backendUrl);
 
-	if (month) backendUrl.searchParams.append('month', month);
-	if (year) backendUrl.searchParams.append('year', year);
-
-	const data = await fetchInAPI(request.cookies, backendUrl.toString(), {}, true);
-
-	return NextResponse.json(data, {
-		status: 200,
-	});
+	return NextResponse.json(data, { status: 200 });
 }
