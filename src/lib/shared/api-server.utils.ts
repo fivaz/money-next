@@ -1,5 +1,4 @@
 import { getTokenForAPI, getTokenForServerAction } from '@/lib/user/auth.utils.server';
-import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest } from 'next/server';
 
 export async function fetchInAPI(request: NextRequest, backendUrl: string, expectJson = true) {
