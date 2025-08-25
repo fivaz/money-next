@@ -46,7 +46,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
 			account,
-			date: dateToInputFormat(buildDate(year, month)),
+			date: buildDate(year, month).toISOString(),
 		};
 	};
 
