@@ -17,7 +17,6 @@ export async function getSources(): Promise<Source[]> {
 export async function addSourceDB(source: Omit<Source, 'id'>) {
 	const saved = fetchInAction(SOURCES_URL, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(source),
 	});
 
@@ -29,7 +28,6 @@ export async function addSourceDB(source: Omit<Source, 'id'>) {
 export async function editSourceDB(source: Source) {
 	const saved = fetchInAction(`${SOURCES_URL}/${source.id}`, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(source),
 	});
 
@@ -55,7 +53,6 @@ export async function reorderSources(sources: Source[]): Promise<void> {
 		`${SOURCES_URL}/reorder`,
 		{
 			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(sources.map(({ id }) => ({ id }))),
 		},
 		false,

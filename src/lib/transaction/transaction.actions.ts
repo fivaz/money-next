@@ -24,7 +24,6 @@ export async function searchTransactions(
 export async function createTransactionAction(transaction: Omit<Transaction, 'id'>) {
 	return fetchInAction(TRANSACTIONS_URL, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
 }
@@ -32,7 +31,6 @@ export async function createTransactionAction(transaction: Omit<Transaction, 'id
 export async function updateTransactionAction(transaction: Transaction) {
 	return fetchInAction(`${TRANSACTIONS_URL}/${transaction.id}`, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(transaction),
 	});
 }

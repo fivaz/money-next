@@ -37,7 +37,6 @@ export async function getCurrentMonthBudgetsWithDetails({
 export async function addBudgetDB(budget: Omit<Budget, 'id'>) {
 	const saved = fetchInAction(BUDGETS_URL, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(budget),
 	});
 
@@ -49,7 +48,6 @@ export async function addBudgetDB(budget: Omit<Budget, 'id'>) {
 export async function editBudgetDB(budget: Budget) {
 	const saved = fetchInAction(`${BUDGETS_URL}/${budget.id}`, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(budget),
 	});
 
@@ -75,7 +73,6 @@ export async function reorderBudgets(budgets: Budget[]): Promise<void> {
 		`${BUDGETS_URL}/reorder`,
 		{
 			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(budgets.map(({ id }) => ({ id }))),
 		},
 		false,
