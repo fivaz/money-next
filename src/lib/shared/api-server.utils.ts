@@ -28,13 +28,17 @@ async function fetchWithAuth(
 ) {
 	if (!token) throw new Error('User not authenticated');
 
-	const headers = {
-		...(init.headers || {}),
-		Authorization: `Bearer ${token}`,
-		cache: init.cache ?? 'no-store',
+	const initWithToken = {
+		...init,
+		headers: {
+			...init.headers,
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+			cache: init.cache ?? 'no-store',
+		},
 	};
 
-	const res = await fetch(input, { headers });
+	const res = await fetch(input, initWithToken);
 
 	if (!res.ok) {
 		const errorMsg = await res.text();
