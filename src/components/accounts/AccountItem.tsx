@@ -106,7 +106,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
 										{isLoading ? (
-											<div className="bg-black- flex justify-center p-4">
+											<div className="bg-black- flex justify-center border-b border-gray-300 p-4 dark:border-gray-600">
 												<LoaderCircleIcon className="size-5 animate-spin" />
 											</div>
 										) : (
