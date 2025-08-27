@@ -23,9 +23,7 @@ export const getBudgetTransactionsUrl = (budgetId: number, year: number, month: 
 export const useBudgetTransactions = (budgetId: number, year: number, month: number) => {
 	const url = getBudgetTransactionsUrl(budgetId, year, month);
 
-	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
-
-	return initialTransactionsData || [];
+	return useSWR<Transaction[]>(url, fetcher);
 };
 
 export const mutateBudgets = (year: number, month: number) => {

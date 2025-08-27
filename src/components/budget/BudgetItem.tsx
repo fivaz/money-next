@@ -8,6 +8,7 @@ import {
 	CogIcon,
 	HandCoinsIcon,
 	PlusIcon,
+	LoaderCircleIcon,
 } from 'lucide-react';
 import BudgetFormButton from '@/components/budget/budget-form/BudgetFormButton';
 import MoneyText from '@/components/MoneyText';
@@ -39,7 +40,7 @@ type BudgetItemProps = {
 export default function BudgetItem({ budget, index, year, month }: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const initialTransactions = useBudgetTransactions(budget.id, year, month);
+	const { data: initialTransactions, isLoading } = useBudgetTransactions(budget.id, year, month);
 
 	const [orderDesc, setOrderDesc] = useState(true);
 
@@ -56,7 +57,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 				<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 					<TransactionListProvider
 						source={{ type: 'budget', id: budget.id }}
-						initialTransactions={initialTransactions}
+						initialTransactions={initialTransactions ?? []}
 						orderDesc={orderDesc}
 					>
 						<div className="rounded-x-lg flex flex-col gap-2 rounded-t-lg border-b border-gray-300 p-3 dark:border-gray-600">
@@ -91,7 +92,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								</div>
 							</div>
 
-							<ProgressBar budget={budget} transactions={initialTransactions} />
+ 						<ProgressBar budget={budget} transactions={initialTransactions ?? []} />
 						</div>
 
 						<AnimatePresence>
@@ -103,7 +104,13 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 										exit={{ scale: 0.95, opacity: 0 }}
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
-										<BudgetTransactions />
+ 									{isLoading ? (
+ 										<div className="bg-black- flex justify-center border-b border-gray-300 p-4 dark:border-gray-600">
+ 											<LoaderCircleIcon className="size-5 animate-spin" />
+ 										</div>
+ 									) : (
+ 										<BudgetTransactions />
+ 									)}
 									</motion.div>
 								</DisclosurePanel>
 							)}
