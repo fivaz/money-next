@@ -8,6 +8,7 @@ import {
 	CogIcon,
 	HandCoinsIcon,
 	PlusIcon,
+	LoaderCircleIcon,
 } from 'lucide-react';
 import IconView from '@/components/icon-picker/IconView';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
@@ -37,7 +38,7 @@ type AccountItemProps = {
 export default function AccountItem({ account, index, year, month }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const initialTransactions = useAccountTransactions(account.id, year, month);
+	const { data: initialTransactions, isLoading } = useAccountTransactions(account.id, year, month);
 
 	const balance = useAccountBalance(account.id, year, month);
 
@@ -54,7 +55,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 		<Disclosure ref={ref} as="div" defaultOpen>
 			{({ open }) => (
 				<TransactionListProvider
-					initialTransactions={initialTransactions}
+					initialTransactions={initialTransactions ?? []}
 					orderDesc={orderDesc}
 					source={{ type: 'account', id: account.id }}
 				>
@@ -104,7 +105,13 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 										exit={{ scale: 0.95, opacity: 0 }}
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
-										<AccountTransactions accountId={account.id} />
+										{isLoading ? (
+											<div className="bg-black- flex justify-center p-4">
+												<LoaderCircleIcon className="size-5 animate-spin" />
+											</div>
+										) : (
+											<AccountTransactions accountId={account.id} />
+										)}
 									</motion.div>
 								</DisclosurePanel>
 							)}

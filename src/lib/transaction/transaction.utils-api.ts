@@ -11,9 +11,7 @@ const getAccountTransactionsUrl = (accountId: number, year: number, month: numbe
 export const useAccountTransactions = (accountId: number, year: number, month: number) => {
 	const url = getAccountTransactionsUrl(accountId, year, month);
 
-	const { data: initialTransactionsData } = useSWR<Transaction[]>(url, fetcher);
-
-	return initialTransactionsData || [];
+	return useSWR<Transaction[]>(url, fetcher);
 };
 
 const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
