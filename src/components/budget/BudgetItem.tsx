@@ -47,7 +47,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 	const getNewBudgetTransaction = (): Partial<Transaction> => {
 		return {
 			budget,
-			date: dateToInputFormat(buildDate(year, month)),
+			date: buildDate(year, month).toISOString(),
 		};
 	};
 
@@ -92,7 +92,7 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 								</div>
 							</div>
 
- 						<ProgressBar budget={budget} transactions={initialTransactions ?? []} />
+							<ProgressBar budget={budget} transactions={initialTransactions ?? []} />
 						</div>
 
 						<AnimatePresence>
@@ -104,13 +104,13 @@ export default function BudgetItem({ budget, index, year, month }: BudgetItemPro
 										exit={{ scale: 0.95, opacity: 0 }}
 										transition={{ duration: 0.1, ease: easeOut }}
 									>
- 									{isLoading ? (
- 										<div className="bg-black- flex justify-center border-b border-gray-300 p-4 dark:border-gray-600">
- 											<LoaderCircleIcon className="size-5 animate-spin" />
- 										</div>
- 									) : (
- 										<BudgetTransactions />
- 									)}
+										{isLoading ? (
+											<div className="bg-black- flex justify-center border-b border-gray-300 p-4 dark:border-gray-600">
+												<LoaderCircleIcon className="size-5 animate-spin" />
+											</div>
+										) : (
+											<BudgetTransactions />
+										)}
 									</motion.div>
 								</DisclosurePanel>
 							)}
