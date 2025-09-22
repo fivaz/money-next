@@ -7,6 +7,7 @@ import IconView from '@/components/icon-picker/IconView';
 import { Switch } from '@/components/base/switch';
 import { TransactionIn } from '@/components/transaction/transaction-form/transaction-form.utils';
 import { useBudgets } from '@/lib/budget/budget.utils-api';
+import { Budget } from '@/lib/budget/budget.model';
 
 type BudgetAndPaidSectionProps = {
 	transactionIn: TransactionIn;
@@ -44,7 +45,7 @@ export default function BudgetAndPaidSection({
 				) : (
 					<Listbox
 						name="budget"
-						value={transactionIn?.budget}
+						value={transactionIn.budget}
 						onChange={handleBudget}
 						placeholder="Select budget&hellip;"
 					>
@@ -52,6 +53,15 @@ export default function BudgetAndPaidSection({
 							<IconView name={''} className="size-4" />
 							No budget
 						</ListboxOption>
+
+						{transactionIn.budget?.id &&
+							!budgets.some((budget) => budget.id === transactionIn.budget?.id) && (
+								<ListboxOption value={transactionIn.budget} className="flex gap-2">
+									<IconView name={transactionIn.budget?.icon} className="size-4 shrink-0" />
+									<span className="truncate">{transactionIn.budget?.name} [deleted]</span>
+								</ListboxOption>
+							)}
+
 						{budgets.map((budget) => (
 							<ListboxOption key={budget.id} value={budget} className="flex gap-2 truncate">
 								<IconView name={budget.icon} className="size-4 shrink-0" />
