@@ -61,7 +61,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 				>
 					<li className="rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
 						<div className="sticky top-0 z-10 flex flex-col gap-2 border-b border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-800">
-							<div className="flex items-center justify-between">
+							<div className="flex flex-col justify-between gap-1 md:flex-row">
 								<div className="flex items-center gap-2 truncate">
 									<Text>
 										<IconView className="size-5" name={account.icon} />
@@ -70,28 +70,30 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 									<Strong className="min-w-0 flex-1 truncate">{account.name}</Strong>
 								</div>
 
-								<div className="flex shrink-0 items-center gap-2">
+								<div className="flex shrink-0 items-center justify-between gap-2 md:justify-start">
 									<Text className="flex items-center gap-2">
 										<TotalIcon className="size-4" />
 										<MoneyText className="shrink-0">{balance}</MoneyText>
 									</Text>
 
-									<Button onClick={() => setOrderDesc((order) => !order)}>
-										{orderDesc ? (
-											<ArrowDown01Icon className="size-4" />
-										) : (
-											<ArrowDown10Icon className="size-4" />
-										)}
-									</Button>
+									<div className="flex gap-2">
+										<Button onClick={() => setOrderDesc((order) => !order)}>
+											{orderDesc ? (
+												<ArrowDown01Icon className="size-4" />
+											) : (
+												<ArrowDown10Icon className="size-4" />
+											)}
+										</Button>
 
-									<TransactionFormButton transaction={getNewAccountTransaction()}>
-										<PlusIcon className="size-4 shrink-0" />
-										<HandCoinsIcon className="size-4 shrink-0" />
-									</TransactionFormButton>
+										<TransactionFormButton transaction={getNewAccountTransaction()}>
+											<PlusIcon className="size-4 shrink-0" />
+											<HandCoinsIcon className="size-4 shrink-0" />
+										</TransactionFormButton>
 
-									<AccountFormButton account={account}>
-										<CogIcon className="size-4 shrink-0" />
-									</AccountFormButton>
+										<AccountFormButton account={account}>
+											<CogIcon className="size-4 shrink-0" />
+										</AccountFormButton>
+									</div>
 								</div>
 							</div>
 						</div>
