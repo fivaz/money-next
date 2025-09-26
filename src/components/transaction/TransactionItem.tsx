@@ -38,27 +38,28 @@ export default function TransactionItem({
 
 	return (
 		<li className="flex items-center justify-between bg-white px-3 py-2 dark:bg-gray-700">
-			<div className="flex min-w-0 items-center gap-2 sm:gap-4">
-				<div className="flex min-w-0 items-center gap-1">
+			<div className="flex items-center gap-2 truncate">
+				<Text className="block w-10 md:hidden">{date.short}</Text>
+
+				<div className="hidden items-center gap-2 md:flex">
 					<Text className="flex shrink-0 items-center gap-2">
 						<CalendarIcon className="hidden size-4 shrink-0 md:block" />
-						<span className="block w-12 md:hidden">{date.short}</span>
-						<span className="hidden w-14 md:block">{date.long}</span>
+						<span className="hidden w-12 md:block">{date.long}</span>
 					</Text>
+
 					<Text className="hidden shrink-0 items-center gap-2 md:flex">
 						<ClockIcon className="size-4 shrink-0" />
 						<span className="w-10">{date.time}</span>
 					</Text>
 				</div>
 
-				<div className="flex items-center gap-2 truncate">
-					<Strong>
-						<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
-					</Strong>
-					<Strong className="min-w-0 flex-1 truncate">
-						{transaction.description.trim() || transaction.budget?.name}
-					</Strong>
-				</div>
+				<Strong>
+					<IconView className="size-4 shrink-0 text-yellow-500" name={transaction.budget?.icon} />
+				</Strong>
+
+				<Strong className="flex-1 truncate">
+					{transaction.description.trim() || transaction.budget?.name}
+				</Strong>
 			</div>
 
 			<div className="flex shrink-0 items-center gap-2">
