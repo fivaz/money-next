@@ -13,7 +13,10 @@ export const useActualBalance = () => {
 	return data || 0;
 };
 
-export const useBudgetedSpent = (year: number, month: number) => {
-	const { data } = useSWR<number>(getBudgetedSpentUrl(year, month), fetcher);
-	return data || 0;
+export const useBudgetedSpent = (year: number, month: number): { paid: number; unpaid: number } => {
+	const { data } = useSWR<{ paid: number; unpaid: number }>(
+		getBudgetedSpentUrl(year, month),
+		fetcher,
+	);
+	return data || { paid: 0, unpaid: 0 };
 };

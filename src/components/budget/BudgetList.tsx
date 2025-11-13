@@ -9,7 +9,7 @@ import { useBudgetList } from '@/lib/budget/BudgetListProvider';
 import { useYearMonth } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
-import { HandCoinsIcon, PiggyBankIcon } from 'lucide-react';
+import { HandCoinsIcon, InfoIcon, PiggyBankIcon } from 'lucide-react';
 import Tooltip from '../Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
 import { getTotalAccumulativeAmount, getTotalAmount } from '@/lib/budget/budget.utils';
@@ -31,7 +31,8 @@ export default function BudgetList() {
 	const totalAccumulativeAmount = getTotalAccumulativeAmount(budgets);
 
 	const finalAmount = totalAmount + totalAccumulativeAmount;
-	const difference = finalAmount + budgetedSpent;
+	const currentDifference = finalAmount + budgetedSpent.paid;
+	const futureDifference = finalAmount + (budgetedSpent.paid + budgetedSpent.unpaid);
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -52,20 +53,24 @@ export default function BudgetList() {
 
 					<span>-</span>
 
-					<Tooltip message={`total spent`}>
+					<Tooltip
+						message={`total spent current / future: ${formatMoney(budgetedSpent.paid + budgetedSpent.unpaid)}`}
+					>
 						<div className="flex items-center gap-2">
 							<TotalIcon className="text-yellow-500">
 								<HandCoinsIcon className="size-5" />
 							</TotalIcon>
 							<MoneyText addColor={false} addSign={false}>
-								{budgetedSpent}
+								{budgetedSpent.paid}
 							</MoneyText>
 						</div>
 					</Tooltip>
 
 					<span>=</span>
 
-					<MoneyText>{difference}</MoneyText>
+					<Tooltip message={`remaining current / future: ${formatMoney(futureDifference)}`}>
+						<MoneyText>{currentDifference}</MoneyText>
+					</Tooltip>
 				</div>
 
 				<DateSwitcher />
