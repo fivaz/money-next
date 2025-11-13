@@ -3,10 +3,13 @@
 import MoneyText from '@/components/MoneyText';
 import clsx from 'clsx';
 import { Text } from '@/components/base/text';
-import { useActualBalance } from '@/lib/source/source.utils-api';
+import { useActualBalance, useActualUnpaidBalance } from '@/lib/balance/balance.utils';
+import Tooltip from '@/components/Tooltip';
+import { formatMoney } from '@/lib/shared/utils';
 
 export default function ClientBalanceViewer({ expectedBalance }: { expectedBalance: number }) {
 	const actualBalance = useActualBalance();
+	const actualUnpaidBalance = useActualUnpaidBalance();
 
 	const balanceDifference = expectedBalance - actualBalance;
 
@@ -14,9 +17,14 @@ export default function ClientBalanceViewer({ expectedBalance }: { expectedBalan
 		<div className="flex shrink-0 items-center gap-2 text-sm">
 			<div className="flex items-center gap-2">
 				<Text className="hidden md:block">balance:</Text>
-				<MoneyText addColor={false} className={clsx('font-semibold text-gray-800 dark:text-white')}>
-					{actualBalance}
-				</MoneyText>
+				<Tooltip message={`future balance: ${formatMoney(actualBalance + actualUnpaidBalance)}`}>
+					<MoneyText
+						addColor={false}
+						className={clsx('font-semibold text-gray-800 dark:text-white')}
+					>
+						{actualBalance}
+					</MoneyText>
+				</Tooltip>
 			</div>
 			<Text className="flex items-center">
 				{balanceDifference !== 0 && (

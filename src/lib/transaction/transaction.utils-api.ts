@@ -2,8 +2,8 @@ import { API, dateParams } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
-import { BALANCE_URL, getBudgetedSpentUrl } from '@/lib/source/source.utils-api';
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
+import { BALANCE_URL, getBudgetedSpentUrl, UNPAID_BALANCE_URL } from '@/lib/balance/balance.utils';
 
 const getAccountTransactionsUrl = (accountId: number, year: number, month: number) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams(year, month)}`;
@@ -34,6 +34,7 @@ export const mutateTransactions = (
 	source?: { type: SourceType; id: number },
 ) => {
 	void mutate(BALANCE_URL);
+	void mutate(UNPAID_BALANCE_URL);
 
 	if (!source) {
 		return;
