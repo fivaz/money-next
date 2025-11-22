@@ -12,11 +12,10 @@ import {
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { format, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import MoneyText from '@/components/MoneyText';
 import { formatFRDate } from '@/lib/shared/date.utils';
 import IconView from '@/components/icon-picker/IconView';
-import Tooltip from '../Tooltip';
-import { getAmount } from '@/lib/transaction/transaction.utils';
+import Tooltip from '../../Tooltip';
+import TransactionItemAmount from '@/components/transaction/TransactionItem/TransactionItemAmount';
 
 type TransactionItemProps = {
 	accountId?: number;
@@ -82,7 +81,7 @@ export default function TransactionItem({
 				)}
 
 				<Text>
-					<MoneyText addColor={transaction.isPaid}>{getAmount(transaction, accountId)}</MoneyText>
+					<TransactionItemAmount transaction={transaction} accountId={accountId} />
 				</Text>
 
 				<TransactionFormButton transaction={transaction} size="p-2">

@@ -7,7 +7,6 @@ import IconView from '@/components/icon-picker/IconView';
 import { Switch } from '@/components/base/switch';
 import { TransactionIn } from '@/components/transaction/transaction-form/transaction-form.utils';
 import { useBudgets } from '@/lib/budget/budget.utils-api';
-import { Budget } from '@/lib/budget/budget.model';
 
 type BudgetAndPaidSectionProps = {
 	transactionIn: TransactionIn;

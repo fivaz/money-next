@@ -1,5 +1,5 @@
 'use client';
-import TransactionItem from '@/components/transaction/TransactionItem';
+import TransactionItem from '@/components/transaction/TransactionItem/TransactionItem';
 import { useTransactionList } from '@/lib/transaction/useTransactionList';
 
 type AccountTransactionsProps = {

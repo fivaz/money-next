@@ -1,4 +1,4 @@
-import { format, formatDate, lastDayOfMonth, parse, parseISO, set } from 'date-fns';
+import { format, formatDate, parse, parseISO } from 'date-fns';
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
