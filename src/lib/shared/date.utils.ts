@@ -7,25 +7,18 @@ export const isoToInputFormat = (isoDate: string) => format(parseISO(isoDate), D
 
 export const dateToInputFormat = (date: Date = new Date()) => format(date, DATE_FORMAT);
 
-export const getParamsDate = (searchParams: ReadonlyURLSearchParams) => {
-	const year = Number(searchParams.get('year')) || new Date().getFullYear();
-	const month = Number(searchParams.get('month')) || new Date().getMonth() + 1;
+export const getParamsDate = (searchParams: ReadonlyURLSearchParams): [number, number, string] => {
+	const currentDate = new Date();
+	const year = Number(searchParams.get('year')) || currentDate.getFullYear();
+	const month = Number(searchParams.get('month')) || currentDate.getMonth() + 1;
+	const date = searchParams.get('asOf') || getISODate(currentDate);
 
-	return [year, month];
+	return [year, month, date];
 };
 
-export const useYearMonth = () => {
+export const useYearMonth = (): [number, number, string] => {
 	const searchParams = useSearchParams();
 	return getParamsDate(searchParams);
-};
-
-export const buildDate = (year: number, month: number): Date => {
-	// add current day to month and year
-	const baseDate = new Date(year, month - 1, 1);
-	const maxDay = lastDayOfMonth(baseDate).getDate();
-	const clampedDay = Math.min(new Date().getDate(), maxDay);
-
-	return set(baseDate, { date: clampedDay, hours: 12 });
 };
 
 export const ISO_DATE = 'yyyy-MM-dd';
@@ -33,6 +26,8 @@ export const ISO_DATE = 'yyyy-MM-dd';
 export const FR_DATE = 'dd/MM/yyyy';
 
 export const getISODate = (date: Date) => formatDate(date, ISO_DATE);
+
+export const parseISODate = (dateString: string) => parse(dateString, ISO_DATE, new Date());
 
 export const formatFRDate = (dateString: string) =>
 	formatDate(parse(dateString, ISO_DATE, new Date()), FR_DATE);

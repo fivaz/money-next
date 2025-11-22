@@ -23,7 +23,7 @@ import { useAccountBalance, useAccountTransactions } from '@/lib/transaction/tra
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
-import { buildDate, dateToInputFormat } from '@/lib/shared/date.utils';
+import { dateToInputFormat } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import Button from '@/components/Button';
@@ -33,9 +33,10 @@ type AccountItemProps = {
 	index: number;
 	year: number;
 	month: number;
+	asOf: string;
 };
 
-export default function AccountItem({ account, index, year, month }: AccountItemProps) {
+export default function AccountItem({ account, index, year, month, asOf }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
 	const { data: initialTransactions, isLoading } = useAccountTransactions(account.id, year, month);
@@ -47,7 +48,7 @@ export default function AccountItem({ account, index, year, month }: AccountItem
 	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
 			account,
-			date: buildDate(year, month).toISOString(),
+			date: asOf,
 		};
 	};
 

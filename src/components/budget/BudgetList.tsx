@@ -18,7 +18,7 @@ import { useBudgetedSpent } from '@/lib/balance/balance.utils';
 export default function BudgetList() {
 	const { updateList, items: budgets } = useBudgetList();
 
-	const [year, month] = useYearMonth();
+	const [year, month, asOf] = useYearMonth();
 	const budgetedSpent = useBudgetedSpent(year, month);
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
@@ -75,7 +75,14 @@ export default function BudgetList() {
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem index={index} key={budget.id} budget={budget} year={year} month={month} />
+						<BudgetItem
+							index={index}
+							key={budget.id}
+							budget={budget}
+							year={year}
+							month={month}
+							asOf={asOf}
+						/>
 					))}
 				</DragDropProvider>
 			</ul>

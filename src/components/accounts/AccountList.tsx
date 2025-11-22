@@ -12,7 +12,7 @@ import { DragDropProvider } from '@dnd-kit/react';
 export default function AccountList() {
 	const { accounts, setAccounts } = useAccountList();
 
-	const [year, month] = useYearMonth();
+	const [year, month, asOf] = useYearMonth();
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newAccounts = move(accounts, event);
@@ -37,6 +37,7 @@ export default function AccountList() {
 							account={account}
 							year={year}
 							month={month}
+							asOf={asOf}
 						/>
 					))}
 				</DragDropProvider>
