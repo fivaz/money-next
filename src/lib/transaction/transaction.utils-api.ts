@@ -8,12 +8,7 @@ import { BALANCE_URL, getBudgetedSpentUrl, UNPAID_BALANCE_URL } from '@/lib/bala
 const getAccountTransactionsUrl = (accountId: number, asOf: string) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams2(asOf)}`;
 
-export const useAccountTransactions = (
-	accountId: number,
-	year: number,
-	month: number,
-	asOf: string,
-) => {
+export const useAccountTransactions = (accountId: number, asOf: string) => {
 	const url = getAccountTransactionsUrl(accountId, asOf);
 
 	return useSWR<Transaction[]>(url, fetcher);

@@ -6,9 +6,11 @@ import { Text } from '@/components/base/text';
 import { useActualBalance, useActualUnpaidBalance } from '@/lib/balance/balance.utils';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
+import { useYearMonth } from '@/lib/shared/date.utils';
 
 export default function ClientBalanceViewer({ expectedBalance }: { expectedBalance: number }) {
-	const actualBalance = useActualBalance();
+	const [, , asOf] = useYearMonth();
+	const actualBalance = useActualBalance(asOf);
 	const actualUnpaidBalance = useActualUnpaidBalance();
 
 	const balanceDifference = expectedBalance - actualBalance;
