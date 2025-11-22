@@ -38,6 +38,7 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set('year', date.getFullYear().toString());
 		params.set('month', (date.getMonth() + 1).toString());
+		params.set('asOf', getISODate(date));
 
 		router.push(`${pathname}?${params.toString()}`);
 	};
