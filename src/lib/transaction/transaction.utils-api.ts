@@ -1,12 +1,12 @@
-import { API, dateParams } from '@/lib/const';
+import { API, dateParams, dateParams2 } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
 import { BALANCE_URL, getBudgetedSpentUrl, UNPAID_BALANCE_URL } from '@/lib/balance/balance.utils';
 
-const getAccountTransactionsUrl = (accountId: number, year: number, month: number, asOf: string) =>
-	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams(year, month, asOf)}`;
+const getAccountTransactionsUrl = (accountId: number, asOf: string) =>
+	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams2(asOf)}`;
 
 export const useAccountTransactions = (
 	accountId: number,
@@ -14,7 +14,7 @@ export const useAccountTransactions = (
 	month: number,
 	asOf: string,
 ) => {
-	const url = getAccountTransactionsUrl(accountId, year, month, asOf);
+	const url = getAccountTransactionsUrl(accountId, asOf);
 
 	return useSWR<Transaction[]>(url, fetcher);
 };
@@ -47,16 +47,16 @@ export const mutateTransactions = (
 	}
 
 	if (source.type === 'account') {
-		void mutate(getAccountTransactionsUrl(transaction.account.id, year, month, asOf));
+		void mutate(getAccountTransactionsUrl(transaction.account.id, asOf));
 		void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
 
 		if (transaction.destination) {
-			void mutate(getAccountTransactionsUrl(transaction.destination.id, year, month, asOf));
+			void mutate(getAccountTransactionsUrl(transaction.destination.id, asOf));
 			void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
 		}
 
 		if (source.id && transaction.account.id !== source.id) {
-			void mutate(getAccountTransactionsUrl(source.id, year, month, asOf));
+			void mutate(getAccountTransactionsUrl(source.id, asOf));
 			void mutate(getAccountBalanceUrl(source.id, year, month));
 		}
 	}
