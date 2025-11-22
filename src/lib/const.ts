@@ -40,5 +40,10 @@ export const API = {
 	SOURCES: 'sources',
 };
 
-export const dateParams = (year: number, month: number) =>
-	`year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+export const dateParams = (year: number, month: number, asOf?: string) => {
+	if (asOf) {
+		return `year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&asOf=${asOf}`;
+	} else {
+		return `year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+	}
+};

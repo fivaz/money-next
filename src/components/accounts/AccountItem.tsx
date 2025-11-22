@@ -39,7 +39,12 @@ type AccountItemProps = {
 export default function AccountItem({ account, index, year, month, asOf }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
-	const { data: initialTransactions, isLoading } = useAccountTransactions(account.id, year, month);
+	const { data: initialTransactions, isLoading } = useAccountTransactions(
+		account.id,
+		year,
+		month,
+		asOf,
+	);
 
 	const balance = useAccountBalance(account.id, year, month);
 

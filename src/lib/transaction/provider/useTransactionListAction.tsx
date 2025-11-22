@@ -15,7 +15,7 @@ export function useTransactionListActions(
 	source?: { type: 'account' | 'budget'; id: number },
 ) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-	const [year, month] = useYearMonth();
+	const [year, month, asOf] = useYearMonth();
 
 	useEffect(() => {
 		setTransactions(initialTransactions);
@@ -49,7 +49,7 @@ export function useTransactionListActions(
 			}
 
 			// Let global SWR mutate trigger the rest
-			mutateTransactions(toCreate, year, month, source);
+			mutateTransactions(toCreate, year, month, asOf, source);
 		} catch (err) {
 			console.error('Create failed', err);
 			setTransactions(previousTransactions);
@@ -66,7 +66,7 @@ export function useTransactionListActions(
 		try {
 			await updateTransactionAction(toUpdate);
 
-			mutateTransactions(toUpdate, year, month, source);
+			mutateTransactions(toUpdate, year, month, asOf, source);
 		} catch (err) {
 			console.error('Update failed', err);
 			setTransactions(previousTransactions); // ⬅️ Restore old state on failure
@@ -79,7 +79,7 @@ export function useTransactionListActions(
 
 		try {
 			await deleteTransactionAction(toDelete.id);
-			mutateTransactions(toDelete, year, month, source);
+			mutateTransactions(toDelete, year, month, asOf, source);
 		} catch (err) {
 			console.error('Delete failed', err);
 			setTransactions(previousTransactions);
