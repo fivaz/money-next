@@ -23,7 +23,6 @@ import { useAccountBalance, useAccountTransactions } from '@/lib/transaction/tra
 import AccountTransactions from '@/components/accounts/AccountTransactions';
 import { Transaction } from '@/lib/transaction/transaction.model';
 
-import { dateToInputFormat } from '@/lib/shared/date.utils';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import Button from '@/components/Button';

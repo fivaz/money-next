@@ -3,24 +3,24 @@ import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { getISODate, getParamsDate } from '@/lib/shared/date.utils';
+import { getISODate, getParamsDate, parseISODate } from '@/lib/shared/date.utils';
 
 type DateSwitcherClientProps = {};
 export default function DateSwitcher({}: DateSwitcherClientProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [year, month] = getParamsDate(searchParams);
+	const [, , asOf] = getParamsDate(searchParams);
 
-	const date = useMemo(() => new Date(year, month - 1), [year, month]);
+	const date = useMemo(() => parseISODate(asOf), [asOf]);
 
 	const dateInput = useRef<HTMLInputElement>(null);
 
 	const formattedDate = useMemo(() => {
 		if (isSameYear(date, new Date())) {
-			return format(date, 'MMMM'); // e.g., "March"
+			return format(date, 'dd MMMM'); // e.g., "March"
 		} else {
-			return format(date, 'MMMM, yyyy'); // e.g., "March, 2025"
+			return format(date, 'dd.MM.yyyy'); // e.g., "March, 2025"
 		}
 	}, [date]);
 
