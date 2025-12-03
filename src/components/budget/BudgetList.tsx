@@ -75,14 +75,7 @@ export default function BudgetList() {
 			<ul className="mt-4 space-y-2">
 				<DragDropProvider onDragEnd={handleDragEnd}>
 					{budgets.map((budget, index) => (
-						<BudgetItem
-							index={index}
-							key={budget.id}
-							budget={budget}
-							year={year}
-							month={month}
-							asOf={asOf}
-						/>
+						<BudgetItem index={index} key={budget.id} budget={budget} asOf={asOf} />
 					))}
 				</DragDropProvider>
 			</ul>

@@ -64,11 +64,11 @@ export const mutateTransactions = (
 		void mutate(getBudgetedSpentUrl(year, month));
 
 		if (transaction.budget) {
-			void mutate(getBudgetTransactionsUrl(transaction.budget.id, year, month));
+			void mutate(getBudgetTransactionsUrl(transaction.budget.id, asOf));
 		}
 
 		if (source.id && transaction.budget?.id !== source.id) {
-			void mutate(getBudgetTransactionsUrl(source.id, year, month));
+			void mutate(getBudgetTransactionsUrl(source.id, asOf));
 		}
 	}
 };

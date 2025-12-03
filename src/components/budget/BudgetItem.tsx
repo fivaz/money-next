@@ -28,26 +28,25 @@ import { useBudgetTransactions } from '@/lib/budget/budget.utils-api';
 import Button from '@/components/Button';
 import TransactionFormButton from '@/components/transaction/transaction-form/TransactionFormButton';
 import { Transaction } from '@/lib/transaction/transaction.model';
+import { toIsoAtNoon } from '@/lib/shared/date.utils';
 
 type BudgetItemProps = {
 	budget: Budget;
 	index: number;
-	year: number;
-	month: number;
 	asOf: string;
 };
 
-export default function BudgetItem({ budget, index, year, month, asOf }: BudgetItemProps) {
+export default function BudgetItem({ budget, index, asOf }: BudgetItemProps) {
 	const { ref } = useSortable({ id: budget.id, index });
 
-	const { data: initialTransactions, isLoading } = useBudgetTransactions(budget.id, year, month);
+	const { data: initialTransactions, isLoading } = useBudgetTransactions(budget.id, asOf);
 
 	const [orderDesc, setOrderDesc] = useState(true);
 
 	const getNewBudgetTransaction = (): Partial<Transaction> => {
 		return {
 			budget,
-			date: asOf,
+			date: toIsoAtNoon(asOf),
 		};
 	};
 
