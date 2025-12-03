@@ -5,12 +5,11 @@ import { fetcher } from '@/lib/shared/api-client.utils';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { useYearMonth } from '@/lib/shared/date.utils';
 
-const getBudgetUrl = (year: number, month: number) =>
-	`/api/${API.BUDGETS}?${dateParams(year, month)}`;
+const getBudgetUrl = (asOf: string) => `/api/${API.BUDGETS}?${dateParams2(asOf)}`;
 
 export const useBudgets = () => {
-	const [year, month] = useYearMonth();
-	const { data: budgetsData, isLoading } = useSWR<Budget[]>(getBudgetUrl(year, month), fetcher);
+	const [_y, _m, asOf] = useYearMonth();
+	const { data: budgetsData, isLoading } = useSWR<Budget[]>(getBudgetUrl(asOf), fetcher);
 
 	const budgets = budgetsData || [];
 
@@ -26,6 +25,6 @@ export const useBudgetTransactions = (budgetId: number, asOf: string) => {
 	return useSWR<Transaction[]>(url, fetcher);
 };
 
-export const mutateBudgets = (year: number, month: number) => {
-	void mutate(getBudgetUrl(year, month));
+export const mutateBudgets = (asOf: string) => {
+	void mutate(getBudgetUrl(asOf));
 };

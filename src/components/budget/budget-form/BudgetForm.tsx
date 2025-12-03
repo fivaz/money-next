@@ -29,7 +29,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 	const formRef = useRef<HTMLFormElement>(null);
 	const { addItem, editItem, deleteItem } = useBudgetList();
 
-	const [year, month] = useYearMonth();
+	const [_y, _m, asOf] = useYearMonth();
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -48,14 +48,14 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 		addItem(budget);
 
 		await addBudgetDB(budgetWithoutId);
-		mutateBudgets(year, month);
+		mutateBudgets(asOf);
 	};
 
 	const editBudget = async (budget: Budget) => {
 		editItem(budget);
 
 		await editBudgetDB(budget);
-		mutateBudgets(year, month);
+		mutateBudgets(asOf);
 	};
 
 	const handleDelete = async () => {
@@ -63,7 +63,7 @@ export default function BudgetForm({ budget, isOpen, closeFormAction }: BudgetFo
 			deleteItem(budget.id);
 
 			await deleteBudgetDB(budget.id);
-			mutateBudgets(year, month);
+			mutateBudgets(asOf);
 		}
 	};
 
