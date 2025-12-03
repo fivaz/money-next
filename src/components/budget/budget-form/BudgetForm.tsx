@@ -17,7 +17,7 @@ import { Switch } from '@/components/base/switch';
 import JarIcon from '@/components/icons/JarIcon';
 import Tooltip from '@/components/Tooltip';
 import { mutateBudgets } from '@/lib/budget/budget.utils-api';
-import { useYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils.client';
 
 type BudgetFormProps = {
 	budget?: Budget;

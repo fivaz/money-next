@@ -6,7 +6,7 @@ import { Text } from '@/components/base/text';
 import { useActualBalance, useActualUnpaidBalance } from '@/lib/balance/balance.utils';
 import Tooltip from '@/components/Tooltip';
 import { formatMoney } from '@/lib/shared/utils';
-import { useYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils.client';
 
 export default function ClientBalanceViewer({ expectedBalance }: { expectedBalance: number }) {
 	const [, , asOf] = useYearMonth();

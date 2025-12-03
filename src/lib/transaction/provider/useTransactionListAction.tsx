@@ -8,7 +8,7 @@ import {
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
-import { useYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils.client';
 
 export function useTransactionListActions(
 	initialTransactions: Transaction[],

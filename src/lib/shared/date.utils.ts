@@ -1,5 +1,4 @@
 import { format, formatDate, parse, parseISO } from 'date-fns';
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 import { setHours, setMinutes, setSeconds } from 'date-fns';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
@@ -7,20 +6,6 @@ export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 export const isoToInputFormat = (isoDate: string) => format(parseISO(isoDate), DATE_FORMAT);
 
 export const dateToInputFormat = (date: Date = new Date()) => format(date, DATE_FORMAT);
-
-export const getParamsDate = (searchParams: ReadonlyURLSearchParams): [number, number, string] => {
-	const currentDate = new Date();
-	const year = Number(searchParams.get('year')) || currentDate.getFullYear();
-	const month = Number(searchParams.get('month')) || currentDate.getMonth() + 1;
-	const date = searchParams.get('asOf') || getISODate(currentDate);
-
-	return [year, month, date];
-};
-
-export const useYearMonth = (): [number, number, string] => {
-	const searchParams = useSearchParams();
-	return getParamsDate(searchParams);
-};
 
 export const ISO_DATE = 'yyyy-MM-dd';
 

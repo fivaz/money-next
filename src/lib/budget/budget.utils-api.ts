@@ -3,7 +3,7 @@ import { Budget } from '@/lib/budget/budget.model';
 import { API, dateParams, dateParams2 } from '@/lib/const';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import type { Transaction } from '@/lib/transaction/transaction.model';
-import { useYearMonth } from '@/lib/shared/date.utils';
+import { useYearMonth } from '@/lib/shared/date.utils.client';
 
 const getBudgetUrl = (asOf: string) => `/api/${API.BUDGETS}?${dateParams2(asOf)}`;
 

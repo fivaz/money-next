@@ -3,7 +3,9 @@ import { addMonths, format, isSameYear, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { getISODate, getParamsDate, parseISODate } from '@/lib/shared/date.utils';
+import { getISODate, parseISODate } from '@/lib/shared/date.utils';
+
+import { getParamsDate } from '@/lib/shared/date.utils.client';
 
 type DateSwitcherClientProps = {};
 export default function DateSwitcher({}: DateSwitcherClientProps) {

@@ -10,27 +10,13 @@ export async function getBudgets(): Promise<Budget[]> {
 	return validateBudgets(data);
 }
 
-export async function getCurrentMonthBudgets({
-	year,
-	month,
-}: {
-	year: number;
-	month: number;
-}): Promise<Budget[]> {
-	const data = await fetchInAction(`${BUDGETS_URL}/by-date?year=${year}&month=${month}`);
+export async function getCurrentMonthBudgets(asOf: string): Promise<Budget[]> {
+	const data = await fetchInAction(`${BUDGETS_URL}/?asOf=${asOf}`);
 	return validateBudgets(data);
 }
 
-export async function getCurrentMonthBudgetsWithDetails({
-	year,
-	month,
-}: {
-	year: number;
-	month: number;
-}): Promise<Budget[]> {
-	const data = await fetchInAction(
-		`${BUDGETS_URL}/by-date-with-details?year=${year}&month=${month}`,
-	);
+export async function getCurrentMonthBudgetsWithDetails(asOf: string): Promise<Budget[]> {
+	const data = await fetchInAction(`${BUDGETS_URL}/with-carry-over?asOf=${asOf}`);
 	return validateBudgets(data);
 }
 

@@ -3,8 +3,9 @@ import clsx from 'clsx';
 import { formatMoney } from '@/lib/shared/utils';
 import { getAmount } from '@/lib/transaction/transaction.utils';
 import { Transaction } from '@/lib/transaction/transaction.model';
-import { parseISODate, useYearMonth } from '@/lib/shared/date.utils';
+import { parseISODate } from '@/lib/shared/date.utils';
 import { startOfDay } from 'date-fns';
+import { useYearMonth } from '@/lib/shared/date.utils.client';
 
 type MoneyTextProps = PropsWithChildren<{
 	transaction: Transaction;
