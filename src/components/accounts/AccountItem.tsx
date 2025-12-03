@@ -26,28 +26,27 @@ import { Transaction } from '@/lib/transaction/transaction.model';
 import TotalIcon from '@/components/icons/TotalIcon';
 import MoneyText from '@/components/MoneyText';
 import Button from '@/components/Button';
+import { toIsoAtNoon } from '@/lib/shared/date.utils';
 
 type AccountItemProps = {
 	account: Account;
 	index: number;
-	year: number;
-	month: number;
 	asOf: string;
 };
 
-export default function AccountItem({ account, index, year, month, asOf }: AccountItemProps) {
+export default function AccountItem({ account, index, asOf }: AccountItemProps) {
 	const { ref } = useSortable({ id: account.id, index });
 
 	const { data: initialTransactions, isLoading } = useAccountTransactions(account.id, asOf);
 
-	const balance = useAccountBalance(account.id, year, month);
+	const balance = useAccountBalance(account.id, asOf);
 
 	const [orderDesc, setOrderDesc] = useState(true);
 
 	const getNewAccountTransaction = (): Partial<Transaction> => {
 		return {
 			account,
-			date: asOf,
+			date: toIsoAtNoon(asOf),
 		};
 	};
 

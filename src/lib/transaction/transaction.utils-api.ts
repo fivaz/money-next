@@ -1,9 +1,13 @@
-import { API, dateParams, dateParams2 } from '@/lib/const';
+import { API, dateParams2 } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import { getBudgetTransactionsUrl } from '@/lib/budget/budget.utils-api';
-import { BALANCE_URL, getBudgetedSpentUrl, UNPAID_BALANCE_URL } from '@/lib/balance/balance.utils';
+import {
+	getActualBalanceUrl,
+	getBudgetedSpentUrl,
+	UNPAID_BALANCE_URL,
+} from '@/lib/balance/balance.utils';
 
 const getAccountTransactionsUrl = (accountId: number, asOf: string) =>
 	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams2(asOf)}`;
@@ -14,11 +18,11 @@ export const useAccountTransactions = (accountId: number, asOf: string) => {
 	return useSWR<Transaction[]>(url, fetcher);
 };
 
-const getAccountBalanceUrl = (accountId: number, year: number, month: number) =>
-	`/api/${API.ACCOUNTS}/${accountId}/balance?${dateParams(year, month)}`;
+const getAccountBalanceUrl = (accountId: number, asOf: string) =>
+	`/api/${API.ACCOUNTS}/${accountId}/balance?${dateParams2(asOf)}`;
 
-export const useAccountBalance = (accountId: number, year: number, month: number) => {
-	const url = getAccountBalanceUrl(accountId, year, month);
+export const useAccountBalance = (accountId: number, asOf: string) => {
+	const url = getAccountBalanceUrl(accountId, asOf);
 
 	const { data } = useSWR<number>(url, fetcher);
 
@@ -34,7 +38,7 @@ export const mutateTransactions = (
 	asOf: string,
 	source?: { type: SourceType; id: number },
 ) => {
-	void mutate(BALANCE_URL);
+	void mutate(getActualBalanceUrl(asOf));
 	void mutate(UNPAID_BALANCE_URL);
 
 	if (!source) {
@@ -43,16 +47,16 @@ export const mutateTransactions = (
 
 	if (source.type === 'account') {
 		void mutate(getAccountTransactionsUrl(transaction.account.id, asOf));
-		void mutate(getAccountBalanceUrl(transaction.account.id, year, month));
+		void mutate(getAccountBalanceUrl(transaction.account.id, asOf));
 
 		if (transaction.destination) {
 			void mutate(getAccountTransactionsUrl(transaction.destination.id, asOf));
-			void mutate(getAccountBalanceUrl(transaction.destination.id, year, month));
+			void mutate(getAccountBalanceUrl(transaction.destination.id, asOf));
 		}
 
 		if (source.id && transaction.account.id !== source.id) {
 			void mutate(getAccountTransactionsUrl(source.id, asOf));
-			void mutate(getAccountBalanceUrl(source.id, year, month));
+			void mutate(getAccountBalanceUrl(source.id, asOf));
 		}
 	}
 

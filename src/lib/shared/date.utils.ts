@@ -1,5 +1,6 @@
 import { format, formatDate, parse, parseISO } from 'date-fns';
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
+import { setHours, setMinutes, setSeconds } from 'date-fns';
 
 export const DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
@@ -31,3 +32,15 @@ export const parseISODate = (dateString: string) => parse(dateString, ISO_DATE, 
 
 export const formatFRDate = (dateString: string) =>
 	formatDate(parse(dateString, ISO_DATE, new Date()), FR_DATE);
+
+export function toIsoAtNoon(dateString: string) {
+	// Parse the YYYY-MM-DD string into a Date
+	let date = parseISODate(dateString);
+
+	// Set the time to 12:00 PM
+	date = setHours(date, 12);
+	date = setMinutes(date, 0);
+	date = setSeconds(date, 0);
+
+	return date.toISOString();
+}
