@@ -5,7 +5,7 @@ import { dateParams, dateParams2 } from '@/lib/const';
 export const BALANCE_URL = `api/balance`;
 export const UNPAID_BALANCE_URL = `${BALANCE_URL}/unpaid`;
 
-export const getActualBalanceUrl = (asOf: string) => `${BALANCE_URL}?${dateParams2(asOf)}`;
+export const getActualBalanceUrl = (asOf: string) => `${BALANCE_URL}?asOf=${asOf}`;
 
 export const useActualBalance = (asOf: string) => {
 	const { data } = useSWR<number>(getActualBalanceUrl(asOf), fetcher);

@@ -1,5 +1,7 @@
 import { getTokenForAPI, getTokenForServerAction } from '@/lib/user/auth.utils.server';
 import { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
+import { COOKIE_TZ_KEY, HEADER_TZ_KEY } from '@/lib/const';
 
 export async function fetchInAPI(request: NextRequest, backendUrl: string, expectJson = true) {
 	// Get token from cookies
@@ -28,6 +30,11 @@ async function fetchWithAuth(
 ) {
 	if (!token) throw new Error('User not authenticated');
 
+	const cookieStore = await cookies();
+	const userTimezone = cookieStore.get(COOKIE_TZ_KEY)?.value || 'UTC';
+	//add a Sentry error
+	if (!userTimezone) console.error('No timezone found in cookies');
+
 	const initWithToken = {
 		...init,
 		headers: {
@@ -35,6 +42,7 @@ async function fetchWithAuth(
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json',
 			cache: init.cache ?? 'no-store',
+			[HEADER_TZ_KEY]: userTimezone,
 		},
 	};
 
