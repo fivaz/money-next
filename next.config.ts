@@ -11,6 +11,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = withSerwist({
 	/* config options here */
+	turbopack: {},
 });
 
 export default nextConfig;

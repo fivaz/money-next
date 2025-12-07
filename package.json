@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next dev --turbo",
+		"dev": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next dev",
 		"build": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next build",
 		"start": "next start",
 		"lint": "next lint --fix",
