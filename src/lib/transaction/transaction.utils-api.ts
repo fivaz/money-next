@@ -33,8 +33,6 @@ type SourceType = 'account' | 'budget';
 
 export const mutateTransactions = (
 	transaction: Omit<Transaction, 'id'>,
-	year: number,
-	month: number,
 	asOf: string,
 	source?: { type: SourceType; id: number },
 ) => {
@@ -61,7 +59,7 @@ export const mutateTransactions = (
 	}
 
 	if (source.type === 'budget') {
-		void mutate(getBudgetedSpentUrl(year, month));
+		void mutate(getBudgetedSpentUrl(asOf));
 
 		if (transaction.budget) {
 			void mutate(getBudgetTransactionsUrl(transaction.budget.id, asOf));

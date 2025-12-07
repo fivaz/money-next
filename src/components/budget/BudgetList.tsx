@@ -18,8 +18,8 @@ import { useBudgetedSpent } from '@/lib/balance/balance.utils';
 export default function BudgetList() {
 	const { updateList, items: budgets } = useBudgetList();
 
-	const [year, month, asOf] = useYearMonth();
-	const budgetedSpent = useBudgetedSpent(year, month);
+	const [_y, _m, asOf] = useYearMonth();
+	const budgetedSpent = useBudgetedSpent(asOf);
 
 	const handleDragEnd = (event: Parameters<typeof move>[1]) => {
 		const newBudgets = move(budgets, event);
