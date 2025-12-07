@@ -43,7 +43,4 @@ export const API = {
 export const COOKIE_TZ_KEY = '__user_timezone';
 export const HEADER_TZ_KEY = 'X-User-Timezone';
 
-export const dateParams = (year: number, month: number) =>
-	`year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
-
-export const dateParams2 = (asOf?: string) => `asOf=${asOf}`;
+export const dateParams = (asOf?: string) => `asOf=${asOf}`;

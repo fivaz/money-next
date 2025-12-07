@@ -1,4 +1,4 @@
-import { API, dateParams2 } from '@/lib/const';
+import { API, dateParams } from '@/lib/const';
 import useSWR, { mutate } from 'swr';
 import type { Transaction } from '@/lib/transaction/transaction.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
@@ -10,7 +10,7 @@ import {
 } from '@/lib/balance/balance.utils';
 
 const getAccountTransactionsUrl = (accountId: number, asOf: string) =>
-	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams2(asOf)}`;
+	`/api/${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}?${dateParams(asOf)}`;
 
 export const useAccountTransactions = (accountId: number, asOf: string) => {
 	const url = getAccountTransactionsUrl(accountId, asOf);
@@ -19,7 +19,7 @@ export const useAccountTransactions = (accountId: number, asOf: string) => {
 };
 
 const getAccountBalanceUrl = (accountId: number, asOf: string) =>
-	`/api/${API.ACCOUNTS}/${accountId}/balance?${dateParams2(asOf)}`;
+	`/api/${API.ACCOUNTS}/${accountId}/balance?${dateParams(asOf)}`;
 
 export const useAccountBalance = (accountId: number, asOf: string) => {
 	const url = getAccountBalanceUrl(accountId, asOf);
