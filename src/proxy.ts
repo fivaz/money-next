@@ -10,7 +10,7 @@ const STATIC_PATHS = [
 	'/static/', // static files
 	'/favicon.ico', // favicon
 	'/manifest.json', // manifest
-	'/robots.txt', // optional
+	'/robots.txt',
 ];
 
 export function proxy(req: NextRequest) {
