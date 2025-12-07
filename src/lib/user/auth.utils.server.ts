@@ -2,29 +2,33 @@
 
 import { getTokens } from 'next-firebase-auth-edge';
 import { cookies } from 'next/headers';
-import { tokenConfig } from '@/config';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/user/user.model';
+import { getToken } from '@/lib/auth/auth.utils.server';
+import { signInWithPopup } from 'firebase/auth';
+import { jwtDecode } from 'jwt-decode';
 
 export const getUser = async (): Promise<User | null> => {
-	const tokens = await getTokens(await cookies(), tokenConfig);
+	const token = await getToken();
 
-	return tokens
-		? {
-				uid: tokens.decodedToken.uid,
-				name: tokens.decodedToken.name,
-				email: tokens.decodedToken.email,
-				picture: tokens.decodedToken.picture,
-			}
-		: null;
+	if (!token) {
+		return null;
+	}
+
+	const decoded: any = jwtDecode(token || '');
+
+	return {
+		uid: decoded.uid,
+		name: decoded.name,
+		email: decoded.email,
+		picture: decoded.picture,
+	};
 };
 
 export const getTokenForServerAction = async () => {
-	const tokens = await getTokens(await cookies(), tokenConfig);
-	return tokens ? tokens.token : null;
+	return getToken();
 };
 
 export const getTokenForAPI = async (requestCookies: RequestCookies) => {
-	const tokens = await getTokens(requestCookies, tokenConfig);
-	return tokens ? tokens.token : null;
+	return getToken();
 };

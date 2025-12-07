@@ -18,12 +18,12 @@ export default function GoogleAuthButton({ setError, setIsLoading }: GoogleAuthB
 		try {
 			setIsLoading(true);
 			const result = await signInWithPopup(auth, provider);
-			const idToken = await result.user.getIdToken();
+			const token = await result.user.getIdToken();
 
-			await fetch('/api/login', {
-				headers: {
-					Authorization: `Bearer ${idToken}`,
-				},
+			await fetch('/api/auth/set-token', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ token }),
 			});
 
 			router.push(ROUTES.ROOT.path);

@@ -1,50 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { authMiddleware, redirectToHome, redirectToLogin } from 'next-firebase-auth-edge';
-import { serverConfig } from './config';
-import { firebaseConfig } from '@/lib/firebase';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { COOKIE_AUTH_KEY } from '@/lib/auth/auth.utils';
 
-const PUBLIC_PATHS = ['/register', '/login'];
+const PUBLIC_PATHS = ['/login', '/register', '/api/auth/set-token', '/api/auth/logout'];
 
-export async function proxy(request: NextRequest) {
-	return authMiddleware(request, {
-		loginPath: '/api/login',
-		logoutPath: '/api/logout',
-		refreshTokenPath: '/api/refresh-token',
-		apiKey: firebaseConfig.apiKey,
-		cookieName: serverConfig.cookieName,
-		cookieSignatureKeys: serverConfig.cookieSignatureKeys,
-		cookieSerializeOptions: serverConfig.cookieSerializeOptions,
-		serviceAccount: serverConfig.serviceAccount,
-		handleValidToken: async (_, headers) => {
-			if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
-				return redirectToHome(request);
-			}
+export function proxy(req: NextRequest) {
+	const pathname = req.nextUrl.pathname;
 
-			return NextResponse.next({
-				request: {
-					headers,
-				},
-			});
-		},
-		handleInvalidToken: async (reason) => {
-			console.info('Missing or malformed credentials', { reason });
+	if (PUBLIC_PATHS.includes(pathname)) return NextResponse.next();
 
-			return redirectToLogin(request, {
-				path: '/login',
-				publicPaths: PUBLIC_PATHS,
-			});
-		},
-		handleError: async (error) => {
-			console.error('Unhandled authentication error', { error });
+	const token = req.cookies.get(COOKIE_AUTH_KEY)?.value;
 
-			return redirectToLogin(request, {
-				path: '/login',
-				publicPaths: PUBLIC_PATHS,
-			});
-		},
-	});
+	if (!token) {
+		return NextResponse.redirect(new URL('/login', req.url));
+	}
+
+	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ['/', '/((?!_next|api|.*\\.).*)', '/api/login', '/api/logout', '/api/refresh-token'],
+	matcher: ['/((?!_next|static|favicon.ico).*)'],
 };

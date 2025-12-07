@@ -30,13 +30,12 @@ export default function LoginPage() {
 
 		try {
 			const credential = await signInWithEmailAndPassword(auth, email, password);
-			const idToken = await credential.user.getIdToken();
+			const token = await credential.user.getIdToken();
 
-			// send to the middleware configured for next-firebase-auth-edge
-			await fetch('/api/login', {
-				headers: {
-					Authorization: `Bearer ${idToken}`,
-				},
+			await fetch('/api/auth/set-token', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ token }),
 			});
 
 			router.push(ROUTES.ROOT.path);

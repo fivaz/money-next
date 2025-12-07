@@ -5,7 +5,7 @@ import { COOKIE_TZ_KEY, HEADER_TZ_KEY } from '@/lib/const';
 
 export async function fetchInAPI(request: NextRequest, backendUrl: string, expectJson = true) {
 	// Get token from cookies
-	const token = await getTokenForAPI(request.cookies);
+	const token = await getToken();
 
 	// Parse backend URL and forward all query parameters from the request
 	const url = new URL(backendUrl);
@@ -17,7 +17,7 @@ export async function fetchInAPI(request: NextRequest, backendUrl: string, expec
 }
 
 export async function fetchInAction(input: RequestInfo, init: RequestInit = {}, expectJson = true) {
-	const token = await getTokenForServerAction();
+	const token = await getToken();
 
 	return fetchWithAuth(token, input, init, expectJson);
 }
