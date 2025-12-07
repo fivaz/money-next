@@ -3,12 +3,12 @@ import { Budget } from '@/lib/budget/budget.model';
 import { API, dateParams } from '@/lib/const';
 import { fetcher } from '@/lib/shared/api-client.utils';
 import type { Transaction } from '@/lib/transaction/transaction.model';
-import { useYearMonth } from '@/lib/shared/date.utils.client';
+import { useAsOf } from '@/lib/shared/date.utils.client';
 
 const getBudgetUrl = (asOf: string) => `/api/${API.BUDGETS}?${dateParams(asOf)}`;
 
 export const useBudgets = () => {
-	const [_y, _m, asOf] = useYearMonth();
+	const asOf = useAsOf();
 	const { data: budgetsData, isLoading } = useSWR<Budget[]>(getBudgetUrl(asOf), fetcher);
 
 	const budgets = budgetsData || [];

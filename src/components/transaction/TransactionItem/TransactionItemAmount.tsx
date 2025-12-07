@@ -5,7 +5,7 @@ import { getAmount } from '@/lib/transaction/transaction.utils';
 import { Transaction } from '@/lib/transaction/transaction.model';
 import { parseISODate } from '@/lib/shared/date.utils';
 import { startOfDay } from 'date-fns';
-import { useYearMonth } from '@/lib/shared/date.utils.client';
+import { useAsOf } from '@/lib/shared/date.utils.client';
 
 type MoneyTextProps = PropsWithChildren<{
 	transaction: Transaction;
@@ -16,7 +16,7 @@ export default function TransactionItemAmount({ transaction, accountId }: MoneyT
 	const amount = getAmount(transaction, accountId);
 	const isNegative = amount < 0;
 	const sign = isNegative ? '-' : '+';
-	const [, , asOf] = useYearMonth();
+	const asOf = useAsOf();
 
 	// Compare the transaction date to the 'asOf' date string (yyyy-MM-dd)
 	const isFuture = startOfDay(new Date(transaction.date)) > parseISODate(asOf);

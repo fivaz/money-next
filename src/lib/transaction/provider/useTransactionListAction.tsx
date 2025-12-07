@@ -8,14 +8,14 @@ import {
 	deleteTransactionAction,
 } from '@/lib/transaction/transaction.actions';
 import { mutateTransactions } from '@/lib/transaction/transaction.utils-api';
-import { useYearMonth } from '@/lib/shared/date.utils.client';
+import { useAsOf } from '@/lib/shared/date.utils.client';
 
 export function useTransactionListActions(
 	initialTransactions: Transaction[],
 	source?: { type: 'account' | 'budget'; id: number },
 ) {
 	const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-	const [year, month, asOf] = useYearMonth();
+	const asOf = useAsOf();
 
 	useEffect(() => {
 		setTransactions(initialTransactions);

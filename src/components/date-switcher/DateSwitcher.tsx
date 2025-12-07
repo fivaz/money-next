@@ -12,7 +12,7 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [, , asOf] = getParamsDate(searchParams);
+	const asOf = getParamsDate(searchParams);
 
 	const date = useMemo(() => parseISODate(asOf), [asOf]);
 
@@ -38,8 +38,6 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 
 	const changeRoute = (date: Date) => {
 		const params = new URLSearchParams(searchParams.toString());
-		params.set('year', date.getFullYear().toString());
-		params.set('month', (date.getMonth() + 1).toString());
 		params.set('asOf', getISODate(date));
 
 		router.push(`${pathname}?${params.toString()}`);
