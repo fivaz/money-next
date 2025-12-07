@@ -5,7 +5,7 @@ import { firebaseConfig } from '@/lib/firebase';
 
 const PUBLIC_PATHS = ['/register', '/login'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 	return authMiddleware(request, {
 		loginPath: '/api/login',
 		logoutPath: '/api/logout',
