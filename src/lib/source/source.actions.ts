@@ -3,19 +3,19 @@
 import { ROUTES } from '@/lib/const';
 import { type Source, SOURCES_URL, validateSources } from '@/lib/source/source.model';
 import { revalidatePath } from 'next/cache';
-import { fetchInAction } from '@/lib/shared/api-server.utils';
+import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
 export async function getExpectedBalance(): Promise<number> {
-	return await fetchInAction(`${SOURCES_URL}/expected-balance`);
+	return await fetchWithAuth(`${SOURCES_URL}/expected-balance`);
 }
 
 export async function getSources(): Promise<Source[]> {
-	const data = await fetchInAction(SOURCES_URL);
+	const data = await fetchWithAuth(SOURCES_URL);
 	return validateSources(data);
 }
 
 export async function addSourceDB(source: Omit<Source, 'id'>) {
-	const saved = fetchInAction(SOURCES_URL, {
+	const saved = fetchWithAuth(SOURCES_URL, {
 		method: 'POST',
 		body: JSON.stringify(source),
 	});
@@ -26,7 +26,7 @@ export async function addSourceDB(source: Omit<Source, 'id'>) {
 }
 
 export async function editSourceDB(source: Source) {
-	const saved = fetchInAction(`${SOURCES_URL}/${source.id}`, {
+	const saved = fetchWithAuth(`${SOURCES_URL}/${source.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(source),
 	});
@@ -37,7 +37,7 @@ export async function editSourceDB(source: Source) {
 }
 
 export async function deleteSourceDB(id: number): Promise<void> {
-	await fetchInAction(
+	await fetchWithAuth(
 		`${SOURCES_URL}/${id}`,
 		{
 			method: 'DELETE',
@@ -49,7 +49,7 @@ export async function deleteSourceDB(id: number): Promise<void> {
 }
 
 export async function reorderSources(sources: Source[]): Promise<void> {
-	await fetchInAction(
+	await fetchWithAuth(
 		`${SOURCES_URL}/reorder`,
 		{
 			method: 'PUT',

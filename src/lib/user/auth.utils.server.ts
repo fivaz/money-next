@@ -1,6 +1,5 @@
 'use server';
 
-import { getTokens } from 'next-firebase-auth-edge';
 import { cookies } from 'next/headers';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/user/user.model';
@@ -15,7 +14,7 @@ export const getUser = async (): Promise<User | null> => {
 		return null;
 	}
 
-	const decoded: any = jwtDecode(token || '');
+	const decoded: { uid: string; name: string; email: string; picture: string } = jwtDecode(token);
 
 	return {
 		uid: decoded.uid,
@@ -23,12 +22,4 @@ export const getUser = async (): Promise<User | null> => {
 		email: decoded.email,
 		picture: decoded.picture,
 	};
-};
-
-export const getTokenForServerAction = async () => {
-	return getToken();
-};
-
-export const getTokenForAPI = async (requestCookies: RequestCookies) => {
-	return getToken();
 };

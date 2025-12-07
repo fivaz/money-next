@@ -1,29 +1,29 @@
 'use server';
 
 import { type Account, ACCOUNTS_URL, validateAccounts } from '@/lib/account/account.model';
-import { fetchInAction } from '@/lib/shared/api-server.utils';
+import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
 export async function getAccounts(): Promise<Account[]> {
-	const data = await fetchInAction(ACCOUNTS_URL);
+	const data = await fetchWithAuth(ACCOUNTS_URL);
 	return validateAccounts(data);
 }
 
 export async function createAccountAction(account: Omit<Account, 'id'>) {
-	return fetchInAction(ACCOUNTS_URL, {
+	return fetchWithAuth(ACCOUNTS_URL, {
 		method: 'POST',
 		body: JSON.stringify(account),
 	});
 }
 
 export async function updateAccountAction(account: Account) {
-	return fetchInAction(`${ACCOUNTS_URL}/${account.id}`, {
+	return fetchWithAuth(`${ACCOUNTS_URL}/${account.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(account),
 	});
 }
 
 export async function deleteAccountAction(id: number): Promise<void> {
-	await fetchInAction(
+	await fetchWithAuth(
 		`${ACCOUNTS_URL}/${id}`,
 		{
 			method: 'DELETE',
@@ -33,7 +33,7 @@ export async function deleteAccountAction(id: number): Promise<void> {
 }
 
 export async function reorderAccounts(accounts: Account[]): Promise<void> {
-	await fetchInAction(
+	await fetchWithAuth(
 		`${ACCOUNTS_URL}/reorder`,
 		{
 			method: 'PUT',

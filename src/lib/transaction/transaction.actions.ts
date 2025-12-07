@@ -6,7 +6,7 @@ import {
 	TRANSACTIONS_URL,
 	validatePaginatedTransactions,
 } from '@/lib/transaction/transaction.model';
-import { fetchInAction } from '@/lib/shared/api-server.utils';
+import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 
 export async function searchTransactions(
 	query: string,
@@ -14,7 +14,7 @@ export async function searchTransactions(
 ): Promise<PaginatedTransactions> {
 	//spring data's pagination is zero-based
 	const springDataPage = page - 1;
-	const data = await fetchInAction(
+	const data = await fetchWithAuth(
 		`${TRANSACTIONS_URL}/search?query=${query}&page=${springDataPage}`,
 	);
 
@@ -22,21 +22,21 @@ export async function searchTransactions(
 }
 
 export async function createTransactionAction(transaction: Omit<Transaction, 'id'>) {
-	return fetchInAction(TRANSACTIONS_URL, {
+	return fetchWithAuth(TRANSACTIONS_URL, {
 		method: 'POST',
 		body: JSON.stringify(transaction),
 	});
 }
 
 export async function updateTransactionAction(transaction: Transaction) {
-	return fetchInAction(`${TRANSACTIONS_URL}/${transaction.id}`, {
+	return fetchWithAuth(`${TRANSACTIONS_URL}/${transaction.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(transaction),
 	});
 }
 
 export async function deleteTransactionAction(id: number): Promise<void> {
-	await fetchInAction(
+	await fetchWithAuth(
 		`${TRANSACTIONS_URL}/${id}`,
 		{
 			method: 'DELETE',
@@ -46,5 +46,5 @@ export async function deleteTransactionAction(id: number): Promise<void> {
 }
 
 export async function getTransactionsByDateDataset() {
-	return fetchInAction(`${TRANSACTIONS_URL}/monthly-summary`);
+	return fetchWithAuth(`${TRANSACTIONS_URL}/monthly-summary`);
 }
