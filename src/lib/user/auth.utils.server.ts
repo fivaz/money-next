@@ -1,10 +1,7 @@
 'use server';
 
-import { cookies } from 'next/headers';
-import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/user/user.model';
 import { getToken } from '@/lib/auth/auth.utils.server';
-import { signInWithPopup } from 'firebase/auth';
 import { jwtDecode } from 'jwt-decode';
 
 export const getUser = async (): Promise<User | null> => {

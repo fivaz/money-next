@@ -6,10 +6,10 @@
 		"dev": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next dev",
 		"build": "NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse --short HEAD) next build",
 		"start": "next start",
-		"lint": "next lint --fix",
+		"lint": "eslint --fix .",
 		"tsc": "tsc --noEmit --watch",
 		"types": "pnpm dlx openapi-typescript http://localhost:8080/v3/api-docs -o types/backend.d.ts",
-		"format": "prettier --write . && next lint --fix",
+		"format": "prettier --write . && eslint --fix .",
 		"generate-pwa-assets": "pwa-assets-generator"
 	},
 	"dependencies": {

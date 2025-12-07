@@ -38,7 +38,7 @@ export default function LoginPage() {
 				body: JSON.stringify({ token }),
 			});
 
-			router.push(ROUTES.ROOT.path);
+			window.location.href = ROUTES.ROOT.path;
 		} catch (error) {
 			setError(parseError(error));
 		} finally {

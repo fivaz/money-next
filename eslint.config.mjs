@@ -11,7 +11,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+	// ignore the public folder
+	{
+		ignores: ['public/**', '.next/**'],
+	},
+
+	// extend next.js recommended configs
 	...compat.extends('next/core-web-vitals', 'next/typescript'),
+
 	{
 		rules: {
 			'@typescript-eslint/no-unused-vars': 'off',

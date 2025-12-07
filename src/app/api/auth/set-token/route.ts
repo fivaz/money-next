@@ -1,6 +1,5 @@
 // app/api/auth/set-token/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from '@/lib/auth/auth.utils.server';
 import { cookies } from 'next/headers';
 import { COOKIE_AUTH_KEY } from '@/lib/auth/auth.utils';
 

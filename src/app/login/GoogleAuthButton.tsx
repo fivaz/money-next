@@ -26,7 +26,7 @@ export default function GoogleAuthButton({ setError, setIsLoading }: GoogleAuthB
 				body: JSON.stringify({ token }),
 			});
 
-			router.push(ROUTES.ROOT.path);
+			window.location.href = ROUTES.ROOT.path;
 		} catch (error) {
 			setError(`Error signing in: ${(error as Error).message}`);
 		} finally {

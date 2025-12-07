@@ -11,7 +11,7 @@ type DateInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'valu
 };
 
 const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
-	({ value, onChange, name, ...props }, ref) => {
+	({ value, onChange, name, ...props }, _ref) => {
 		const inputRef = useRef<HTMLInputElement>(null);
 
 		// Convert ISO -> datetime-local value
