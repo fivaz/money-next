@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { COOKIE_AUTH_KEY } from '@/lib/auth/auth.utils';
+import { ROUTES } from '@/lib/const';
 
 const PUBLIC_PATHS = ['/login', '/register', '/api/auth/set-token', '/api/auth/logout'];
 
@@ -23,7 +24,7 @@ export function proxy(req: NextRequest) {
 	const token = req.cookies.get(COOKIE_AUTH_KEY)?.value;
 
 	if (!token) {
-		return NextResponse.redirect(new URL('/login', req.url));
+		return NextResponse.redirect(new URL(ROUTES.LOGIN.path, req.url));
 	}
 
 	return NextResponse.next();

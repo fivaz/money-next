@@ -2,6 +2,7 @@
 
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import { ROUTES } from '@/lib/const';
 
 export default function SignOutButton({
 	className = 'block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:outline-none dark:text-gray-200 hover:dark:bg-gray-700',
@@ -13,7 +14,7 @@ export default function SignOutButton({
 
 		await fetch('/api/auth/logout', { method: 'POST' });
 
-		window.location.href = '/login';
+		window.location.href = ROUTES.LOGIN.path;
 	};
 
 	return (
