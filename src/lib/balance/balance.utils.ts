@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
-import { dateParams, dateParams2 } from '@/lib/const';
+import { dateParams } from '@/lib/const';
 
 export const BALANCE_URL = `api/balance`;
 export const UNPAID_BALANCE_URL = `${BALANCE_URL}/unpaid`;

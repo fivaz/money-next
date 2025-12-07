@@ -46,5 +46,4 @@ export const HEADER_TZ_KEY = 'X-User-Timezone';
 export const dateParams = (year: number, month: number) =>
 	`year=${year}&month=${month}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
 
-export const dateParams2 = (asOf?: string) =>
-	`timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&asOf=${asOf}`;
+export const dateParams2 = (asOf?: string) => `asOf=${asOf}`;
