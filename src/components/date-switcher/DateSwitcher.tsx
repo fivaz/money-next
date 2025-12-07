@@ -1,5 +1,5 @@
 'use client';
-import { addMonths, format, isSameYear, subMonths } from 'date-fns';
+import { addMonths, format, isSameMonth, isSameYear, lastDayOfMonth, subMonths } from 'date-fns';
 import { Calendar1Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -27,12 +27,22 @@ export default function DateSwitcher({}: DateSwitcherClientProps) {
 	}, [date]);
 
 	const handlePrevMonth = () => {
-		const newDate = subMonths(date, 1);
+		const target = subMonths(date, 1);
+
+		const newDate = isSameMonth(target, new Date())
+			? new Date() // keep today
+			: lastDayOfMonth(target); // otherwise last day of month
+
 		changeRoute(newDate);
 	};
 
 	const handleNextMonth = () => {
-		const newDate = addMonths(date, 1);
+		const target = addMonths(date, 1);
+
+		const newDate = isSameMonth(target, new Date())
+			? new Date() // keep today
+			: lastDayOfMonth(target);
+
 		changeRoute(newDate);
 	};
 
