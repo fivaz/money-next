@@ -2,14 +2,14 @@
 
 import { ReactNode, useEffect } from 'react';
 import { setUserTimezone } from '@/lib/shared/timezone.actions';
-import { COOKIE_TZ_KEY } from '@/lib/const';
+import { COOKIE } from '@/lib/const';
 
 /**
  * A client-side helper to read a specific cookie value from document.cookie.
  * @returns The timezone string if found, otherwise null.
  */
 function getClientTimezoneCookie(): string | null {
-	const name = `${COOKIE_TZ_KEY}=`;
+	const name = `${COOKIE.TIMEZONE}=`;
 
 	try {
 		const decodedCookie = decodeURIComponent(document.cookie);

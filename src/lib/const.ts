@@ -43,9 +43,9 @@ export const API = {
 export const COOKIE = {
 	SESSION: process.env.AUTH_COOKIE_NAME || '__user_token',
 	USER_PUBLIC: '__user_public',
+	TIMEZONE: '__user_timezone',
 };
 
-export const COOKIE_TZ_KEY = '__user_timezone';
 export const HEADER_TZ_KEY = 'X-User-Timezone';
 
 export const dateParams = (asOf?: string) => `asOf=${asOf}`;

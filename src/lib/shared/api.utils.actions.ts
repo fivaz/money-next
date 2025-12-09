@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { BACKEND_URL, COOKIE, COOKIE_TZ_KEY, HEADER_TZ_KEY } from '@/lib/const';
+import { BACKEND_URL, COOKIE, HEADER_TZ_KEY } from '@/lib/const';
 import { NextRequest } from 'next/server';
 
 export async function fetchAPIWithQuery(request: NextRequest, apiUrl: string) {
@@ -25,7 +25,7 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 	const baseUrl = BACKEND_URL;
 	if (!baseUrl) throw new Error('BACKEND_URL is not defined in the environment.');
 
-	const userTimezone = cookieStore.get(COOKIE_TZ_KEY)?.value || 'UTC';
+	const userTimezone = cookieStore.get(COOKIE.TIMEZONE)?.value || 'UTC';
 	//add a Sentry error
 	if (!userTimezone) console.error('No timezone found in cookies');
 

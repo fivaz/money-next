@@ -1,7 +1,7 @@
 'use server';
 
 import { API, ROUTES } from '@/lib/const';
-import { type Source, SOURCES_URL, validateSources } from '@/lib/source/source.model';
+import { type Source, validateSources } from '@/lib/source/source.model';
 import { revalidatePath } from 'next/cache';
 import { fetchAPI } from '@/lib/shared/api.utils.actions';
 
@@ -26,7 +26,7 @@ export async function addSourceDB(source: Omit<Source, 'id'>) {
 }
 
 export async function editSourceDB(source: Source) {
-	const saved = fetchAPI(`${SOURCES_URL}/${source.id}`, {
+	const saved = fetchAPI(`${API.SOURCES}/${source.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(source),
 	});
@@ -37,7 +37,7 @@ export async function editSourceDB(source: Source) {
 }
 
 export async function deleteSourceDB(id: number): Promise<void> {
-	await fetchAPI(`${SOURCES_URL}/${id}`, {
+	await fetchAPI(`${API.SOURCES}/${id}`, {
 		method: 'DELETE',
 	});
 
@@ -45,7 +45,7 @@ export async function deleteSourceDB(id: number): Promise<void> {
 }
 
 export async function reorderSources(sources: Source[]): Promise<void> {
-	await fetchAPI(`${SOURCES_URL}/reorder`, {
+	await fetchAPI(`${API.SOURCES}/reorder`, {
 		method: 'PUT',
 		body: JSON.stringify(sources.map(({ id }) => ({ id }))),
 	});
