@@ -12,16 +12,11 @@ export async function fetchAPIWithQuery(request: NextRequest, apiUrl: string) {
 	return fetchAPI(`${apiUrl}?${params.toString()}`);
 }
 
-interface FetchAPIOptions extends RequestInit {
-	parseJson?: boolean;
-}
-
 /**
  * A server-side helper for calling your backend API.
  * Automatically attaches the session token as a Bearer header.
  */
-export async function fetchAPI(endpoint: string, options: FetchAPIOptions = {}) {
-	const { parseJson = true, headers, ...rest } = options;
+export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 	const cookieStore = await cookies();
 
 	const token = cookieStore.get(COOKIE.SESSION)?.value;
@@ -37,27 +32,19 @@ export async function fetchAPI(endpoint: string, options: FetchAPIOptions = {}) 
 	const url = `${baseUrl}/${endpoint}`;
 
 	const res = await fetch(url, {
-		...rest,
+		...options,
 		headers: {
-			...(headers || {}),
+			...(options.headers || {}),
 			Authorization: `Bearer ${token}`,
 			[HEADER_TZ_KEY]: userTimezone,
+			'Content-Type': 'application/json',
 		},
 	});
 
 	if (!res.ok) {
-		let body: unknown;
-		try {
-			body = await res.json();
-		} catch {
-			body = await res.text();
-		}
-
-		const error = new Error(`Request to ${url} failed with status ${res.status}`);
-		(error as any).status = res.status;
-		(error as any).body = body;
-		throw error;
+		const errorMsg = await res.text();
+		throw new Error(errorMsg || 'Request failed');
 	}
 
-	return parseJson ? await res.json() : res;
+	return res.json();
 }

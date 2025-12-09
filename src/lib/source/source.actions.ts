@@ -3,7 +3,6 @@
 import { API, ROUTES } from '@/lib/const';
 import { type Source, SOURCES_URL, validateSources } from '@/lib/source/source.model';
 import { revalidatePath } from 'next/cache';
-import { fetchWithAuth } from '@/lib/shared/api-server.utils';
 import { fetchAPI } from '@/lib/shared/api.utils.actions';
 
 export async function getExpectedBalance(): Promise<number> {
@@ -12,13 +11,11 @@ export async function getExpectedBalance(): Promise<number> {
 
 export async function getSources(): Promise<Source[]> {
 	const data = await fetchAPI(API.SOURCES);
-	console.log('data', data);
-
 	return validateSources(data);
 }
 
 export async function addSourceDB(source: Omit<Source, 'id'>) {
-	const saved = fetchWithAuth(SOURCES_URL, {
+	const saved = await fetchAPI(API.SOURCES, {
 		method: 'POST',
 		body: JSON.stringify(source),
 	});
@@ -29,7 +26,7 @@ export async function addSourceDB(source: Omit<Source, 'id'>) {
 }
 
 export async function editSourceDB(source: Source) {
-	const saved = fetchWithAuth(`${SOURCES_URL}/${source.id}`, {
+	const saved = fetchAPI(`${SOURCES_URL}/${source.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(source),
 	});
@@ -40,26 +37,18 @@ export async function editSourceDB(source: Source) {
 }
 
 export async function deleteSourceDB(id: number): Promise<void> {
-	await fetchWithAuth(
-		`${SOURCES_URL}/${id}`,
-		{
-			method: 'DELETE',
-		},
-		false,
-	); // false = we don't expect JSON response
+	await fetchAPI(`${SOURCES_URL}/${id}`, {
+		method: 'DELETE',
+	});
 
 	revalidatePath(ROUTES.SOURCES.path);
 }
 
 export async function reorderSources(sources: Source[]): Promise<void> {
-	await fetchWithAuth(
-		`${SOURCES_URL}/reorder`,
-		{
-			method: 'PUT',
-			body: JSON.stringify(sources.map(({ id }) => ({ id }))),
-		},
-		false,
-	);
+	await fetchAPI(`${SOURCES_URL}/reorder`, {
+		method: 'PUT',
+		body: JSON.stringify(sources.map(({ id }) => ({ id }))),
+	});
 
 	revalidatePath(ROUTES.SOURCES.path);
 }

@@ -13,6 +13,7 @@ import { Link } from '@/components/base/link';
 import GoogleAuthButton from '@/app/login/GoogleAuthButton';
 import { parseError } from '@/lib/user/auth.utils.client';
 import { TriangleAlertIcon } from 'lucide-react';
+import { loginServer } from '@/lib/auth2/utils.actions';
 
 export default function LoginPage() {
 	const [error, setError] = useState('');
@@ -39,13 +40,9 @@ export default function LoginPage() {
 			const credential = await createUserWithEmailAndPassword(auth, email, password);
 			const idToken = await credential.user.getIdToken();
 
-			await fetch('/api/login', {
-				headers: {
-					Authorization: `Bearer ${idToken}`,
-				},
-			});
+			await loginServer(idToken);
 
-			router.push(ROUTES.ROOT.path);
+			window.location.href = ROUTES.ROOT.path;
 		} catch (error) {
 			setError(parseError(error));
 		} finally {

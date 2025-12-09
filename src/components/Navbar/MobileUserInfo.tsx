@@ -1,13 +1,20 @@
+'use client';
+
 import { CircleUser } from 'lucide-react';
 import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import SignOutButton from '@/components/Navbar/ProfileDropdown/SignOutButton';
-import { getUser } from '@/lib/auth2/utils.actions';
+import useSWR from 'swr';
+import { User } from '@/lib/auth2/user.model';
+import { fetcher } from '@/lib/shared/api-client.utils';
 
-type MobileUserInfoProps = {};
+export default function MobileUserInfo() {
+	const { data } = useSWR('/api/user', fetcher, {
+		refreshInterval: 0,
+		revalidateOnFocus: false,
+	});
 
-export default async function MobileUserInfo({}: MobileUserInfoProps) {
-	const user = await getUser();
+	const user: User | null = data?.user ?? null;
 
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">

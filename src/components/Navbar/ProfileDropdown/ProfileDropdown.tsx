@@ -3,12 +3,19 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import SignOutButton from './SignOutButton';
 import { User } from '@/lib/auth2/user.model';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/shared/api-client.utils';
 
-interface ProfileDropdownProps {
-	user: User | null;
-}
+interface ProfileDropdownProps {}
 
-export default function ProfileDropdown({ user }: ProfileDropdownProps) {
+export default function ProfileDropdown({}: ProfileDropdownProps) {
+	const { data } = useSWR('/api/user', fetcher, {
+		refreshInterval: 0,
+		revalidateOnFocus: false,
+	});
+
+	const user: User | null = data?.user ?? null;
+
 	return (
 		<Menu as="div" className="relative ml-3">
 			<div>

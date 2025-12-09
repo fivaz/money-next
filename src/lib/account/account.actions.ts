@@ -1,44 +1,37 @@
 'use server';
 
-import { type Account, ACCOUNTS_URL, validateAccounts } from '@/lib/account/account.model';
-import { fetchWithAuth } from '@/lib/shared/api-server.utils';
+import { type Account, validateAccounts } from '@/lib/account/account.model';
+import { fetchAPI } from '@/lib/shared/api.utils.actions';
+import { API } from '@/lib/const';
 
 export async function getAccounts(): Promise<Account[]> {
-	const data = await fetchWithAuth(ACCOUNTS_URL);
+	const data = await fetchAPI(API.ACCOUNTS);
 	return validateAccounts(data);
 }
 
 export async function createAccountAction(account: Omit<Account, 'id'>) {
-	return fetchWithAuth(ACCOUNTS_URL, {
+	return fetchAPI(API.ACCOUNTS, {
 		method: 'POST',
 		body: JSON.stringify(account),
 	});
 }
 
 export async function updateAccountAction(account: Account) {
-	return fetchWithAuth(`${ACCOUNTS_URL}/${account.id}`, {
+	return fetchAPI(`${API.ACCOUNTS}/${account.id}`, {
 		method: 'PUT',
 		body: JSON.stringify(account),
 	});
 }
 
 export async function deleteAccountAction(id: number): Promise<void> {
-	await fetchWithAuth(
-		`${ACCOUNTS_URL}/${id}`,
-		{
-			method: 'DELETE',
-		},
-		false,
-	); // false = we don't expect JSON response
+	await fetchAPI(`${API.ACCOUNTS}/${id}`, {
+		method: 'DELETE',
+	});
 }
 
 export async function reorderAccounts(accounts: Account[]): Promise<void> {
-	await fetchWithAuth(
-		`${ACCOUNTS_URL}/reorder`,
-		{
-			method: 'PUT',
-			body: JSON.stringify(accounts.map(({ id }) => ({ id }))),
-		},
-		false,
-	);
+	await fetchAPI(`${API.ACCOUNTS}/reorder`, {
+		method: 'PUT',
+		body: JSON.stringify(accounts.map(({ id }) => ({ id }))),
+	});
 }

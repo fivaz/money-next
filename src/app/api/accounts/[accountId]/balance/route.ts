@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchInAPI } from '@/lib/shared/api-server.utils';
-import { ACCOUNTS_URL } from '@/lib/account/account.model';
+import { API } from '@/lib/const';
+import { fetchAPIWithQuery } from '@/lib/shared/api.utils.actions';
 
 export async function GET(
 	request: NextRequest,
@@ -8,9 +8,9 @@ export async function GET(
 ) {
 	const { accountId } = await params;
 
-	const backendUrl = `${ACCOUNTS_URL}/${accountId}/balance`;
+	const backendUrl = `${API.ACCOUNTS}/${accountId}/balance`;
 
-	const data = await fetchInAPI(request, backendUrl);
+	const data = await fetchAPIWithQuery(request, backendUrl);
 
 	return NextResponse.json(data, { status: 200 });
 }

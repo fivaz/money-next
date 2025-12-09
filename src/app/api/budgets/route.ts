@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BUDGETS_URL, validateBudgets } from '@/lib/budget/budget.model';
-import { fetchInAPI } from '@/lib/shared/api-server.utils';
+import { validateBudgets } from '@/lib/budget/budget.model';
+import { fetchAPIWithQuery } from '@/lib/shared/api.utils.actions';
+import { API } from '@/lib/const';
 
 export async function GET(request: NextRequest) {
-	const data = await fetchInAPI(request, `${BUDGETS_URL}`);
+	const data = await fetchAPIWithQuery(request, API.BUDGETS);
 
 	const budgets = validateBudgets(data);
 

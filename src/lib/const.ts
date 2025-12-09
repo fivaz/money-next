@@ -42,6 +42,7 @@ export const API = {
 
 export const COOKIE = {
 	SESSION: process.env.AUTH_COOKIE_NAME || '__user_token',
+	USER_PUBLIC: '__user_public',
 };
 
 export const COOKIE_TZ_KEY = '__user_timezone';

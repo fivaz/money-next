@@ -6,9 +6,8 @@ import BalanceViewerSkeleton from '@/components/Navbar/balance-viewer/BalanceVie
 import { Suspense } from 'react';
 import NavLinks from '@/components/Navbar/NavLinks';
 import DarkMode from '@/components/Navbar/DarkMode';
-import ProfileDropdown from '@/components/Navbar/ProfileDropdown/ProfileDropdown';
 import { Skeleton } from '@/components/Skeleton';
-import ProfileDropdownServer from '@/components/Navbar/ProfileDropdown/ProfileDropdownServer';
+import ProfileDropdown from '@/components/Navbar/ProfileDropdown/ProfileDropdown';
 export default function Navbar() {
 	const commitHash = `current commit: ${process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'}`;
 
@@ -32,9 +31,7 @@ export default function Navbar() {
 
 							<div className="hidden sm:ml-6 sm:flex sm:items-center">
 								<DarkMode />
-								<Suspense fallback={<Skeleton />}>
-									<ProfileDropdownServer />
-								</Suspense>
+								<ProfileDropdown />
 							</div>
 						</div>
 					</div>

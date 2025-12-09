@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { validateSchema } from '@/lib/shared/shared.model';
-import { API, BACKEND_URL } from '@/lib/const';
 import { BudgetSchema } from '@/lib/budget/budget.model';
 import { AccountSchema } from '@/lib/account/account.model';
 
@@ -57,5 +56,3 @@ export const validatePaginatedTransactions = (data: unknown): PaginatedTransacti
 		return result.data as unknown as PaginatedTransactions;
 	}
 };
-
-export const TRANSACTIONS_URL = `${BACKEND_URL}/${API.TRANSACTIONS}`;

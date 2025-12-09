@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchInAPI } from '@/lib/shared/api-server.utils';
-import { ACCOUNTS_URL, validateAccounts } from '@/lib/account/account.model';
+import { validateAccounts } from '@/lib/account/account.model';
+import { fetchAPIWithQuery } from '@/lib/shared/api.utils.actions';
+import { API } from '@/lib/const';
 
 export async function GET(request: NextRequest) {
-	const data = await fetchInAPI(request, ACCOUNTS_URL);
+	const data = await fetchAPIWithQuery(request, API.ACCOUNTS);
 
 	const accounts = validateAccounts(data);
 

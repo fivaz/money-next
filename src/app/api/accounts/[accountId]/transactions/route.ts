@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateTransactions } from '@/lib/transaction/transaction.model';
 import { API } from '@/lib/const';
-import { fetchInAPI } from '@/lib/shared/api-server.utils';
-import { ACCOUNTS_URL } from '@/lib/account/account.model';
+import { fetchAPIWithQuery } from '@/lib/shared/api.utils.actions';
 
 export async function GET(
 	request: NextRequest,
@@ -10,9 +9,9 @@ export async function GET(
 ) {
 	const { accountId } = await params;
 
-	const backendUrl = `${ACCOUNTS_URL}/${accountId}/${API.TRANSACTIONS}`;
+	const backendUrl = `${API.ACCOUNTS}/${accountId}/${API.TRANSACTIONS}`;
 
-	const data = await fetchInAPI(request, backendUrl);
+	const data = await fetchAPIWithQuery(request, backendUrl);
 
 	const transactions = validateTransactions(data);
 
