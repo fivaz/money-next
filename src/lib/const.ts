@@ -41,8 +41,7 @@ export const API = {
 };
 
 export const COOKIE = {
-	SESSION: process.env.AUTH_COOKIE_NAME || '__user_token',
-	USER_PUBLIC: '__user_public',
+	SESSION: process.env.SESSION_COOKIE || '__user_token',
 	TIMEZONE: '__user_timezone',
 };
 
