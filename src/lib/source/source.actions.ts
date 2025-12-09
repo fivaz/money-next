@@ -1,16 +1,19 @@
 'use server';
 
-import { ROUTES } from '@/lib/const';
+import { API, ROUTES } from '@/lib/const';
 import { type Source, SOURCES_URL, validateSources } from '@/lib/source/source.model';
 import { revalidatePath } from 'next/cache';
 import { fetchWithAuth } from '@/lib/shared/api-server.utils';
+import { fetchAPI } from '@/lib/shared/api.utils.actions';
 
 export async function getExpectedBalance(): Promise<number> {
-	return await fetchWithAuth(`${SOURCES_URL}/expected-balance`);
+	return await fetchAPI(`${API.SOURCES}/expected-balance`);
 }
 
 export async function getSources(): Promise<Source[]> {
-	const data = await fetchWithAuth(SOURCES_URL);
+	const data = await fetchAPI(API.SOURCES);
+	console.log('data', data);
+
 	return validateSources(data);
 }
 
