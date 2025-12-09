@@ -18,10 +18,10 @@ export default function NavbarDisclosure({ children }: PropsWithChildren) {
 						</div>
 					</div>
 					<DisclosurePanel className="sm:hidden">
+						<NavLinks mobile />
 						<Suspense fallback={<Skeleton />}>
-							<NavLinks mobile />
+							<MobileUserInfo />
 						</Suspense>
-						<MobileUserInfo />
 					</DisclosurePanel>
 				</>
 			)}

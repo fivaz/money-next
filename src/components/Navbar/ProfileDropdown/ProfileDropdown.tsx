@@ -2,13 +2,13 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import SignOutButton from './SignOutButton';
-import { useAuth } from '@/lib/user/AuthContext';
+import { User } from '@/lib/auth2/user.model';
 
-interface ProfileDropdownProps {}
+interface ProfileDropdownProps {
+	user: User | null;
+}
 
-export default function ProfileDropdown({}: ProfileDropdownProps) {
-	const { user } = useAuth();
-
+export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 	return (
 		<Menu as="div" className="relative ml-3">
 			<div>

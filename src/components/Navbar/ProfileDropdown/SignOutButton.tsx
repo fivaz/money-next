@@ -1,6 +1,6 @@
 'use client';
 
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/auth2/firebase';
 import { signOut } from 'firebase/auth';
 import { ROUTES } from '@/lib/const';
 

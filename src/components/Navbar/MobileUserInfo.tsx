@@ -1,15 +1,13 @@
-'use client';
-
 import { CircleUser } from 'lucide-react';
 import DarkMode from './DarkMode';
 import clsx from 'clsx';
-import { useAuth } from '@/lib/user/AuthContext';
 import SignOutButton from '@/components/Navbar/ProfileDropdown/SignOutButton';
+import { getUser } from '@/lib/auth2/utils.actions';
 
 type MobileUserInfoProps = {};
 
-export default function MobileUserInfo({}: MobileUserInfoProps) {
-	const { user } = useAuth();
+export default async function MobileUserInfo({}: MobileUserInfoProps) {
+	const user = await getUser();
 
 	return (
 		<div className="border-t border-gray-200 pt-4 pb-3 dark:border-gray-700">

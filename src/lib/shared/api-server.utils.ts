@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 import { COOKIE_TZ_KEY, HEADER_TZ_KEY } from '@/lib/const';
-import { getToken } from '@/lib/auth/auth.utils.server';
 
 export async function fetchInAPI(request: NextRequest, backendUrl: string, expectJson = true) {
 	// Parse backend URL and forward all query parameters from the request
@@ -14,7 +13,7 @@ export async function fetchInAPI(request: NextRequest, backendUrl: string, expec
 }
 
 export async function fetchWithAuth(input: RequestInfo, init: RequestInit = {}, expectJson = true) {
-	const token = await getToken();
+	const token = null;
 
 	if (!token) throw new Error('User not authenticated');
 

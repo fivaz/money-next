@@ -7,7 +7,7 @@ import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/auth2/firebase';
 import { useRouter } from 'next/navigation';
 import { Link } from '@/components/base/link';
 import GoogleAuthButton from '@/app/login/GoogleAuthButton';

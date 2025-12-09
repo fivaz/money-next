@@ -1,35 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { COOKIE_AUTH_KEY } from '@/lib/auth/auth.utils';
-import { ROUTES } from '@/lib/const';
+import { COOKIE, ROUTES } from '@/lib/const';
+import { adminAuth } from '@/lib/auth2/firebase-admin';
 
-const PUBLIC_PATHS = ['/login', '/register', '/api/auth/set-token', '/api/auth/logout'];
+const PUBLIC_PATHS = ['/login', '/register'];
 
-const STATIC_PATHS = [
-	'/_next/', // Next.js compiled chunks
-	'/static/', // static files
-	'/favicon.ico', // favicon
-	'/manifest.json', // manifest
-	'/robots.txt',
-];
-
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
 	const pathname = req.nextUrl.pathname;
 
 	if (PUBLIC_PATHS.includes(pathname)) return NextResponse.next();
 
-	// Allow Next.js internals and static/public assets
-	if (STATIC_PATHS.some((p) => pathname.startsWith(p))) return NextResponse.next();
+	const token = req.cookies.get(COOKIE.SESSION)?.value;
 
-	const token = req.cookies.get(COOKIE_AUTH_KEY)?.value;
+	if (!token) return NextResponse.redirect(new URL(ROUTES.LOGIN.path, req.url));
 
-	if (!token) {
+	try {
+		await adminAuth.verifySessionCookie(token, true);
+		return NextResponse.next();
+	} catch (error) {
 		return NextResponse.redirect(new URL(ROUTES.LOGIN.path, req.url));
 	}
-
-	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ['/((?!_next|static|favicon.ico).*)'],
+	matcher: '/((?!_next/static|_next/image|favicon.ico).*)',
 };

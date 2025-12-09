@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
-import { AuthProvider } from '@/lib/user/AuthProvider';
-import { getUser } from '@/lib/user/auth.utils.server';
 import PromptProvider from '@/components/Prompt/PromptProvider';
 
 const APP_NAME = 'Money';
@@ -66,18 +64,14 @@ export default async function RootLayout({
 }: Readonly<{
 	children: ReactNode;
 }>) {
-	const user = await getUser();
-
 	return (
 		<html lang="en" dir="ltr" suppressHydrationWarning>
 			<head />
 			<body>
 				<ThemeProvider attribute="class">
-					<AuthProvider user={user}>
-						<PromptProvider>
-							<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
-						</PromptProvider>
-					</AuthProvider>
+					<PromptProvider>
+						<div className="min-h-screen bg-gray-100 dark:bg-gray-900">{children}</div>
+					</PromptProvider>
 				</ThemeProvider>
 			</body>
 		</html>

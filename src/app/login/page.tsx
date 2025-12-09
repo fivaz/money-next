@@ -7,12 +7,13 @@ import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/auth2/firebase';
 import { useRouter } from 'next/navigation';
 import { Link } from '@/components/base/link';
 import GoogleAuthButton from '@/app/login/GoogleAuthButton';
 import { parseError } from '@/lib/user/auth.utils.client';
 import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
+import { loginServer } from '@/lib/auth2/utils.actions';
 
 export default function LoginPage() {
 	const [error, setError] = useState('');
@@ -32,11 +33,7 @@ export default function LoginPage() {
 			const credential = await signInWithEmailAndPassword(auth, email, password);
 			const token = await credential.user.getIdToken();
 
-			await fetch('/api/auth/set-token', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ token }),
-			});
+			await loginServer(token);
 
 			window.location.href = ROUTES.ROOT.path;
 		} catch (error) {

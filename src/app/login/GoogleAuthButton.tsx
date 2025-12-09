@@ -1,10 +1,10 @@
 import Button from '@/components/Button';
 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { useRouter } from 'next/navigation';
+import { auth } from '@/lib/auth2/firebase';
 import { ROUTES } from '@/lib/const';
 import { Dispatch, SetStateAction } from 'react';
+import { loginServer } from '@/lib/auth2/utils.actions';
 
 type GoogleAuthButtonProps = {
 	setError: Dispatch<SetStateAction<string>>;
@@ -12,7 +12,6 @@ type GoogleAuthButtonProps = {
 };
 export default function GoogleAuthButton({ setError, setIsLoading }: GoogleAuthButtonProps) {
 	const provider = new GoogleAuthProvider();
-	const router = useRouter();
 
 	const handleGoogleSignIn = async () => {
 		try {
@@ -20,11 +19,7 @@ export default function GoogleAuthButton({ setError, setIsLoading }: GoogleAuthB
 			const result = await signInWithPopup(auth, provider);
 			const token = await result.user.getIdToken();
 
-			await fetch('/api/auth/set-token', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ token }),
-			});
+			await loginServer(token);
 
 			window.location.href = ROUTES.ROOT.path;
 		} catch (error) {
