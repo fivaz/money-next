@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { COOKIE } from '@/lib/const';
-import { adminAuth } from '@/lib/auth2/firebase-admin';
+import { adminAuth } from '@/lib/auth/firebase-admin';
 
 export async function GET() {
 	const cookieStore = await cookies();

@@ -2,7 +2,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CircleUser } from 'lucide-react';
 import SignOutButton from './SignOutButton';
-import { User } from '@/lib/auth2/user.model';
+import { User } from '@/lib/auth/user.model';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/shared/api-client.utils';
 

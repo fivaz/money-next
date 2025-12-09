@@ -5,7 +5,7 @@ import DarkMode from './DarkMode';
 import clsx from 'clsx';
 import SignOutButton from '@/components/Navbar/ProfileDropdown/SignOutButton';
 import useSWR from 'swr';
-import { User } from '@/lib/auth2/user.model';
+import { User } from '@/lib/auth/user.model';
 import { fetcher } from '@/lib/shared/api-client.utils';
 
 export default function MobileUserInfo() {

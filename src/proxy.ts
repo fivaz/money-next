@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { COOKIE, ROUTES } from '@/lib/const';
-import { adminAuth } from '@/lib/auth2/firebase-admin';
+import { adminAuth } from '@/lib/auth/firebase-admin';
 
 const PUBLIC_PATHS = ['/login', '/register'];
 

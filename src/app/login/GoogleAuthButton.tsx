@@ -1,10 +1,10 @@
 import Button from '@/components/Button';
 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '@/lib/auth2/firebase';
+import { auth } from '@/lib/auth/firebase';
 import { ROUTES } from '@/lib/const';
 import { Dispatch, SetStateAction } from 'react';
-import { loginServer } from '@/lib/auth2/utils.actions';
+import { loginServer } from '@/lib/auth/utils.actions';
 
 type GoogleAuthButtonProps = {
 	setError: Dispatch<SetStateAction<string>>;

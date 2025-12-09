@@ -7,13 +7,13 @@ import { Input } from '@/components/base/input';
 import { Field, Label } from '@/components/base/fieldset';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FormEvent, useState } from 'react';
-import { auth } from '@/lib/auth2/firebase';
+import { auth } from '@/lib/auth/firebase';
 import { useRouter } from 'next/navigation';
 import { Link } from '@/components/base/link';
 import GoogleAuthButton from '@/app/login/GoogleAuthButton';
-import { parseError } from '@/lib/user/auth.utils.client';
+import { parseError } from '@/lib/auth/utils.client';
 import { TriangleAlertIcon } from 'lucide-react';
-import { loginServer } from '@/lib/auth2/utils.actions';
+import { loginServer } from '@/lib/auth/utils.actions';
 
 export default function LoginPage() {
 	const [error, setError] = useState('');

@@ -1,6 +1,6 @@
 'use server';
 
-import { adminAuth } from '@/lib/auth2/firebase-admin';
+import { adminAuth } from '@/lib/auth/firebase-admin';
 import { cookies } from 'next/headers';
 import { COOKIE } from '@/lib/const';
 
